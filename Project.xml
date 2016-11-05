@@ -4,6 +4,17 @@
 
 	<app title="Kazuochi2" file="Kazuochi2" main="Main" version="0.0.1" company="HaxeFlixel" />
 
+    <!-- For Android -->
+    <meta title="Kazuochi2" package="jp_2dgames.kazuochi2" version="1.0.0" company="2dgames.jp" if="android" />
+    <android target-sdk-version="16" />
+
+    <!-- For iOS -->
+    <meta title="Kazuochi2" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" unless="android"/>
+    <ios deployment="9" binaries="arm7" devices="iphone"/>
+    <ios linker-flags="" prerenderd-icon="false"/>
+    <window hardware="true" allow-shaders="true" require-shaders="true" if="cpp"/>
+    <window vsync="true" antialiasing="4" if="cpp"/>
+
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
 	<app preloader="flixel.system.FlxPreloader" />
@@ -23,7 +34,7 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
+	<window if="mobile" orientation="portrait" fullscreen="true" width="0" height="0" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
