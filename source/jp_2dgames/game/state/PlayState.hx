@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.token.Block;
+import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.addons.transition.FlxTransitionableState;
 import jp_2dgames.game.particle.ParticleStartLevel;
@@ -47,6 +49,11 @@ class PlayState extends FlxTransitionableState {
     // マップ読み込み
     Field.loadLevel(Global.level);
 
+    this.add(new FlxSprite(0, 0, "assets/images/bg.png"));
+
+    // ブロック生成
+    Block.createParent(this);
+
     // 各種オブジェクト生成
     Field.createObjects();
 
@@ -60,6 +67,13 @@ class PlayState extends FlxTransitionableState {
     // シーケンス管理生成
     _seq = new SeqMgr();
 
+    for(j in 0...10) {
+      for(i in 0...8) {
+        var px = 80 * i;
+        var py = 80 * j;
+        Block.add(i+1, px, py);
+      }
+    }
   }
 
   /**
@@ -67,6 +81,7 @@ class PlayState extends FlxTransitionableState {
    **/
   override public function destroy():Void {
 
+    Block.destroyParent();
     Particle.destroyParent();
     ParticleBmpFont.destroyParent();
     Input.destroyVirtualPad();
