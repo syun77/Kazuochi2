@@ -59,7 +59,7 @@ class PlayState extends FlxTransitionableState {
     Block.createParent(this);
 
     // 各種オブジェクト生成
-    Field.createObjects();
+    Field.createObjectsFromLayer();
 
     // パーティクル生成
     Particle.createParent(this);
@@ -70,14 +70,6 @@ class PlayState extends FlxTransitionableState {
 
     // シーケンス管理生成
     _seq = new SeqMgr();
-
-    for(j in 0...10) {
-      for(i in 0...8) {
-        var px = Block.WIDTH * i;
-        var py = Block.HEIGHT * j;
-        Block.add(i+1, px, py);
-      }
-    }
   }
 
   /**
