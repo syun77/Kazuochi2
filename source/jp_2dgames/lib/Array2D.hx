@@ -13,6 +13,11 @@ class Array2D {
   private var _width:Int;
   private var _height:Int;
   private var _pool:Map<Int,Int>;
+  // 領域外
+  public var outOfRange(get, never):Int;
+  function get_outOfRange() {
+    return m_OutOfRange;
+  }
   // 幅
   public var width(get, never):Int;
   private function get_width() {

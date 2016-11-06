@@ -23,14 +23,41 @@ class Block extends Token {
   public static function destroyParent():Void {
     parent = null;
   }
-  public static function add(Type:Int, X:Float, Y:Float):Block {
+  public static function add(Type:Int, xgrid:Int, ygrid:Int):Block {
     var block:Block = parent.recycle(Block);
-    block.init(Type, X, Y);
+    block.init(Type, xgrid, ygrid);
     return block;
+  }
+  public static function search(xgrid:Int, ygrid:Int):Block {
+    return forEachIf(function(block:Block) {
+      if(block.xgrid == xgrid && block.ygrid == ygrid) {
+        return true;
+      }
+      return false;
+    });
+  }
+  public static function forEachIf(func:Block->Bool):Block {
+    for(block in parent.members) {
+      if(block.exists) {
+        if(func(block)) {
+          // 条件に一致した
+          return block;
+        }
+      }
+    }
+    // 一致しなかった
+    return null;
   }
 
   // ==========================================================
+  // ■プロパティ
+  public var xgrid(get, never):Int;
+  public var ygrid(get, never):Int;
+
+  // ==========================================================
   // ■フィールド
+  var _xgrid:Int;  // グリッド座標(X)
+  var _ygrid:Int;  // グリッド座標(Y)
   var _number:Int; // 数値
   var _hp:Int;     // ブロックの堅さ
 
@@ -48,10 +75,17 @@ class Block extends Token {
   /**
    * 初期化
    **/
-  public function init(Number:Int, X:Float, Y:Float, Hp:Int=0):Void {
+  public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=0):Void {
     animation.play('${Number}');
-    x = X;
-    y = Y;
+    _xgrid = xgrid;
+    _ygrid = ygrid;
+    x = Field.toWorldX(_xgrid);
+    y = Field.toWorldY(_ygrid);
     _hp = Hp;
   }
+
+  // ======================================================================
+  // ■アクセサ
+  function get_xgrid() { return _xgrid; }
+  function get_ygrid() { return _ygrid; }
 }

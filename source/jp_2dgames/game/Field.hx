@@ -30,6 +30,7 @@ class Field {
   static var _tmx:TmxLoader = null;
   static var _map:FlxTilemap = null;
   static var _layer:Array2D = null;
+  static var _tmpLayer:Array2D = null;
 
   /**
    * マップデータ読み込み
@@ -40,6 +41,7 @@ class Field {
     _tmx = new TmxLoader();
     _tmx.load('assets/data/${name}.tmx');
     _layer = _tmx.getLayer(LAYER_NAME);
+    _tmpLayer = new Array2D(_layer.width, _layer.height);
   }
 
   /**
@@ -69,13 +71,86 @@ class Field {
   public static function createObjectsFromLayer():Void {
     var layer = _tmx.getLayer(LAYER_NAME);
     layer.forEach(function(i:Int, j:Int, v:Int) {
-      var x = toWorldX(i);
-      var y = toWorldY(j);
       switch(v) {
         case 1,2,3,4,5,6,7,8,9:
-          Block.add(v, x, y);
+          Block.add(v, i, j);
       }
     });
+  }
+
+  /**
+   * 消去チェック
+   **/
+  public static function checkErase():Void {
+
+    _layer.forEach(function(i:Int, j:Int, v:Int) {
+      if(v == 0) {
+        // チェック不要
+        return;
+      }
+
+      // テンポラリレイヤー初期化
+      _tmpLayer.initialize(_layer.width, _layer.height);
+
+      // 消去できる数を計算する
+      var cnt = _checkEraseRecursion(_layer, i, j, 0, 0, v, 0);
+      if(cnt < v) {
+        // 消去できない
+        return;
+      }
+
+      // 消去できる
+      _tmpLayer.forEach(function(xgrid:Int, ygrid:Int, val:Int) {
+        if(val != 1) {
+          // 消さない
+          return;
+        }
+
+        var block = Block.search(xgrid, ygrid);
+        if(block != null) {
+          block.kill();
+          // レイヤーからも消す
+          _layer.set(xgrid, ygrid, 0);
+        }
+        else {
+          trace('error:${xgrid},${ygrid}');
+        }
+      });
+    });
+  }
+
+  static function _checkEraseRecursion(layer:Array2D, x:Int, y:Int, dx:Int, dy:Int, val:Int, cnt:Int):Int {
+    var px = x + dx;
+    var py = y + dy;
+    if(_tmpLayer.get(px, py) == 1) {
+      // チェック済み
+      return cnt;
+    }
+
+    var val2 = layer.get(px, py);
+    if(val2 == layer.outOfRange) {
+      // 領域外
+      return cnt;
+    }
+
+    if(val2 != val) {
+      // 消去対象とならない
+      return cnt;
+    }
+
+    // 番号が一致した
+    _tmpLayer.set(px, py, 1);
+    cnt++;
+
+    var xtbl = [-1, 0, 1, 0];
+    var ytbl = [0, -1, 0, 1];
+    for(i in 0...xtbl.length) {
+      // 再帰検索
+      var dx = xtbl[i];
+      var dy = ytbl[i];
+      cnt = _checkEraseRecursion(_layer, px, py, dx, dy, val, cnt);
+    }
+    return cnt;
   }
 
   /**

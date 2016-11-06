@@ -129,6 +129,10 @@ class PlayState extends FlxTransitionableState {
    **/
   function _updateMain():Void {
 
+    if(FlxG.keys.justPressed.SPACE) {
+      Field.checkErase();
+    }
+
     switch(_seq.proc()) {
       case SeqMgr.RET_DEAD:
         // ゲームオーバー
