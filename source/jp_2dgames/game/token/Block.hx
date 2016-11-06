@@ -1,5 +1,7 @@
 package jp_2dgames.game.token;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
@@ -36,6 +38,14 @@ class Block extends Token {
       return false;
     });
   }
+  /**
+   * すべて停止しているかどうか
+   **/
+  public static function isStopAll():Bool {
+    return forEachIf(function(block:Block) {
+      return block.isMoving();
+    }) == null;
+  }
   public static function forEachIf(func:Block->Bool):Block {
     for(block in parent.members) {
       if(block.exists) {
@@ -60,12 +70,15 @@ class Block extends Token {
   var _ygrid:Int;  // グリッド座標(Y)
   var _number:Int; // 数値
   var _hp:Int;     // ブロックの堅さ
+  var _bMoving:Bool; // 移動中かどうか
 
   /**
    * コンストラクタ
    **/
   public function new() {
     super();
+
+    // 画像読み込み
     loadGraphic(AssetPaths.IMAGE_BLOCK, true, WIDTH, HEIGHT);
     for(i in 0...12) {
       animation.add('${i+1}', [i]);
@@ -76,12 +89,40 @@ class Block extends Token {
    * 初期化
    **/
   public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=0):Void {
+    _bMoving = false;
     animation.play('${Number}');
     _xgrid = xgrid;
     _ygrid = ygrid;
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
     _hp = Hp;
+  }
+
+  /**
+   * 移動する
+   **/
+  public function move(xgrid:Int, ygrid:Int, cntDelay:Int):Void {
+
+    var dy = ygrid - _ygrid;
+
+    _xgrid = xgrid;
+    _ygrid = ygrid;
+
+    // 移動中
+    _bMoving = true;
+    var xnext = Field.toWorldX(_xgrid);
+    var ynext = Field.toWorldY(_ygrid);
+    FlxTween.tween(this, {x:xnext, y:ynext}, 0.2+dy*0.1, {ease:FlxEase.quadIn, startDelay:cntDelay*0.05, onComplete:function(_) {
+      // 移動完了
+      _bMoving = false;
+    }});
+  }
+
+  /**
+   * 移動中かどうか
+   **/
+  public function isMoving():Bool {
+    return _bMoving;
   }
 
   // ======================================================================

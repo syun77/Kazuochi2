@@ -1,21 +1,40 @@
 package jp_2dgames.game;
 
-import jp_2dgames.lib.Snd;
-import flixel.FlxObject;
-import flixel.group.FlxGroup;
-import flixel.FlxBasic;
-import flixel.FlxSprite;
-import flixel.FlxG;
-import flixel.tile.FlxTilemap;
-
 /**
  * 状態
  **/
+import jp_2dgames.game.token.Block;
+import flixel.FlxG;
 private enum State {
-  Init;       // 初期化
-  Main;       // メイン
-  Dead;       // 死亡
-  StageClear; // ステージクリア
+
+  None;              // 無効
+
+  Init;              // 初期化
+  // 下から出現
+  AppearBottomCheck; // チェック
+  AppearBottomExec;  // 実行
+
+  AppearBlock;       // ブロック出現
+  InputKey;          // 落下場所選択
+  FallBlock;         // ブロック落下
+  // ブロック消滅 (敵へのダメージ)
+  EraseCheck;        // チェック
+  EraseExec;         // 実行
+  // ダメージ (プレイヤーへのダメージ)
+  DamageCheck;       // チェック
+  DamageExec;        // 実行
+
+  WinLoseCheck;      // 勝利・敗北判定
+  EnemyAIExec;       // 敵のAI実行
+
+  Win;               // 勝利演出
+  Lose;              // 敗北演出
+  GameOver;          // ゲームオーバー
+
+  StageClear;        // ステージクリア
+
+  End;               // おしまい
+
 }
 
 /**
@@ -28,14 +47,125 @@ class SeqMgr {
   public static var RET_STAGECLEAR:Int  = 5; // ステージクリア
 
   var _state:State;
+  var _statePrev:State;
   var _bDead:Bool = false;
   var _bStageClear:Bool = false;
+  var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
 
   /**
    * コンストラクタ
    **/
   public function new() {
     _state = State.Init;
+    _statePrev = _state;
+
+    FlxG.watch.add(this, "_state");
+    FlxG.watch.add(this, "_statePrev");
+  }
+
+  /**
+   * 状態遷移
+   **/
+  function _change(next:State):Void {
+    trace('${_state} -> ${next}');
+    _statePrev = _state;
+    _state = next;
+  }
+
+  function _procInit():State {
+    return State.InputKey;
+  }
+  function _procAppearBottomCheck():State {
+    return State.None;
+  }
+  function _procAppearBottomExec():State {
+    return State.None;
+  }
+  function _procAppearBlock():State {
+    return State.None;
+  }
+  function _procInputKey():State {
+
+    if(FlxG.keys.justPressed.SPACE) {
+      // 落下開始
+      return State.FallBlock;
+    }
+
+    return State.None;
+  }
+  function _procFallBlock():State {
+    // TODO: 落下処理
+    if(Block.isStopAll() == false) {
+      // ブロック落下中
+      return State.None;
+    }
+    return State.EraseCheck;
+  }
+  function _procEraseCheck():State {
+    // 消去処理
+    var cntErase = Field.checkErase();
+    if(cntErase > 0) {
+      // 消去できた
+      // 連鎖続行
+      _bKeepOnChain = true;
+      return State.EraseExec;
+    }
+    else {
+      // ダメージチェックへ
+      // 連鎖終了
+      _bKeepOnChain = false;
+      return State.DamageCheck;
+    }
+  }
+  function _procEraseExec():State {
+    // 勝利敗北判定
+    return State.WinLoseCheck;
+  }
+  function _procDamageCheck():State {
+    // TODO: ダメージ処理
+    return State.DamageExec;
+  }
+  function _procDamageExec():State {
+    // TODO: ダメージ処理
+    return State.WinLoseCheck;
+  }
+  function _procWinLoseCheck():State {
+    if(false) {
+      // TODO: プレイヤー死亡
+      return State.Lose;
+    }
+    if(false) {
+      // TODO: 敵死亡
+      return State.Win;
+    }
+    if(_bKeepOnChain) {
+      // TODO: 連鎖あり
+      // 落下処理
+      Field.fall();
+      return State.FallBlock;
+    }
+
+    // プレイヤーのターン終了
+
+    return State.EnemyAIExec;
+  }
+  function _procEnemyAIExec():State {
+    return State.None;
+  }
+  function _procWin():State {
+    return State.None;
+  }
+  function _procLose():State {
+    return State.None;
+  }
+  function _procGameOver():State {
+    return State.None;
+  }
+  function _procStageClear():State {
+    return State.None;
+  }
+  function _procEnd():State {
+    return State.None;
   }
 
   /**
@@ -44,44 +174,41 @@ class SeqMgr {
   public function proc():Int {
 
     var ret = RET_NONE;
+    var tbl = [
+      State.Init              => _procInit,       // 初期化
+      // 下から出現
+      State.AppearBottomCheck => _procAppearBottomCheck, // チェック
+      State.AppearBottomExec  => _procAppearBottomExec,  // 実行
 
-    switch(_state) {
-      case State.Init:
-        // 初期化
-        _state = State.Main;
-      case State.Main:
-        // メイン
-        _updateMain();
-      case State.Dead:
-        // プレイヤー死亡
-        return RET_DEAD;
-      case State.StageClear:
-        // ステージクリア
-        return RET_STAGECLEAR;
+      State.AppearBlock       => _procAppearBlock,       // ブロック出現
+      State.InputKey          => _procInputKey,          // 落下場所選択
+      State.FallBlock         => _procFallBlock,         // ブロック落下
+      // ブロック消滅
+      State.EraseCheck        => _procEraseCheck,        // チェック
+      State.EraseExec         => _procEraseExec,         // 実行
+      // ダメージ
+      State.DamageCheck       => _procDamageCheck,       // チェック
+      State.DamageExec        => _procDamageExec,        // 実行
+
+      State.WinLoseCheck      => _procWinLoseCheck,      // 勝利・敗北判定
+      State.EnemyAIExec       => _procEnemyAIExec,       // 敵のAI実行
+
+      State.Win               => _procWin,               // 勝利演出
+      State.Lose              => _procLose,              // 敗北演出
+      State.GameOver          => _procGameOver,          // ゲームオーバー
+
+      State.StageClear        => _procStageClear,        // ステージクリア
+
+      State.End               => _procEnd,               // おしまい
+
+    ];
+
+    var next = tbl[_state]();
+    if(next != State.None) {
+      // 状態遷移
+      _change(next);
     }
 
     return RET_NONE;
-  }
-
-  /**
-   * 更新・メイン
-   **/
-  function _updateMain():Void {
-
-    /*
-    if(_player.exists == false) {
-      // プレイヤー死亡
-      _bDead = true;
-    }
-    */
-
-    if(_bDead) {
-      // 死亡
-      _state = State.Dead;
-    }
-    else if(_bStageClear) {
-      // ステージクリア
-      _state = State.StageClear;
-    }
   }
 }

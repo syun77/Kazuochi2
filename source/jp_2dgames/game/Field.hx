@@ -81,7 +81,9 @@ class Field {
   /**
    * 消去チェック
    **/
-  public static function checkErase():Void {
+  public static function checkErase():Int {
+
+    var totalEraseCount:Int = 0;
 
     _layer.forEach(function(i:Int, j:Int, v:Int) {
       if(v == 0) {
@@ -100,6 +102,9 @@ class Field {
       }
 
       // 消去できる
+      // 消去数アップ
+      totalEraseCount += cnt;
+
       _tmpLayer.forEach(function(xgrid:Int, ygrid:Int, val:Int) {
         if(val != 1) {
           // 消さない
@@ -117,6 +122,9 @@ class Field {
         }
       });
     });
+
+    // トータル消去数を返す
+    return totalEraseCount;
   }
 
   static function _checkEraseRecursion(layer:Array2D, x:Int, y:Int, dx:Int, dy:Int, val:Int, cnt:Int):Int {
@@ -151,6 +159,37 @@ class Field {
       cnt = _checkEraseRecursion(_layer, px, py, dx, dy, val, cnt);
     }
     return cnt;
+  }
+
+  /**
+   * ブロックの落下
+   **/
+  public static function fall():Void {
+    for(i in 0..._layer.width) {
+      var cntZero:Int = 0;
+      var cntDelay:Int = 0;
+      // 下から調べる
+      var array = [for(a in 0..._layer.height) _layer.height-1-a];
+      for(j in array) {
+        var v = _layer.get(i, j);
+        if(v > 0) {
+          // ブロックが存在するのでずらす
+          var xnext = i;
+          var ynext = j + cntZero;
+          var block = Block.search(i, j);
+          _layer.set(i, j, 0); // 現在の位置から消す
+          _layer.set(xnext, ynext, v); // 移動
+          block.move(xnext, ynext, cntDelay);
+          cntDelay++;
+        }
+        else {
+          // 何もない
+          cntZero++;
+          cntDelay = 0;
+        }
+      }
+      trace(i, cntZero);
+    }
   }
 
   /**
