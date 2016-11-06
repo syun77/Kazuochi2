@@ -86,10 +86,19 @@ class SeqMgr {
   }
   function _procInputKey():State {
 
+#if desktop
     if(FlxG.keys.justPressed.SPACE || FlxG.mouse.justPressed) {
       // 落下開始
       return State.FallBlock;
     }
+#else
+    for(touch in FlxG.touches.list) {
+      if(touch.justPressed) {
+        // 落下開始
+        return State.FallBlock;
+      }
+    }
+#end
 
     return State.None;
   }
