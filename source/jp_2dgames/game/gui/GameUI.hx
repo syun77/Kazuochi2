@@ -68,6 +68,11 @@ class GameUI extends FlxSpriteGroup {
       FlxG.debugger.visible = !FlxG.debugger.visible;
     });
     this.add(btnDebug);
+    // リトライ
+    var btnRetry = new MyButton(120, FlxG.height-48, "Retry", function() {
+      FlxG.resetState();
+    });
+    this.add(btnRetry);
 #end
 
     scrollFactor.set();

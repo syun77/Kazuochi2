@@ -86,7 +86,7 @@ class SeqMgr {
   }
   function _procInputKey():State {
 
-    if(FlxG.keys.justPressed.SPACE) {
+    if(FlxG.keys.justPressed.SPACE || FlxG.mouse.justPressed) {
       // 落下開始
       return State.FallBlock;
     }
