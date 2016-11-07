@@ -3,6 +3,8 @@ package jp_2dgames.game;
 /**
  * 状態
  **/
+import jp_2dgames.game.gui.CursorUI;
+import jp_2dgames.lib.Input;
 import jp_2dgames.game.token.Block;
 import flixel.FlxG;
 private enum State {
@@ -90,19 +92,14 @@ class SeqMgr {
 
   function _procInputKey():State {
 
-#if desktop
-    if(FlxG.keys.justPressed.SPACE || FlxG.mouse.justPressed) {
+    if(Input.touchJustPressed) {
+      CursorUI.show();
+    }
+    if(Input.touchJustReleased) {
       // 落下開始
+      CursorUI.hide();
       return State.FallBlock;
     }
-#else
-    for(touch in FlxG.touches.list) {
-      if(touch.justPressed) {
-        // 落下開始
-        return State.FallBlock;
-      }
-    }
-#end
 
     return State.None;
   }

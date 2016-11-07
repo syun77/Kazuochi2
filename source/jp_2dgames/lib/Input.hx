@@ -232,6 +232,8 @@ class Input {
   public static var x(get, never):Float;
   public static var y(get, never):Float;
   public static var virtualPad(get, never):FlxVirtualPad;
+  public static var touchJustPressed(get, never):Bool;
+  public static var touchJustReleased(get, never):Bool;
 
   public static var mouse:InputMouse = new InputMouse();
   public static var press:InputKey = new InputKey(KeyMode.Press);
@@ -256,12 +258,60 @@ class Input {
   // ------------------------------------------------------
   // ■アクセサ
   static function get_x() {
+#if FLX_TOUCH
+    for(touch in FlxG.touches.list) {
+      if(touch.pressed) {
+        return touch.x;
+      }
+    }
+    return -1;
+#else
     return mouse.x;
+#end
   }
   static function get_y() {
+#if FLX_TOUCH
+    for(touch in FlxG.touches.list) {
+      if(touch.pressed) {
+        return touch.y;
+      }
+    }
+    return -1;
+#else
     return mouse.y;
+#end
   }
   static function get_virtualPad() {
     return _virtualPad;
+  }
+  static function get_touchJustPressed() {
+#if FLX_TOUCH
+    for(touch in FlxG.touches.list) {
+      if(touch.pressed) {
+        return true;
+      }
+    }
+    return false;
+#else
+    return press.A;
+#end
+  }
+
+  static function get_touchJustReleased() {
+
+#if FLX_TOUCH
+    var ret:Bool = false;
+    for(touch in FlxG.touches.list) {
+      if(touch.pressed) {
+        return false;
+      }
+      if(touch.justReleased) {
+        ret = true;
+      }
+    }
+    return ret;
+#else
+    return release.A;
+#end
   }
 }

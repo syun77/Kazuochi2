@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.gui.BgUI;
 import jp_2dgames.game.token.Block;
 import flixel.FlxSprite;
@@ -66,6 +67,7 @@ class PlayState extends FlxTransitionableState {
     ParticleBmpFont.createParent(this);
 
     // GUI生成
+    CursorUI.createInstance(this);
     this.add(new GameUI());
 
     // シーケンス管理生成
@@ -81,6 +83,7 @@ class PlayState extends FlxTransitionableState {
     Particle.destroyParent();
     ParticleBmpFont.destroyParent();
     Input.destroyVirtualPad();
+    CursorUI.destroyInstance();
 
     super.destroy();
   }
