@@ -18,6 +18,10 @@ class Field {
   // オブジェクトレイヤー
   static inline var LAYER_NAME:String = "object";
 
+  // 描画オフセット
+  public static inline var OFFSET_X:Int = 20;
+  public static inline var OFFSET_Y:Int = 128;
+
   // タイルサイズ
   static inline var TILE_WIDTH:Int  = Block.WIDTH;
   static inline var TILE_HEIGHT:Int = Block.HEIGHT;
@@ -192,35 +196,42 @@ class Field {
    * グリッド座標をワールド座標に変換(X)
    **/
   public static function toWorldX(i:Float):Float {
-    return i * TILE_WIDTH;
+    return i * TILE_WIDTH + OFFSET_X;
   }
 
   /**
    * グリッド座標をワールド座標に変換(Y)
    **/
   public static function toWorldY(j:Float):Float {
-    return j * TILE_HEIGHT;
+    return j * TILE_HEIGHT + OFFSET_Y;
   }
 
   /**
    * ワールド座標をグリッド座標に変換(X)
    **/
   public static function toGridX(i:Float):Int {
-    return Math.floor(i / TILE_WIDTH);
+    return Math.floor((i-OFFSET_X) / TILE_WIDTH);
   }
 
   /**
    * ワールド座標をグリッド座標に変換(Y)
    **/
   public static function toGridY(j:Float):Int {
-    return Math.floor(j / TILE_HEIGHT);
+    return Math.floor((j-OFFSET_Y) / TILE_HEIGHT);
   }
 
   /**
-   * 座標をグリッドに合わせる
+   * 座標をグリッドに合わせる(X)
    **/
-  public static function snapGrid(a:Float):Float {
-    return Std.int(a / GRID_SIZE) * GRID_SIZE;
+  public static function snapGridX(x:Float):Float {
+    return Std.int((x-OFFSET_X) / GRID_SIZE) * GRID_SIZE + OFFSET_X;
+  }
+
+  /**
+   * 座標をグリッドに合わせる(Y)
+   **/
+  public static function snapGridY(y:Float):Float {
+    return Std.int((y-OFFSET_Y) / GRID_SIZE) * GRID_SIZE + OFFSET_Y;
   }
 }
 

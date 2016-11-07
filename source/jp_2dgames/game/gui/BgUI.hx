@@ -55,7 +55,7 @@ class BgUI extends FlxGroup {
    * グリッド画像の作成
    **/
   function _createGrid():FlxSprite {
-    var spr = new FlxSprite(0, 0, _createGridImage());
+    var spr = new FlxSprite(Field.OFFSET_X, Field.OFFSET_Y, _createGridImage());
     return spr;
   }
 

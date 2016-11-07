@@ -52,8 +52,8 @@ class CursorUI extends FlxSprite {
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
-    var xtouch = Input.x;
+    var xtouch = Input.x-Block.WIDTH/2;
     x = Field.toWorldX(Math.floor(xtouch/Block.WIDTH));
-    y = 0;
+    y = Field.OFFSET_Y;
   }
 }
