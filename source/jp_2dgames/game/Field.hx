@@ -1,14 +1,6 @@
 package jp_2dgames.game;
 
 import jp_2dgames.game.token.Block;
-import jp_2dgames.lib.DirUtil.Dir;
-import flixel.math.FlxPoint;
-import flash.geom.Point;
-import flixel.util.FlxColor;
-import flash.geom.Rectangle;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.graphics.FlxGraphic;
 import flixel.tile.FlxTilemap;
 import jp_2dgames.lib.Array2D;
 import jp_2dgames.lib.TextUtil;
@@ -21,7 +13,7 @@ class Field {
 
   // フィールドサイズ
   public static inline var GRID_X:Int = 7;
-  public static inline var GRID_Y:Int = 10;
+  public static inline var GRID_Y:Int = 8;
 
   // オブジェクトレイヤー
   static inline var LAYER_NAME:String = "object";

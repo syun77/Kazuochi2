@@ -144,7 +144,8 @@ class Block extends Token {
    **/
   public function erase():Void {
     _state = State.Flicker;
-    FlxFlicker.flicker(this, 0.35, 0.04, true, true, function(_) {
+    var duration = 0.5;
+    FlxFlicker.flicker(this, duration, 0.04, true, true, function(_) {
       kill();
     });
   }
