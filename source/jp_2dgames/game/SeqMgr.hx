@@ -75,15 +75,19 @@ class SeqMgr {
   function _procInit():State {
     return State.InputKey;
   }
+
   function _procAppearBottomCheck():State {
     return State.None;
   }
+
   function _procAppearBottomExec():State {
     return State.None;
   }
+
   function _procAppearBlock():State {
     return State.None;
   }
+
   function _procInputKey():State {
 
 #if desktop
@@ -102,14 +106,16 @@ class SeqMgr {
 
     return State.None;
   }
+
   function _procFallBlock():State {
     // TODO: 落下処理
-    if(Block.isStopAll() == false) {
+    if(Block.isIdleAll() == false) {
       // ブロック落下中
       return State.None;
     }
     return State.EraseCheck;
   }
+
   function _procEraseCheck():State {
     // 消去処理
     var cntErase = Field.checkErase();
@@ -126,18 +132,28 @@ class SeqMgr {
       return State.DamageCheck;
     }
   }
+
   function _procEraseExec():State {
+
+    if(Block.isIdleAll() == false) {
+      // 消滅中
+      return State.None;
+    }
+
     // 勝利敗北判定
     return State.WinLoseCheck;
   }
+
   function _procDamageCheck():State {
     // TODO: ダメージ処理
     return State.DamageExec;
   }
+
   function _procDamageExec():State {
     // TODO: ダメージ処理
     return State.WinLoseCheck;
   }
+
   function _procWinLoseCheck():State {
     if(false) {
       // TODO: プレイヤー死亡
@@ -158,21 +174,27 @@ class SeqMgr {
 
     return State.EnemyAIExec;
   }
+
   function _procEnemyAIExec():State {
     return State.None;
   }
+
   function _procWin():State {
     return State.None;
   }
+
   function _procLose():State {
     return State.None;
   }
+
   function _procGameOver():State {
     return State.None;
   }
+
   function _procStageClear():State {
     return State.None;
   }
+
   function _procEnd():State {
     return State.None;
   }

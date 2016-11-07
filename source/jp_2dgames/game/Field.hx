@@ -117,7 +117,8 @@ class Field {
 
         var block = Block.search(xgrid, ygrid);
         if(block != null) {
-          block.kill();
+          // ブロックを消す
+          block.erase();
           // レイヤーからも消す
           _layer.set(xgrid, ygrid, 0);
         }
@@ -192,7 +193,6 @@ class Field {
           cntDelay = 0;
         }
       }
-      trace(i, cntZero);
     }
   }
 

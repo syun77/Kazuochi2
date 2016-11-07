@@ -1,9 +1,19 @@
 package jp_2dgames.game.token;
 
+import flixel.effects.FlxFlicker;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+
+/**
+ * 状態
+ **/
+private enum State {
+  Idle;    // 待機中
+  Fall;    // 落下中
+  Flicker; // 点滅中
+}
 
 /**
  * ブロック
@@ -41,9 +51,9 @@ class Block extends Token {
   /**
    * すべて停止しているかどうか
    **/
-  public static function isStopAll():Bool {
+  public static function isIdleAll():Bool {
     return forEachIf(function(block:Block) {
-      return block.isMoving();
+      return block.isIdle() == false;
     }) == null;
   }
   public static function forEachIf(func:Block->Bool):Block {
@@ -70,7 +80,7 @@ class Block extends Token {
   var _ygrid:Int;  // グリッド座標(Y)
   var _number:Int; // 数値
   var _hp:Int;     // ブロックの堅さ
-  var _bMoving:Bool; // 移動中かどうか
+  var _state:State; // 状態
 
   /**
    * コンストラクタ
@@ -89,7 +99,7 @@ class Block extends Token {
    * 初期化
    **/
   public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=0):Void {
-    _bMoving = false;
+    _state = State.Idle;
     animation.play('${Number}');
     _xgrid = xgrid;
     _ygrid = ygrid;
@@ -108,21 +118,35 @@ class Block extends Token {
     _xgrid = xgrid;
     _ygrid = ygrid;
 
-    // 移動中
-    _bMoving = true;
+    // 落下中
+    _state = State.Fall;
     var xnext = Field.toWorldX(_xgrid);
     var ynext = Field.toWorldY(_ygrid);
-    FlxTween.tween(this, {x:xnext, y:ynext}, 0.2+dy*0.1, {ease:FlxEase.quadIn, startDelay:cntDelay*0.05, onComplete:function(_) {
+
+    var speed = 0.1 + dy * 0.05;
+    var delay = 0.025 * cntDelay;
+
+    FlxTween.tween(this, {x:xnext, y:ynext}, speed, {ease:FlxEase.quadIn, startDelay:delay, onComplete:function(_) {
       // 移動完了
-      _bMoving = false;
+      _state = State.Idle;
     }});
   }
 
   /**
-   * 移動中かどうか
+   * 待機中かどうか
    **/
-  public function isMoving():Bool {
-    return _bMoving;
+  public function isIdle():Bool {
+    return _state == State.Idle;
+  }
+
+  /**
+   * 消滅する
+   **/
+  public function erase():Void {
+    _state = State.Flicker;
+    FlxFlicker.flicker(this, 0.35, 0.04, true, true, function(_) {
+      kill();
+    });
   }
 
   // ======================================================================
