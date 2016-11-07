@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.math.FlxMath;
 import jp_2dgames.game.token.Block;
 import flixel.tile.FlxTilemap;
 import jp_2dgames.lib.Array2D;
@@ -196,6 +197,8 @@ class Field {
    * グリッド座標をワールド座標に変換(X)
    **/
   public static function toWorldX(i:Float):Float {
+    i = Math.max(i, 0);
+    i = Math.min(i, GRID_X-1);
     return i * TILE_WIDTH + OFFSET_X;
   }
 
