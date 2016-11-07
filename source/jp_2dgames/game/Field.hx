@@ -19,6 +19,10 @@ import jp_2dgames.lib.TmxLoader;
  **/
 class Field {
 
+  // フィールドサイズ
+  public static inline var GRID_X:Int = 7;
+  public static inline var GRID_Y:Int = 10;
+
   // オブジェクトレイヤー
   static inline var LAYER_NAME:String = "object";
 
