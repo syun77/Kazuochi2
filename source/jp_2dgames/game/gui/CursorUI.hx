@@ -8,6 +8,15 @@ import jp_2dgames.game.token.Block;
 import flixel.FlxSprite;
 
 /**
+ * 状態
+ **/
+private enum State {
+  End;         // 非表示
+  AppearBlock; // ブロック出現
+  MoveCursor;  // カーソル移動
+}
+
+/**
  * カーソルUI
  **/
 class CursorUI extends FlxSprite {
@@ -21,31 +30,27 @@ class CursorUI extends FlxSprite {
     _instance = null;
   }
 
-  // 次に出現するブロックを設定
-  public static function setNextBlock(nextBlock:Int):Void {
-    _instance._setNextBlock(nextBlock);
+  // 終了したかどうか
+  public static function isEnd():Bool {
+    return _instance._isEnd();
   }
 
+  // 次に出現するブロックを設定
+  public static function start(nextBlock:Int):Void {
+    _instance._start(nextBlock);
+  }
+
+  // 配置したブロックを取得
   public static function getBlock():Block {
     var block = _instance._block;
     _instance._block = null;
     return block;
   }
 
-  // 表示
-  public static function show():Void {
-    _instance._show();
-    // 座標を更新しておく
-    _instance.update(FlxG.elapsed);
-  }
-
-  // 非表示
-  public static function hide():Void {
-    _instance._hide();
-  }
-
   // ==========================================
   // ■フィールド
+  // 状態
+  var _state:State = State.End;
   // 落下対象のブロック
   var _block:Block = null;
 
@@ -60,6 +65,7 @@ class CursorUI extends FlxSprite {
     makeGraphic(w, h, FlxColor.WHITE);
     alpha = 0.5;
     visible = false;
+    _state = State.End;
   }
 
   /**
@@ -67,13 +73,34 @@ class CursorUI extends FlxSprite {
    **/
   override public function update(elapsed:Float):Void {
 
-    if(visible == false) {
-      // 非表示の場合は操作できない
-      return;
+    switch(_state) {
+      case State.End:
+        // カーソル非表示
+        visible = false;
+      case State.AppearBlock:
+        // カーソル非表示
+        visible = false;
+        if(Input.touchJustPressed) {
+          // カーソル移動へ
+          _state = State.MoveCursor;
+        }
+      case State.MoveCursor:
+        visible = true;
+        _updateMoveCursor();
+        if(Input.touchJustReleased) {
+          // 選択したのでおしまい
+          _state = State.End;
+        }
     }
 
     super.update(elapsed);
 
+  }
+
+  /**
+   * カーソル移動中
+   **/
+  function _updateMoveCursor():Void {
     // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
@@ -86,25 +113,22 @@ class CursorUI extends FlxSprite {
   }
 
   /**
-   * 次のブロックを表示
+   * カーソル処理開始
    **/
-  function _setNextBlock(nextBlock:Int):Void {
+  function _start(nextBlock:Int):Void {
     var px = Field.GRID_NEXT_X;
     var py = Field.GRID_NEXT_Y;
     _block = Block.add(nextBlock, px, py);
+
+    // ブロック出現
+    _state = State.AppearBlock;
   }
 
   /**
-   * 表示
+   * カーソル処理が終了したかどうか
    **/
-  function _show():Void {
-    visible = true;
+  function _isEnd():Bool {
+    return _state == State.End;
   }
 
-  /**
-   * 非表示
-   **/
-  function _hide():Void {
-    visible = false;
-  }
 }

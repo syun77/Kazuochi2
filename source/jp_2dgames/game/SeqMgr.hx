@@ -100,19 +100,16 @@ class SeqMgr {
   function _procAppearBlock():State {
     // TOOD: 次に出現するブロックを抽選
     _nextBlock = FlxG.random.int(2, 5);
-    CursorUI.setNextBlock(_nextBlock);
+    CursorUI.start(_nextBlock);
     return State.InputKey;
   }
 
   function _procInputKey():State {
 
-    if(Input.touchJustPressed) {
-      CursorUI.show();
-    }
-    if(Input.touchJustReleased) {
+    if(CursorUI.isEnd()) {
+      // カーソル処理終了
       // ブロックを配置
       var block = CursorUI.getBlock();
-      CursorUI.hide();
       var layer = Field.getLayer();
       layer.set(block.xgrid, block.ygrid, _nextBlock);
       // 落下開始
