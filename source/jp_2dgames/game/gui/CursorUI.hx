@@ -20,18 +20,28 @@ class CursorUI extends FlxSprite {
   public static function destroyInstance():Void {
     _instance = null;
   }
+
+  // 次に出現するブロックを設定
+  public static function setNextBlock(nextBlock:Int):Void {
+    _instance._setNextBlock(nextBlock);
+  }
+
+  // 表示
   public static function show():Void {
-    _instance.revive();
+    _instance._show();
     // 座標を更新しておく
     _instance.update(FlxG.elapsed);
   }
+
+  // 非表示
   public static function hide():Void {
-    _instance.kill();
+    _instance._hide();
   }
 
   // ==========================================
-  // フィールド
-
+  // ■フィールド
+  // 落下対象のブロック
+  var _block:Block = null;
 
   /**
    * コンストラクタ
@@ -43,17 +53,52 @@ class CursorUI extends FlxSprite {
     var h = Block.HEIGHT * Field.GRID_Y;
     makeGraphic(w, h, FlxColor.WHITE);
     alpha = 0.5;
-    kill();
+    visible = false;
   }
 
   /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
+
+    if(visible == false) {
+      // 非表示の場合は操作できない
+      return;
+    }
+
     super.update(elapsed);
 
+    // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
-    x = Field.toWorldX(Math.floor(xtouch/Block.WIDTH));
-    y = Field.OFFSET_Y;
+    var xgrid = Math.floor(xtouch/Block.WIDTH);
+    var ygrid = 0;
+    x = Field.toWorldX(xgrid);
+    y = Field.toWorldY(ygrid);
+
+    // ブロックも一緒に移動
+    _block.moveNoWait(xgrid, ygrid);
+  }
+
+  /**
+   * 次のブロックを表示
+   **/
+  function _setNextBlock(nextBlock:Int):Void {
+    var px = Field.GRID_NEXT_X;
+    var py = Field.GRID_NEXT_Y;
+    _block = Block.add(nextBlock, px, py);
+  }
+
+  /**
+   * 表示
+   **/
+  function _show():Void {
+    visible = true;
+  }
+
+  /**
+   * 非表示
+   **/
+  function _hide():Void {
+    visible = false;
   }
 }

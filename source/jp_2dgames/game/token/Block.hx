@@ -144,6 +144,17 @@ class Block extends Token {
   }
 
   /**
+   * 移動する（ウェイトなし）
+   **/
+  public function moveNoWait(xgrid:Int, ygrid:Int):Void {
+    _xgrid = xgrid;
+    _ygrid = ygrid;
+
+    x = Field.toWorldX(_xgrid);
+    y = Field.toWorldY(_ygrid);
+  }
+
+  /**
    * 待機中かどうか
    **/
   public function isIdle():Bool {

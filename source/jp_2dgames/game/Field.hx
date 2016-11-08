@@ -16,6 +16,10 @@ class Field {
   public static inline var GRID_X:Int = 7;
   public static inline var GRID_Y:Int = 8;
 
+  // 次のブロックの位置
+  public static inline var GRID_NEXT_X:Int = 3;
+  public static inline var GRID_NEXT_Y:Int = 0;
+
   // オブジェクトレイヤー
   static inline var LAYER_NAME:String = "object";
 

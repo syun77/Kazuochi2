@@ -48,11 +48,12 @@ class SeqMgr {
   public static var RET_DEAD:Int    = 3; // プレイヤー死亡
   public static var RET_STAGECLEAR:Int  = 5; // ステージクリア
 
+  // 状態
   var _state:State;
   var _statePrev:State;
-  var _bDead:Bool = false;
-  var _bStageClear:Bool = false;
+
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
+  var _nextBlock:Int = 0; // 次に出現するブロックの番号
 
   /**
    * コンストラクタ
@@ -61,6 +62,7 @@ class SeqMgr {
     _state = State.Init;
     _statePrev = _state;
 
+    // デバッグ用
     FlxG.watch.add(this, "_state");
     FlxG.watch.add(this, "_statePrev");
   }
@@ -75,7 +77,8 @@ class SeqMgr {
   }
 
   function _procInit():State {
-    return State.InputKey;
+    // ブロック出現
+    return State.AppearBlock;
   }
 
   function _procAppearBottomCheck():State {
@@ -87,7 +90,10 @@ class SeqMgr {
   }
 
   function _procAppearBlock():State {
-    return State.None;
+    // TOOD: 次に出現するブロックを抽選
+    _nextBlock = FlxG.random.int(2, 5);
+    CursorUI.setNextBlock(_nextBlock);
+    return State.InputKey;
   }
 
   function _procInputKey():State {
