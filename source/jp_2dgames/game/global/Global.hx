@@ -22,6 +22,10 @@ class Global {
     _life = MAX_LIFE;
   }
 
+  public static function setLevel(lv:Int):Void {
+    _level = lv;
+  }
+
   public static function addLevel():Bool {
     _level++;
     return _level > MAX_LEVEL;

@@ -54,6 +54,13 @@ class Field {
   }
 
   /**
+   * レイヤー情報の取得
+   **/
+  public static function getLayer():Array2D {
+    return _layer;
+  }
+
+  /**
    * フィールドの幅
    **/
   public static function getWidth():Int {

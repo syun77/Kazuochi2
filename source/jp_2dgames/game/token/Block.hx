@@ -56,6 +56,17 @@ class Block extends Token {
       return block.isIdle() == false;
     }) == null;
   }
+  /**
+   * すべて消す
+   **/
+  public static function killAll():Void {
+    forEach(function(b:Block) {
+      b.kill();
+    });
+  }
+  public static function forEach(func:Block->Void):Void {
+    parent.forEachExists(func);
+  }
   public static function forEachIf(func:Block->Bool):Block {
     for(block in parent.members) {
       if(block.exists) {

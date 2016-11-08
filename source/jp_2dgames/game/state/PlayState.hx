@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.save.Save;
 import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.gui.BgUI;
 import jp_2dgames.game.token.Block;
@@ -171,6 +172,14 @@ class PlayState extends FlxTransitionableState {
       // リスタート
       FlxG.resetState();
 //      FlxG.switchState(new PlayInitState());
+    }
+    if(FlxG.keys.justPressed.S) {
+      Save.save(true, true);
+    }
+    if(FlxG.keys.justPressed.A) {
+      Save.load(true, true);
+      Block.killAll();
+      Field.createObjectsFromLayer();
     }
 #end
 #end
