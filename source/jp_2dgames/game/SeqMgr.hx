@@ -88,7 +88,13 @@ class SeqMgr {
 
   function _procAppearBottomExec():State {
     // 消滅チェック
-    return State.EraseCheck;
+    if(false) {
+      // 下から出現
+      return State.EraseCheck;
+    }
+
+    // 出現終わり
+    return State.AppearBlock;
   }
 
   function _procAppearBlock():State {
