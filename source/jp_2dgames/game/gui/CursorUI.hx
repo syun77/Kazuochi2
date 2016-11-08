@@ -26,6 +26,12 @@ class CursorUI extends FlxSprite {
     _instance._setNextBlock(nextBlock);
   }
 
+  public static function getBlock():Block {
+    var block = _instance._block;
+    _instance._block = null;
+    return block;
+  }
+
   // 表示
   public static function show():Void {
     _instance._show();

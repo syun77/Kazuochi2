@@ -82,11 +82,13 @@ class SeqMgr {
   }
 
   function _procAppearBottomCheck():State {
-    return State.None;
+    // せり上げチェック
+    return State.AppearBottomExec;
   }
 
   function _procAppearBottomExec():State {
-    return State.None;
+    // 消滅チェック
+    return State.EraseCheck;
   }
 
   function _procAppearBlock():State {
@@ -102,8 +104,13 @@ class SeqMgr {
       CursorUI.show();
     }
     if(Input.touchJustReleased) {
-      // 落下開始
+      // ブロックを配置
+      var block = CursorUI.getBlock();
       CursorUI.hide();
+      var layer = Field.getLayer();
+      layer.set(block.xgrid, block.ygrid, _nextBlock);
+      // 落下開始
+      Field.fall();
       return State.FallBlock;
     }
 
@@ -174,12 +181,24 @@ class SeqMgr {
     }
 
     // プレイヤーのターン終了
-
+    // 敵の行動
     return State.EnemyAIExec;
   }
 
   function _procEnemyAIExec():State {
-    return State.None;
+    // TODO: AI実行
+    if(false) {
+      // 上から降らす
+      return State.FallBlock;
+    }
+    else if(true) {
+      // 下からせり上げ
+      return State.AppearBottomCheck;
+    }
+    else {
+      // ブロック出現要求なし
+      return State.AppearBlock;
+    }
   }
 
   function _procWin():State {
