@@ -86,10 +86,13 @@ class CursorUI extends FlxSprite {
         }
       case State.MoveCursor:
         visible = true;
-        _updateMoveCursor();
         if(Input.touchJustReleased) {
-          // 選択したのでおしまい
+          // 離したのでおしまい
           _state = State.End;
+        }
+        else {
+          // 移動中
+          _updateMoveCursor();
         }
     }
 
