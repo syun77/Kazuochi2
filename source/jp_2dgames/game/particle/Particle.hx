@@ -1,244 +1,118 @@
 package jp_2dgames.game.particle;
 
-import flixel.tweens.FlxEase;
-import flixel.util.FlxColor;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.FlxG;
-import flixel.FlxCamera;
-import flixel.FlxState;
-import flixel.math.FlxAngle;
 import flash.display.BlendMode;
-import flixel.FlxSprite;
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle.ParticleType;
+import jp_2dgames.game.particle.Particle.ParticleType;
+import flixel.FlxState;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import jp_2dgames.game.token.Token;
 
 /**
  * パーティクルの種類
  **/
-enum PType {
-  Ball;    // 玉
-  Ball2;   // 玉2
-  Spiral;  // らせん
-  Ring;    // リング
-  Ring2;   // リング2
-  Ring3;   // リング3(逆再生)
-  Ring4;   // リング4(横につぶす)
+enum ParticleType {
+  Ball;  // 球体
+  Ring;  // ドーナッツ状の円
+  Blade; // 長細い
+  Rect;  // 矩形
 }
 
 /**
  * パーティクル
  **/
-class Particle extends FlxSprite {
+class Particle extends Token {
 
-  static inline var SCALE_BASE:Float    = 1.0;
-  static inline var SCALE_BALL:Float    = 0.25 * SCALE_BASE;
-  static inline var SCALE_BALL2:Float   = 0.05 * SCALE_BASE;
-  static inline var SCALE_SPIRAL:Float  = 0.25 * SCALE_BASE;
-  static inline var SCALE_RING:Float    = 1 * SCALE_BASE;
-  static inline var SCALE_RING2:Float   = 0.5 * SCALE_BASE;
-  static inline var SCALE_RING3:Float   = 8 * SCALE_BASE;
-  static inline var SCALE_RING4:Float   = 0.5 * SCALE_BASE;
-
-  static inline var SPEED_RATIO:Float   = 0.5;
-
-  // パーティクル管理
   public static var parent:FlxTypedGroup<Particle> = null;
-
-  /**
-   * 生成
-   **/
   public static function createParent(state:FlxState):Void {
-    parent = new FlxTypedGroup<Particle>(256);
-    for(i in 0...parent.maxSize) {
-      parent.add(new Particle());
-    }
+    parent = new FlxTypedGroup<Particle>();
     state.add(parent);
   }
-
-  /**
-   * 消滅
-   **/
   public static function destroyParent():Void {
     parent = null;
   }
 
   /**
-   * 開始
+   * 追加
    **/
-  public static function start(type:PType, X:Float, Y:Float, color:Int=FlxColor.WHITE):Void {
-
-    switch(type) {
-      case PType.Ball:
-        var dir = FlxG.random.float(0, 45);
-        for(i in 0...8) {
-          var p:Particle = parent.recycle();
-          var spd = FlxG.random.float(100, 400) * SPEED_RATIO;
-          var t = FlxG.random.int(40, 60);
-          p.init(type, t, X, Y, dir, spd);
-          p.color = color;
-          dir += FlxG.random.float(40, 50);
-        }
-      case PType.Ball2:
-        var dir = FlxG.random.float(0, 45);
-        for(i in 0...8) {
-          var p:Particle = parent.recycle();
-          var spd = FlxG.random.float(100, 400) * SPEED_RATIO;
-          var t = FlxG.random.int(10, 20);
-          p.init(type, t, X, Y, dir, spd);
-          p.color = color;
-          dir += FlxG.random.float(40, 50);
-        }
-      case PType.Ring, PType.Ring2, PType.Ring3, PType.Ring4:
-        var t = 60;
-        var p:Particle = parent.recycle();
-        p.init(type, t, X, Y, 0, 0);
-        p.color = color;
-
-      case PType.Spiral:
-        var p:Particle = parent.recycle();
-        var spd = FlxG.random.float(10, 20);
-        var t = FlxG.random.int(40, 60);
-        p.init(type, t, X, Y, 90, spd);
-        p.color = color;
-    }
+  public static function add(Type:ParticleType, X:Float, Y:Float, deg:Float, speed:Float):Particle {
+    var particle:Particle = parent.recycle(Particle);
+    particle.init(Type, X, Y, deg, speed);
+    return particle;
   }
 
-  /**
-   * 強制的に更新
-   **/
-  public static function forceUpdate(elapsed:Float):Void {
-    parent.update(elapsed);
-  }
+  // ===========================================
+  // ■プロパティ
+  var age(default, default):Float; // 死亡までの時間
 
-  // ----------------------------------------------------
+  // ===========================================
   // ■フィールド
-
-  // 種別
-  var _type:PType;
-  // タイマー
-  var _timer:Int;
-  // 開始タイマー
-  var _tStart:Int;
-  // 拡張パラメータ
-  var _val:Float;
-  // 最初のX座標
-  var _xprev:Float;
+  var _type:ParticleType;
+  var _lifespan:Float;
 
   /**
    * コンストラクタ
    **/
   public function new() {
     super();
-    loadGraphic(AssetPaths.IMAGE_EFFECT, true);
-
+    loadGraphic(AssetPaths.IMAGE_PARTICLE, true, 256, 256);
     // アニメーション登録
-    animation.add('${PType.Ball}', [0], 1);
-    animation.add('${PType.Ball2}', [0], 1);
-    animation.add('${PType.Ring}', [1], 2);
-    animation.add('${PType.Ring2}', [1], 2);
-    animation.add('${PType.Ring3}', [1], 2);
-    animation.add('${PType.Ring4}', [1], 2);
-    animation.add('${PType.Spiral}', [0], 1);
-
-    // 中心を基準に描画
-    offset.set(width / 2, height / 2);
-
-    // 加算ブレンド
-    blend = BlendMode.ADD;
-
-    // 非表示
-    kill();
+    _registerAnimations();
   }
 
   /**
    * 初期化
    **/
-  public function init(type:PType, timer:Int, X:Float, Y:Float, direction:Float, speed:Float):Void {
-    _type = type;
-    animation.play('${type}');
-    _timer = timer;
-    _tStart = timer;
-    _val = 0;
-    _xprev = X;
+  public function init(Type:ParticleType, X:Float, Y:Float, deg:Float, speed:Float):Void {
+    x = X - width/2;
+    y = Y - height/2;
+    setVelocity(deg, speed);
+    _type = Type;
+    animation.play('${_type}');
+    _lifespan = 0;
+    age = 1;
 
-    // 座標と速度を設定
-    x = X;
-    y = Y;
-    var rad = FlxAngle.asRadians(direction);
-    velocity.x = Math.cos(rad) * speed;
-    velocity.y = -Math.sin(rad) * speed;
-
-    // 初期化
-    alpha = 1.0;
-    switch(_type) {
-      case PType.Ball:
-        var sc = SCALE_BALL;
-        scale.set(sc, sc);
-        acceleration.y = 300 * SPEED_RATIO;
-      case PType.Ball2:
-        var sc = SCALE_BALL2;
-        scale.set(sc, sc);
-        acceleration.y = 300 * SPEED_RATIO;
-      case PType.Ring, PType.Ring2, PType.Ring3, PType.Ring4:
-        scale.set(0, 0);
-        acceleration.y = 0;
-        alpha = _timer / _tStart;
-      case PType.Spiral:
-        var sc = SCALE_SPIRAL;
-        scale.set(sc, sc);
-        acceleration.y = -200;
-        _val = FlxG.random.float() * 3.14*2;
-    }
+    // パラメータ初期化
+    scale.set(1, 1);
+    alpha = 1;
+    color = FlxColor.WHITE;
+    blend = BlendMode.ADD;
   }
 
   /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
-    super.update(elapsed);
 
-    switch(_type) {
-      case PType.Ball, PType.Ball2:
-        _timer--;
-        velocity.x *= 0.95;
-        velocity.y *= 0.95;
-        scale.x *= 0.97;
-        scale.y *= 0.97;
-        alpha = FlxEase.expoOut(_timer / _tStart);
-      case PType.Ring:
-        _timer = Std.int(_timer * 0.93);
-        var sc = SCALE_RING * (_tStart - _timer) / _tStart;
-        scale.set(sc, sc);
-        alpha = FlxEase.expoOut(_timer / _tStart);
-      case PType.Ring2:
-        _timer = Std.int(_timer * 0.93);
-        var sc = SCALE_RING2 * (_tStart - _timer) / _tStart;
-        scale.set(sc, sc);
-        alpha = FlxEase.expoOut(_timer / _tStart);
-      case PType.Ring3:
-        _timer = Std.int(_timer * 0.93);
-        var sc = SCALE_RING3 * _timer / _tStart;
-        scale.set(sc, sc);
-        alpha = FlxEase.expoOut(_timer / _tStart);
-      case PType.Ring4:
-        _timer = Std.int(_timer * 0.93);
-        var sc = SCALE_RING4 * (_tStart - _timer) / _tStart;
-        scale.set(sc, sc/4);
-        alpha = FlxEase.expoOut(_timer / _tStart);
-      case PType.Spiral:
-        _timer--;
-        _val += 0.05*2;
-        if(_val > 3.14*2) {
-          _val -= 3.14*2;
-        }
-
-        x = _xprev + 16 * Math.sin(_val);
-        velocity.y *= 0.95;
-        scale.x *= 0.97;
-        scale.y *= 0.97;
-    }
-
-    if(_timer < 1) {
+    _lifespan += elapsed;
+    if(_lifespan >= age) {
       // 消滅
       kill();
     }
+
+    switch(_type) {
+      case ParticleType.Ball:  // 球体
+      case ParticleType.Ring:  // ドーナッツ状の円
+      case ParticleType.Blade: // 長細い
+      case ParticleType.Rect:  // 矩形
+        var sc = elapsed;
+        scale.add(sc, sc);
+        alpha -= elapsed;
+    }
+
+    super.update(elapsed);
   }
+
+  /**
+   * アニメーションの登録
+   **/
+  function _registerAnimations():Void {
+    animation.add('${ParticleType.Ball}',  [0]);
+    animation.add('${ParticleType.Ring}',  [1]);
+    animation.add('${ParticleType.Blade}', [2]);
+    animation.add('${ParticleType.Rect}' , [3]);
+  }
+
+  // ===========================================
+  // ■アクセサ
 }

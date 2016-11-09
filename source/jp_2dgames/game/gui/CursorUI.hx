@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -53,6 +54,8 @@ class CursorUI extends FlxSprite {
   var _state:State = State.End;
   // 落下対象のブロック
   var _block:Block = null;
+  // 経過時間
+  var _elapsed:Float = 0;
 
   /**
    * コンストラクタ
@@ -63,7 +66,7 @@ class CursorUI extends FlxSprite {
     var w = Block.WIDTH;
     var h = Block.HEIGHT * Field.GRID_Y;
     makeGraphic(w, h, FlxColor.WHITE);
-    alpha = 0.5;
+    alpha = 0.2;
     visible = false;
     _state = State.End;
   }
@@ -96,6 +99,15 @@ class CursorUI extends FlxSprite {
         }
     }
 
+    if(_state != State.End) {
+      _elapsed += elapsed;
+      if(_elapsed > 0.3) {
+        var p = Particle.add(ParticleType.Rect, _block.xcenter, _block.ycenter, 0, 0);
+        p.color = FlxColor.RED;
+        _elapsed -= 0.3;
+      }
+    }
+
     super.update(elapsed);
 
   }
@@ -125,6 +137,7 @@ class CursorUI extends FlxSprite {
 
     // ブロック出現
     _state = State.AppearBlock;
+    _elapsed = 0;
   }
 
   /**
