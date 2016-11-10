@@ -3,6 +3,7 @@ package jp_2dgames.game.actor;
 /**
  * アニメーション状態
  **/
+import jp_2dgames.lib.Input;
 private enum AnimState {
   Idle; // 待機
   Damage;  // ダメージ
@@ -42,6 +43,10 @@ class Player extends Actor {
 
     _totalElapsed += elapsed;
     y = ystart + 4 * Math.sin(_totalElapsed*4);
+
+    if(Input.on.A) {
+      setParam(_hpmax + 100);
+    }
 
     animation.play('${_anim}');
   }

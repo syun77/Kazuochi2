@@ -1,11 +1,6 @@
 package jp_2dgames.game.gui;
 
-import flixel.ui.FlxButton;
-import flixel.util.FlxAxes;
-import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import flixel.ui.FlxBar;
-import jp_2dgames.lib.StatusBar;
+import jp_2dgames.game.actor.Player;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
 import jp_2dgames.game.global.Global;
@@ -28,10 +23,12 @@ class GameUI extends FlxSpriteGroup {
 
   var _tAnim:Int = 0;
 
+  var _playerUI:StatusUI;
+
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(player:Player) {
     super(4, 2);
 
     var px:Float = 0;
@@ -45,6 +42,10 @@ class GameUI extends FlxSpriteGroup {
     _txtLevel = new FlxText(px, py+FONT_SIZE+4, 0, "", FONT_SIZE);
 //    this.add(_txtLevel);
     _txtLevel.y -= FONT_SIZE-4;
+
+    // プレイヤーUI作成
+    _playerUI = new StatusUI(player.left+32, player.bottom-32, player);
+    this.add(_playerUI);
 
 #if debug
     // デバッグボタン

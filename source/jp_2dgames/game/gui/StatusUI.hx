@@ -1,16 +1,16 @@
 package jp_2dgames.game.gui;
 
+import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.SprFont;
 import flixel.FlxSprite;
 import jp_2dgames.lib.StatusBar;
-import flixel.group.FlxGroup;
 
 /**
  * ステータスUI
  **/
-class StatusUI extends FlxGroup {
+class StatusUI extends FlxSpriteGroup {
 
   // HP数値の最大桁数
   static inline var MAX_DIGIT:Int = 8;
@@ -19,6 +19,7 @@ class StatusUI extends FlxGroup {
   var _activeBar:StatusBar;
   // HP
   var _txtHp:FlxSprite;
+  var _txtHpX:Float;
   // 対象のアクター
   var _actor:Actor;
 
@@ -29,14 +30,17 @@ class StatusUI extends FlxGroup {
    * コンストラクタ
    **/
   public function new(X:Float, Y:Float, actor:Actor) {
-    super(X, Y);
+    super();
+    x = X;
+    y = Y;
 
     // アクターを保持
     _actor = actor;
 
     // アクティブゲージ作成
-    _activeBar = new StatusBar(0, 0, 64, 4, true);
-    _txtHp = new FlxSprite(32, 16);
+    _activeBar = new StatusBar(0, 0, 64, 8, true);
+    _txtHpX = 88;
+    _txtHp = new FlxSprite(_txtHpX, 12);
 
     // HP数値作成
     var FONT_SIZE:Int = SprFont.FONT_WIDTH;
@@ -62,7 +66,8 @@ class StatusUI extends FlxGroup {
       var hp = _actor.hp;
       if(hp != _hp) {
         // 前回と値が違ったら描画
-        SprFont.render(this, '${hp}');
+        var w = SprFont.render(_txtHp, '${hp}');
+        _txtHp.x = _txtHpX - (w/2);
         _hp = hp;
       }
     }

@@ -9,12 +9,12 @@ class Actor extends Token {
 
   // ========================================
   // ■プロパティ
-  var hp(get, never):Int;
-  var hpmax(get, never):Int;
-  var hpratio(get, never):Float;
-  var ap(get, never):Int;
-  var apmax(get, never):Int;
-  var apratio(get, never):Float;
+  public var hp(get, never):Int;
+  public var hpmax(get, never):Int;
+  public var hpratio(get, never):Float;
+  public var ap(get, never):Int;
+  public var apmax(get, never):Int;
+  public var apratio(get, never):Float;
 
   // ========================================
   // ■フィールド

@@ -70,6 +70,7 @@ class PlayState extends FlxTransitionableState {
     Field.createObjectsFromLayer();
 
     var player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
+    player.setParam(100);
     this.add(player);
 
     // パーティクル生成
@@ -78,7 +79,7 @@ class PlayState extends FlxTransitionableState {
 
     // GUI生成
     CursorUI.createInstance(this);
-    this.add(new GameUI());
+    this.add(new GameUI(player));
 
     // シーケンス管理生成
     _seq = new SeqMgr();
