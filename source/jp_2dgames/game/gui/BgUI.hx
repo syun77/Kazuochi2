@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.tweens.FlxTween;
 import jp_2dgames.lib.MyColor;
 import flixel.util.FlxColor;
 import jp_2dgames.game.token.Block;
@@ -36,6 +37,20 @@ class BgUI extends FlxGroup {
     _grid = _createGrid();
     _grid.color = MyColor.SILVER;
     this.add(_grid);
+
+    // 危険ライン
+    {
+      var px = Field.toWorldX(0);
+      var py = Field.toWorldY(1);
+      var w  = Block.WIDTH * Field.GRID_X+4;
+      var h  = 8;
+      px -= 2;
+      py -= h/2;
+      var line = new FlxSprite(px, py);
+      line.makeGraphic(w, h, FlxColor.RED);
+      FlxTween.tween(line, {alpha:0.5}, 1, {type:FlxTween.PINGPONG});
+      this.add(line);
+    }
   }
 
   /**
