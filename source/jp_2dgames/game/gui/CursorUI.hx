@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.math.FlxMath;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
@@ -120,6 +121,11 @@ class CursorUI extends FlxSprite {
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
     var ygrid = 0;
+
+    // 画面外に出ないようにする
+    xgrid = FlxMath.maxInt(xgrid, 0);
+    xgrid = FlxMath.minInt(xgrid, Field.GRID_X-1);
+
     x = Field.toWorldX(xgrid);
     y = Field.toWorldY(ygrid);
 
