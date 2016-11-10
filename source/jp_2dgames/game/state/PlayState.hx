@@ -6,8 +6,6 @@ import jp_2dgames.game.save.Save;
 import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.gui.BgUI;
 import jp_2dgames.game.token.Block;
-import flixel.FlxSprite;
-import flixel.text.FlxText;
 import flixel.addons.transition.FlxTransitionableState;
 import jp_2dgames.game.particle.ParticleStartLevel;
 import jp_2dgames.game.gui.GameUI;
@@ -39,10 +37,10 @@ class PlayState extends FlxTransitionableState {
 
   // ---------------------------------------
   // ■定数
-  static inline var PLAYER_POS_X:Int = 16;
+  static inline var PLAYER_POS_X:Int = 0;
   static inline var PLAYER_POS_Y:Int = 0;
-  static inline var ENEMY_POS_X:Int = 160;
-  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y;
+  static inline var ENEMY_POS_X:Int = 192;
+  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y+9;
 
   // ---------------------------------------
   // ■フィールド

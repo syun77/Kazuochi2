@@ -39,7 +39,7 @@ class StatusUI extends FlxSpriteGroup {
 
     // アクティブゲージ作成
     _activeBar = new StatusBar(0, 0, 64, 8, true);
-    _txtHpX = 88;
+    _txtHpX = 33;
     _txtHp = new FlxSprite(_txtHpX, 12);
 
     // HP数値作成
@@ -67,7 +67,7 @@ class StatusUI extends FlxSpriteGroup {
       if(hp != _hp) {
         // 前回と値が違ったら描画
         var w = SprFont.render(_txtHp, '${hp}');
-        _txtHp.x = _txtHpX - (w/2);
+        _txtHp.x = x + _txtHpX - (w/2);
         _hp = hp;
       }
     }
