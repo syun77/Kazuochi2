@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
@@ -24,11 +25,12 @@ class GameUI extends FlxSpriteGroup {
   var _tAnim:Int = 0;
 
   var _playerUI:StatusUI;
+  var _enemyUI:StatusUI;
 
   /**
    * コンストラクタ
    **/
-  public function new(player:Player) {
+  public function new(player:Player, enemy:Enemy) {
     super(4, 2);
 
     var px:Float = 0;
@@ -46,6 +48,10 @@ class GameUI extends FlxSpriteGroup {
     // プレイヤーUI作成
     _playerUI = new StatusUI(player.left+32, player.bottom-32, player);
     this.add(_playerUI);
+
+    // 敵UI作成
+    _enemyUI = new StatusUI(enemy.left+32, enemy.bottom-32, enemy);
+    this.add(_enemyUI);
 
 #if debug
     // デバッグボタン

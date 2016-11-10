@@ -6,6 +6,7 @@ package jp_2dgames.game;
 class AssetPaths {
   // 画像ファイル
   public static inline var IMAGE_PLAYER = "assets/images/player.png";
+  public static inline var IMAGE_ENEMY  = "assets/images/enemy.png";
   public static inline var IMAGE_EFFECT = "assets/images/effect.png";
   public static inline var IMAGE_BUTTON = "assets/images/button.png";
   public static inline var IMAGE_BLOCK  = "assets/images/block.png";

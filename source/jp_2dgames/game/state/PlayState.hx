@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.save.Save;
 import jp_2dgames.game.gui.CursorUI;
@@ -40,6 +41,8 @@ class PlayState extends FlxTransitionableState {
   // ■定数
   static inline var PLAYER_POS_X:Int = 16;
   static inline var PLAYER_POS_Y:Int = 0;
+  static inline var ENEMY_POS_X:Int = 160;
+  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y;
 
   // ---------------------------------------
   // ■フィールド
@@ -69,9 +72,15 @@ class PlayState extends FlxTransitionableState {
     // 各種オブジェクト生成
     Field.createObjectsFromLayer();
 
+    // プレイヤーの生成
     var player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
     player.setParam(100);
     this.add(player);
+
+    // 敵の生成
+    var enemy = new Enemy(ENEMY_POS_X, ENEMY_POS_Y);
+    enemy.setParam(9999);
+    this.add(enemy);
 
     // パーティクル生成
     Particle.createParent(this);
@@ -79,7 +88,7 @@ class PlayState extends FlxTransitionableState {
 
     // GUI生成
     CursorUI.createInstance(this);
-    this.add(new GameUI(player));
+    this.add(new GameUI(player, enemy));
 
     // シーケンス管理生成
     _seq = new SeqMgr();
