@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.save.Save;
 import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.gui.BgUI;
@@ -36,6 +37,11 @@ private enum State {
 class PlayState extends FlxTransitionableState {
 
   // ---------------------------------------
+  // ■定数
+  static inline var PLAYER_POS_X:Int = 16;
+  static inline var PLAYER_POS_Y:Int = 0;
+
+  // ---------------------------------------
   // ■フィールド
   var _state:State = State.Init;
 
@@ -62,6 +68,9 @@ class PlayState extends FlxTransitionableState {
 
     // 各種オブジェクト生成
     Field.createObjectsFromLayer();
+
+    var player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
+    this.add(player);
 
     // パーティクル生成
     Particle.createParent(this);

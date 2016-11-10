@@ -14,20 +14,20 @@ class Actor extends Token {
   var hpratio(get, never):Float;
   var ap(get, never):Int;
   var apmax(get, never):Int;
-  var apratio(get, nver):Float;
+  var apratio(get, never):Float;
 
   // ========================================
   // ■フィールド
-  var _hp;    // 現在のHP
-  var _hpmax; // 最大HP
-  var _ap;    // 現在の行動ポイント
-  var _apmax; // 最大行動ポイント
+  var _hp:Int;    // 現在のHP
+  var _hpmax:Int; // 最大HP
+  var _ap:Int;    // 現在の行動ポイント
+  var _apmax:Int; // 最大行動ポイント
 
   /**
    * コンストラクタ
    **/
-  public function new() {
-    super();
+  public function new(X:Float=0.0, Y:Float=0.0) {
+    super(X, Y);
   }
 
   /**
