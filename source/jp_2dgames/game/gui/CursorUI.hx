@@ -84,12 +84,28 @@ class CursorUI extends FlxSprite {
       case State.AppearBlock:
         // カーソル非表示
         visible = false;
+      #if flash
+        // カーソル移動へ
+        _state = State.MoveCursor;
+      #else
         if(Input.touchJustPressed) {
           // カーソル移動へ
           _state = State.MoveCursor;
         }
+      #end
       case State.MoveCursor:
         visible = true;
+      #if flash
+        _block.visible = true;
+        if(FlxG.mouse.justPressed) {
+          // 離したのでおしまい
+          _state = State.End;
+        }
+        else {
+          // 移動中
+          _updateMoveCursor();
+        }
+      #else
         if(Input.touchJustReleased) {
           // 離したのでおしまい
           _state = State.End;
@@ -98,6 +114,7 @@ class CursorUI extends FlxSprite {
           // 移動中
           _updateMoveCursor();
         }
+      #end
     }
 
     if(_state != State.End) {
@@ -140,6 +157,9 @@ class CursorUI extends FlxSprite {
     var px = Field.GRID_NEXT_X;
     var py = Field.GRID_NEXT_Y;
     _block = Block.add(nextBlock, px, py);
+#if flash
+    _block.visible = false;
+#end
 
     // ブロック出現
     _state = State.AppearBlock;

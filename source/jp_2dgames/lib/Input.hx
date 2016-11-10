@@ -258,6 +258,11 @@ class Input {
   // ------------------------------------------------------
   // ■アクセサ
   static function get_x() {
+
+#if flash
+  return FlxG.mouse.x;
+#end
+
 #if FLX_TOUCH
     for(touch in FlxG.touches.list) {
       if(touch.pressed) {
@@ -270,6 +275,11 @@ class Input {
 #end
   }
   static function get_y() {
+
+#if flash
+    return FlxG.mouse.y;
+#end
+
 #if FLX_TOUCH
     for(touch in FlxG.touches.list) {
       if(touch.pressed) {
