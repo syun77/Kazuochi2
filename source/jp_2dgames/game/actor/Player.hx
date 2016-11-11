@@ -25,7 +25,6 @@ class Player extends Actor {
    **/
   public function new(X:Float, Y:Float) {
     super(X, Y);
-    setStartPosition(X, Y);
     scale.set(0.5, 0.5);
 
     loadGraphic(AssetPaths.IMAGE_PLAYER, true);

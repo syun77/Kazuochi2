@@ -33,6 +33,13 @@ class Enemy extends Actor  {
   }
 
   /**
+   * ダメージ処理
+   **/
+  override public function damage(v:Int):Void {
+    super.damage(v);
+  }
+
+  /**
    * アニメーションの登録
    **/
   function _registerAnimations():Void {

@@ -163,8 +163,8 @@ class SeqMgr {
       return State.None;
     }
 
-    // ダメージ計算
-    var v = 1;
+    // TODO: ダメージ計算
+    var v = 100;
 
     // 敵にダメージを与える
     _enemy.damage(v);

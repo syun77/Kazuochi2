@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import flixel.effects.FlxFlicker;
 import jp_2dgames.lib.DirUtil;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
@@ -12,8 +13,8 @@ import flixel.FlxSprite;
  * 状態
  **/
 private enum State {
-  Main;  // メイン
-  Fade;  // フェードで消える
+  Main;    // メイン
+  Flicker; // 点滅で消える
 }
 
 /**
@@ -29,9 +30,9 @@ class ParticleBmpFont extends FlxSprite {
 
   // ■速度関連
   // 開始速度
-  static inline var SPEED_Y_INIT:Float = 5.0;//-20.0;
+  static inline var SPEED_INIT:Float = 200.0;
   // 重力加速度
-  static inline var GRAVITY:Float = 15.0;
+  static inline var GRAVITY:Float = 800.0;
   // 床との反発係数
   static inline var FRICTION:Float = 0.5;
 
@@ -56,12 +57,12 @@ class ParticleBmpFont extends FlxSprite {
 
   public static function start(X:Float, Y:Float, str:String, color:Int=FlxColor.WHITE, ?movedir:Dir):ParticleBmpFont {
     var p:ParticleBmpFont = parent.recycle();
-    p.init(X, Y, str, movedir);
+    p.init(X, Y, str);
     p.color = color;
     return p;
   }
   public static function startNumber(X:Float, Y:Float, val:Int, color:Int=FlxColor.WHITE, ?movedir:Dir):ParticleBmpFont {
-    return start(X, Y, '${val}', color, movedir);
+    return start(X, Y, '${val}', color);
   }
 
   /**
@@ -93,29 +94,17 @@ class ParticleBmpFont extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(X:Float, Y:Float, str:String, movedir:Dir) {
-
-    // カメラ位置をオフセット
-    X += -FlxG.camera.scroll.x;
-    Y += -FlxG.camera.scroll.y;
+  public function init(X:Float, Y:Float, str:String) {
 
     x = X;
     y = Y;
     _ystart = Y;
+    acceleration.y = GRAVITY;
 
     var w = SprFont.render(this, str);
 
-    if(movedir == null) {
-      movedir = Dir.Up;
-    }
     // 移動開始
-    switch(movedir) {
-      case Dir.Left:  velocity.x = -SPEED_Y_INIT; // 左へ移動
-      case Dir.Up:    velocity.y = -SPEED_Y_INIT; // 上へ移動
-      case Dir.Right: velocity.x =  SPEED_Y_INIT; // 右へ移動
-      case Dir.Down:  velocity.y =  SPEED_Y_INIT; // 下へ移動
-      default:
-    }
+    velocity.y = -SPEED_INIT;
 
     // フォントを中央揃えする
     x = X - (w / 2);
@@ -137,20 +126,25 @@ class ParticleBmpFont extends FlxSprite {
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
+    if(y > _ystart) {
+      // 地面に当たったら跳ね返る
+      y = _ystart;
+      velocity.y *= -FRICTION;
+    }
+
     switch(_state) {
       case State.Main:
         _timer--;
         if(_timer == 0) {
-          // フェードで消える
-          _state = State.Fade;
+          // 点滅で消える
+          _state = State.Flicker;
+          FlxFlicker.flicker(this, 0.3, 0.02, true, true, function(_) {
+            // 点滅終了後に消える
+            kill();
+          });
         }
 
-      case State.Fade:
-        // フェードで消える
-        alpha -= 1.0 / 30;
-        if(alpha < 0) {
-          kill();
-        }
+      case State.Flicker:
     }
 
   }
