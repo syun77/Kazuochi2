@@ -3,6 +3,9 @@ package jp_2dgames.game;
 /**
  * 状態
  **/
+import jp_2dgames.game.actor.Enemy;
+import jp_2dgames.game.actor.Player;
+import flixel.math.FlxMath;
 import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.token.Block;
@@ -55,12 +58,19 @@ class SeqMgr {
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
   var _nextBlock:Int = 0; // 次に出現するブロックの番号
 
+  // キャラクター
+  var _player:Player;
+  var _enemy:Enemy;
+
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(player:Player, enemy:Enemy) {
     _state = State.Init;
     _statePrev = _state;
+
+    _player = player;
+    _enemy  = enemy;
 
     // デバッグ用
     FlxG.watch.add(this, "_state");
@@ -153,17 +163,46 @@ class SeqMgr {
       return State.None;
     }
 
+    // ダメージ計算
+    var v = 1;
+
+    // 敵にダメージを与える
+    _enemy.damage(v);
+
     // 勝利敗北判定
     return State.WinLoseCheck;
   }
 
   function _procDamageCheck():State {
-    // TODO: ダメージ処理
-    return State.DamageExec;
+    // TODO: フィールド外のブロックをチェック
+    if(false) {
+      // TODO: 存在する場合はダメージ処理
+      return State.DamageExec;
+    }
+    else {
+      // TODO: 存在しない場合は勝敗チェック
+      return State.WinLoseCheck;
+    }
   }
 
   function _procDamageExec():State {
-    // TODO: ダメージ処理
+
+    if(false) {
+      // TODO: ダメージ演出完了待ち
+      return State.None;
+    }
+
+    var nEraseBlock:Int = 1; // 消滅したブロック数
+    var v:Int = 0;  // 最終的なダメージ値
+    var d:Int = 30; // 基準
+    for(i in 0...nEraseBlock) {
+      v += d;
+      d = Math.floor(d / 2);
+      d = FlxMath.maxInt(d, 5); // 5ダメージが下限
+    }
+
+    // TODO: プレイヤーにダメージを与える
+
     return State.WinLoseCheck;
   }
 

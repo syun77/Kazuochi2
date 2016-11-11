@@ -89,7 +89,7 @@ class PlayState extends FlxTransitionableState {
     this.add(new GameUI(player, enemy));
 
     // シーケンス管理生成
-    _seq = new SeqMgr();
+    _seq = new SeqMgr(player, enemy);
   }
 
   /**

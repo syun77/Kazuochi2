@@ -1,6 +1,8 @@
 package jp_2dgames.game.actor;
-import flixel.FlxG;
-import jp_2dgames.lib.Input;
+
+/**
+ * 敵
+ **/
 class Enemy extends Actor  {
 
   // ==========================================
@@ -28,11 +30,6 @@ class Enemy extends Actor  {
     _totalElapsed += elapsed;
 
     angle = 5 * Math.sin(_totalElapsed);
-
-    if(Input.press.A) {
-      var anim = FlxG.random.int(1, 5);
-      animation.play('${anim}');
-    }
   }
 
   /**
