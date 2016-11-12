@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.game.particle.Particle;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -70,5 +71,18 @@ class Shot extends Token {
     }
 
     FlxTween.quadMotion(this, x, y, xctrl, yctrl, xtarget, ytarget, 0.5, true, {onComplete:func});
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update(elapsed:Float):Void {
+    super.update(elapsed);
+
+    var deg = FlxG.random.float(0, 360);
+    var speed = FlxG.random.float(50, 100);
+    var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
+    p.scale.set(0.2, 0.2);
+    p.drag.set(100, 100);
   }
 }
