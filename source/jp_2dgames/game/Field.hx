@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.Enemy;
+import jp_2dgames.game.token.Shot;
 import flixel.math.FlxMath;
 import jp_2dgames.game.token.Block;
 import flixel.tile.FlxTilemap;
@@ -93,9 +95,9 @@ class Field {
   /**
    * 消去チェック
    **/
-  public static function checkErase():Int {
+  public static function checkErase(result:EraseResult, enemy:Enemy):EraseResult {
 
-    var totalEraseCount:Int = 0;
+    result.init();
 
     _layer.forEach(function(i:Int, j:Int, v:Int) {
       if(v == 0) {
@@ -115,7 +117,11 @@ class Field {
 
       // 消去できる
       // 消去数アップ
-      totalEraseCount += cnt;
+      result.erase += cnt;
+
+      // 座標の合計
+      var xgridTotal:Int = 0;
+      var ygridTotal:Int = 0;
 
       _tmpLayer.forEach(function(xgrid:Int, ygrid:Int, val:Int) {
         if(val != 1) {
@@ -129,15 +135,25 @@ class Field {
           block.erase();
           // レイヤーからも消す
           _layer.set(xgrid, ygrid, 0);
+
+          // 座標の合計を求める
+          xgridTotal += xgrid;
+          ygridTotal += ygrid;
         }
         else {
           trace('error:${xgrid},${ygrid}');
         }
       });
+
+      // 攻撃演出生成
+      var px = OFFSET_X + (xgridTotal / cnt) * TILE_WIDTH;
+      var py = OFFSET_Y + (ygridTotal / cnt) * TILE_HEIGHT;
+      Shot.add(px, py, enemy.xcenter, enemy.ycenter);
+
     });
 
     // トータル消去数を返す
-    return totalEraseCount;
+    return result;
   }
 
   static function _checkEraseRecursion(layer:Array2D, x:Int, y:Int, dx:Int, dy:Int, val:Int, cnt:Int):Int {

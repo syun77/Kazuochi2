@@ -59,6 +59,8 @@ class SeqMgr {
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
   var _nextBlock:Int = 0; // 次に出現するブロックの番号
 
+  var _eraseResult:EraseResult; // 消去結果
+
   // キャラクター
   var _player:Player;
   var _enemy:Enemy;
@@ -69,6 +71,8 @@ class SeqMgr {
   public function new(player:Player, enemy:Enemy) {
     _state = State.Init;
     _statePrev = _state;
+
+    _eraseResult = new EraseResult();
 
     _player = player;
     _enemy  = enemy;
@@ -142,18 +146,9 @@ class SeqMgr {
 
   function _procEraseCheck():State {
     // 消去処理
-    var cntErase = Field.checkErase();
-    if(cntErase > 0) {
+    var result = Field.checkErase(_eraseResult, _enemy);
+    if(result.erase > 0) {
       // 消去できた
-      var f
-      Shot.add(FlxG.width/2, FlxG.height, _enemy.xcenter, _enemy.ycenter, function() {
-
-        // TODO: ダメージ計算
-        var v = 100;
-
-        // 敵にダメージを与える
-        _enemy.damage(v);
-      });
       // 連鎖続行
       _bKeepOnChain = true;
       return State.EraseExec;
@@ -177,6 +172,12 @@ class SeqMgr {
       // 演出中
       return State.None;
     }
+
+    // TODO: ダメージ計算
+    var v = 100;
+
+    // 敵にダメージを与える
+    _enemy.damage(v);
 
     // 勝利敗北判定
     return State.WinLoseCheck;
