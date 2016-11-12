@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.token.Shot;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.save.Save;
@@ -80,6 +81,9 @@ class PlayState extends FlxTransitionableState {
     enemy.setParam(9999);
     this.add(enemy);
 
+    // ショット生成
+    Shot.createParent(this);
+
     // パーティクル生成
     Particle.createParent(this);
     ParticleBmpFont.createParent(this);
@@ -98,6 +102,7 @@ class PlayState extends FlxTransitionableState {
   override public function destroy():Void {
 
     Block.destroyParent();
+    Shot.destroyParent();
     Particle.destroyParent();
     ParticleBmpFont.destroyParent();
     Input.destroyVirtualPad();

@@ -3,6 +3,7 @@ package jp_2dgames.game;
 /**
  * 状態
  **/
+import jp_2dgames.game.token.Shot;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import flixel.math.FlxMath;
@@ -144,6 +145,15 @@ class SeqMgr {
     var cntErase = Field.checkErase();
     if(cntErase > 0) {
       // 消去できた
+      var f
+      Shot.add(FlxG.width/2, FlxG.height, _enemy.xcenter, _enemy.ycenter, function() {
+
+        // TODO: ダメージ計算
+        var v = 100;
+
+        // 敵にダメージを与える
+        _enemy.damage(v);
+      });
       // 連鎖続行
       _bKeepOnChain = true;
       return State.EraseExec;
@@ -163,11 +173,10 @@ class SeqMgr {
       return State.None;
     }
 
-    // TODO: ダメージ計算
-    var v = 100;
-
-    // 敵にダメージを与える
-    _enemy.damage(v);
+    if(Shot.parent.countLiving() > 0) {
+      // 演出中
+      return State.None;
+    }
 
     // 勝利敗北判定
     return State.WinLoseCheck;
