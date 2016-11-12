@@ -63,7 +63,6 @@ class Shot extends Token {
 
     xtarget -= origin.x;
     ytarget -= origin.y;
-    trace(offset.x, offset.y);
 
     // 移動完了後のコールバック関数
     var func = function(_) {

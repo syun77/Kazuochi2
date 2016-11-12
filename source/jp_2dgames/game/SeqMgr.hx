@@ -86,7 +86,7 @@ class SeqMgr {
    * 状態遷移
    **/
   function _change(next:State):Void {
-    trace('${_state} -> ${next}');
+    //trace('${_state} -> ${next}');
     _statePrev = _state;
     _state = next;
   }
@@ -173,8 +173,8 @@ class SeqMgr {
       return State.None;
     }
 
-    // TODO: ダメージ計算
-    var v = 100;
+    // ダメージ計算
+    var v = _eraseResult.calculateDamage();
 
     // 敵にダメージを与える
     _enemy.damage(v);

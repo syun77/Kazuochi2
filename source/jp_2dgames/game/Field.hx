@@ -119,6 +119,14 @@ class Field {
       // 消去数アップ
       result.erase += cnt;
 
+      // 消去グループ数アップ
+      result.kind++;
+
+      // 最大連結数
+      if(cnt > result.connect) {
+        result.connect = cnt;
+      }
+
       // 座標の合計
       var xgridTotal:Int = 0;
       var ygridTotal:Int = 0;
@@ -146,11 +154,20 @@ class Field {
       });
 
       // 攻撃演出生成
-      var px = OFFSET_X + (xgridTotal / cnt) * TILE_WIDTH;
-      var py = OFFSET_Y + (ygridTotal / cnt) * TILE_HEIGHT;
+      var px = OFFSET_X + (xgridTotal / cnt + 0.5) * TILE_WIDTH;
+      var py = OFFSET_Y + (ygridTotal / cnt + 0.5) * TILE_HEIGHT;
       Shot.add(px, py, enemy.xcenter, enemy.ycenter);
 
     });
+
+    if(result.erase > 0) {
+      // 連鎖数を増やす
+      result.chain++;
+    }
+    else {
+      // 連鎖終了
+      result.chain = 0;
+    }
 
     // トータル消去数を返す
     return result;
