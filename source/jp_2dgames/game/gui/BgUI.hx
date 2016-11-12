@@ -127,6 +127,6 @@ class BgUI extends FlxGroup {
       _tBlack = Math.max(_tBlack - elapsed, 0);
     }
 
-    _bg.color = FlxColor.interpolate(FlxColor.WHITE, FlxColor.GRAY, _tBlack/MAX_BLACK);
+    _bg.color = FlxColor.interpolate(FlxColor.WHITE, MyColor.CHARCOAL, _tBlack/MAX_BLACK);
   }
 }
