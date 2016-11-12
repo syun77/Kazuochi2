@@ -90,6 +90,5 @@ class Shot extends Token {
     var speed = FlxG.random.float(50, 100);
     var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
     p.scale.set(0.2, 0.2);
-    p.drag.set(100, 100);
   }
 }

@@ -197,11 +197,6 @@ class SeqMgr {
 
   function _procDamageExec():State {
 
-    if(false) {
-      // TODO: ダメージ演出完了待ち
-      return State.None;
-    }
-
     var nEraseBlock:Int = 1; // 消滅したブロック数
     var v:Int = 0;  // 最終的なダメージ値
     var d:Int = 30; // 基準
@@ -217,12 +212,18 @@ class SeqMgr {
   }
 
   function _procWinLoseCheck():State {
+    if(_player.isShake() || _enemy.isShake()) {
+      // ダメージ演出完了待ち
+      return State.None;
+    }
+
     if(false) {
       // TODO: プレイヤー死亡
       return State.Lose;
     }
-    if(false) {
-      // TODO: 敵死亡
+    if(_enemy.isDead()) {
+      // 敵死亡
+      _enemy.vanish();
       return State.Win;
     }
     if(_bKeepOnChain) {

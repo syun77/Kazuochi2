@@ -78,6 +78,7 @@ class Particle extends Token {
     color = FlxColor.WHITE;
     blend = BlendMode.ADD;
     drag.set();
+    angle = 0;
   }
 
   /**
@@ -94,11 +95,19 @@ class Particle extends Token {
     switch(_type) {
       case ParticleType.Ball:  // 球体
         alpha -= elapsed;
-        scale.x *= 0.98;
-        scale.y *= 0.98;
+        scale.x *= 0.95;
+        scale.y *= 0.95;
+        velocity.x *= 0.97;
+        velocity.y *= 0.97;
 
       case ParticleType.Ring:  // ドーナッツ状の円
+        var sc = elapsed * 4;
+        scale.add(sc, sc);
+        alpha -= elapsed;
+
       case ParticleType.Blade: // 長細い
+        alpha -= elapsed;
+
       case ParticleType.Rect:  // 矩形
         var sc = elapsed;
         scale.add(sc, sc);
