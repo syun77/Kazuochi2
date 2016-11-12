@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.token.Shot;
 import flixel.tweens.FlxTween;
 import jp_2dgames.lib.MyColor;
 import flixel.util.FlxColor;
@@ -16,11 +17,15 @@ import flash.geom.Rectangle;
 class BgUI extends FlxGroup {
 
   static inline var THICK:Int = 2; // 線の太さ
+  static inline var MAX_BLACK:Float = 0.4;
 
   // ==================================
   // ■フィールド
   var _bg:FlxSprite;
   var _grid:FlxSprite;
+
+  // 暗くするタイマー
+  var _tBlack:Float = 0.0;
 
   /**
    * コンストラクタ
@@ -105,5 +110,23 @@ class BgUI extends FlxGroup {
     }
 
     return bitmap;
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update(elapsed:Float):Void {
+    super.update(elapsed);
+
+    if(Shot.count() > 0) {
+      // 暗くする
+      _tBlack = Math.min(_tBlack + elapsed, MAX_BLACK);
+    }
+    else {
+      // 明るくする
+      _tBlack = Math.max(_tBlack - elapsed, 0);
+    }
+
+    _bg.color = FlxColor.interpolate(FlxColor.WHITE, FlxColor.GRAY, _tBlack/MAX_BLACK);
   }
 }

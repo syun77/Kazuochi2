@@ -168,7 +168,7 @@ class SeqMgr {
       return State.None;
     }
 
-    if(Shot.parent.countLiving() > 0) {
+    if(Shot.count() > 0) {
       // 演出中
       return State.None;
     }

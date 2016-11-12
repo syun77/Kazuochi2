@@ -27,6 +27,13 @@ class Shot extends Token {
   }
 
   /**
+   * 生存数をカウント
+   **/
+  public static function count():Int {
+    return parent.countLiving();
+  }
+
+  /**
    * コンストラクタ
    **/
   public function new() {
