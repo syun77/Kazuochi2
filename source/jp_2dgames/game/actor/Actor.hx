@@ -72,18 +72,6 @@ class Actor extends Token {
    **/
   public function vanish():Void {
 
-    var deg = FlxG.random.float(0, 360);
-    for(i in 0...12) {
-      deg += 360/7 + FlxG.random.float(0, 20);
-      var speed = FlxG.random.float(200, 400);
-      var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
-      var sc = FlxG.random.float(0.3, 0.6);
-      p.scale.set(sc, sc);
-      p.acceleration.y = 200;
-    }
-
-    // 見た目だけ消す
-    visible = false;
   }
 
   /**
@@ -118,13 +106,6 @@ class Actor extends Token {
       return TIMER_DAMAGE_MIDDLE;
     }
     return TIMER_DAMAGE_LARGE;
-  }
-
-  /**
-   * ダメージシェイク中かどうか
-   **/
-  public function isShake():Bool {
-    return _tDamage > 0.5;
   }
 
   /**

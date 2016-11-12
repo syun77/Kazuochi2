@@ -79,6 +79,7 @@ class Particle extends Token {
     blend = BlendMode.ADD;
     drag.set();
     angle = 0;
+    acceleration.set();
   }
 
   /**

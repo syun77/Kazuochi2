@@ -86,7 +86,7 @@ class SeqMgr {
    * 状態遷移
    **/
   function _change(next:State):Void {
-    //trace('${_state} -> ${next}');
+    trace('${_state} -> ${next}');
     _statePrev = _state;
     _state = next;
   }
@@ -212,10 +212,6 @@ class SeqMgr {
   }
 
   function _procWinLoseCheck():State {
-    if(_player.isShake() || _enemy.isShake()) {
-      // ダメージ演出完了待ち
-      return State.None;
-    }
 
     if(false) {
       // TODO: プレイヤー死亡
@@ -255,7 +251,18 @@ class SeqMgr {
   }
 
   function _procWin():State {
-    return State.None;
+    if(_enemy.visible) {
+      // 敵消滅待ち
+      return State.None;
+    }
+
+    // TODO: 次の敵出現
+    _enemy.setParam(100);
+    _enemy.appear();
+
+    // 落下開始
+    Field.fall();
+    return State.FallBlock;
   }
 
   function _procLose():State {

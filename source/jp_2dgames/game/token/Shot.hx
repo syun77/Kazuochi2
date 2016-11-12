@@ -57,9 +57,12 @@ class Shot extends Token {
     // 制御点
     var xctrl = -200;
     var yctrl = -200;
+    var xctrl2 = 200;
+    var yctrl2 = 200;
 
     if(X > FlxG.width/2) {
       xctrl = 200;
+      yctrl2 = 0;
     }
 
     if(FlxG.random.bool()) {
@@ -67,6 +70,12 @@ class Shot extends Token {
     }
     else {
       yctrl = FlxG.random.int(0, 200);
+    }
+    if(FlxG.random.bool()) {
+      xctrl2 = 120 + FlxG.random.int(0, 100);
+    }
+    else {
+      yctrl2 = 300 + FlxG.random.int(0, 200);
     }
 
     xtarget -= origin.x;
@@ -77,7 +86,13 @@ class Shot extends Token {
       kill();
     }
 
-    FlxTween.quadMotion(this, x, y, xctrl, yctrl, xtarget, ytarget, 0.5, true, {onComplete:func});
+    if(FlxG.random.bool()) {
+      FlxTween.quadMotion(this, x, y, xctrl, yctrl, xtarget, ytarget, 0.5, true, {onComplete:func});
+    }
+    else {
+
+      FlxTween.cubicMotion(this, x, y, xctrl, yctrl, xctrl2, yctrl2, xtarget, ytarget, 0.5, {onComplete:func});
+    }
   }
 
   /**

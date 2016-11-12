@@ -78,7 +78,7 @@ class PlayState extends FlxTransitionableState {
 
     // 敵の生成
     var enemy = new Enemy(ENEMY_POS_X, ENEMY_POS_Y);
-    enemy.setParam(100);
+    enemy.setParam(1000);
     this.add(enemy);
 
     // ショット生成

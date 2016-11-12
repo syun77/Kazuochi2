@@ -156,7 +156,9 @@ class Field {
       // 攻撃演出生成
       var px = OFFSET_X + (xgridTotal / cnt + 0.5) * TILE_WIDTH;
       var py = OFFSET_Y + (ygridTotal / cnt + 0.5) * TILE_HEIGHT;
-      Shot.add(px, py, enemy.xcenter, enemy.ycenter);
+      var xtarget = enemy.xstart + enemy.origin.x;
+      var ytarget = enemy.ystart + enemy.origin.y;
+      Shot.add(px, py, xtarget, ytarget);
 
     });
 

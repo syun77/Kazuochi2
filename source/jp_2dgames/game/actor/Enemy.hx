@@ -3,6 +3,10 @@ package jp_2dgames.game.actor;
 /**
  * 敵
  **/
+import flixel.tweens.FlxEase;
+import jp_2dgames.game.particle.Particle;
+import flixel.FlxG;
+import flixel.tweens.FlxTween;
 class Enemy extends Actor  {
 
   // ==========================================
@@ -22,6 +26,20 @@ class Enemy extends Actor  {
   }
 
   /**
+   * 敵出現
+   **/
+  public function appear():Void {
+
+    // 変数初期化
+    _totalElapsed = 0;
+
+    scale.set(1, 1);
+    x = FlxG.width * 1.5;
+    visible = true;
+    FlxTween.tween(this, {x:xstart}, 1, {ease:FlxEase.expoOut});
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
@@ -38,6 +56,39 @@ class Enemy extends Actor  {
   override public function damage(v:Int):Void {
     super.damage(v);
   }
+
+  /**
+   * 消滅
+   **/
+  override public function vanish():Void {
+
+    FlxTween.tween(scale, {x:0.1, y:2}, 0.5, {ease:FlxEase.elasticIn, onComplete:function(_) {
+      var deg = FlxG.random.float(0, 360);
+      for(i in 0...12) {
+        deg += 360/7 + FlxG.random.float(0, 20);
+        var speed = FlxG.random.float(200, 400);
+        var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
+        var sc = FlxG.random.float(0.3, 0.6);
+        p.scale.set(sc, sc);
+        p.acceleration.y = 200;
+      }
+
+      // ダメージアニメ停止
+      if(_tween != null) {
+        _tween.cancel();
+        _tween = null;
+        _tDamage = 0;
+        x = xstart;
+        y = ystart;
+      }
+      scale.y = 0.5;
+      FlxTween.tween(scale, {x:4, y:0}, 0.3, {ease:FlxEase.expoOut, onComplete:function(_) {
+        // 見た目だけ消す
+        visible = false;
+      }});
+    }});
+  }
+
 
   /**
    * アニメーションの登録
