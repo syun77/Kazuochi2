@@ -55,7 +55,7 @@ class Particle extends Token {
    **/
   public function new() {
     super();
-    loadGraphic(AssetPaths.IMAGE_PARTICLE, true, 256, 256);
+    loadGraphic(AssetPaths.IMAGE_PARTICLE, true);
     // アニメーション登録
     _registerAnimations();
   }

@@ -9,9 +9,10 @@
     <android target-sdk-version="16" />
 
     <!-- For iOS -->
-    <meta title="Kazuochi2" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" unless="android"/>
+    <meta title="Kazuochi2" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" if="ios"/>
     <ios deployment="9" binaries="arm7" devices="iphone"/>
     <ios linker-flags="" prerenderd-icon="false"/>
+    <certificate identity="iPhone Developer" if="ios" />
     <window hardware="true" allow-shaders="true" require-shaders="true" if="cpp"/>
     <window vsync="true" antialiasing="4" if="cpp"/>
 

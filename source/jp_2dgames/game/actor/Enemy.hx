@@ -68,7 +68,7 @@ class Enemy extends Actor  {
         deg += 360/7 + FlxG.random.float(0, 20);
         var speed = FlxG.random.float(200, 400);
         var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
-        var sc = FlxG.random.float(0.3, 0.6);
+        var sc = FlxG.random.float(0.6, 1.2);
         p.scale.set(sc, sc);
         p.acceleration.y = 200;
       }

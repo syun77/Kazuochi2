@@ -33,17 +33,21 @@ class Shot extends Token {
     return parent.countLiving();
   }
 
+  // ====================================
+  // ■フィールド
+  var _elapsed:Float;
+
   /**
    * コンストラクタ
    **/
   public function new() {
     super();
-    loadGraphic(AssetPaths.IMAGE_PARTICLE, true, 256, 256);
+    loadGraphic(AssetPaths.IMAGE_PARTICLE, true);
     blend = BlendMode.ADD;
     animation.add("play", [0]);
     animation.play("play");
 
-    var sc = 0.4;
+    var sc = 0.8;
     scale.set(sc, sc);
   }
 
@@ -53,6 +57,8 @@ class Shot extends Token {
   public function init(X:Float, Y:Float, xtarget:Float, ytarget:Float):Void {
     x = X - origin.x;
     y = Y - origin.y;
+
+    _elapsed = 0;
 
     // 制御点
     var xctrl = -200;
@@ -101,9 +107,14 @@ class Shot extends Token {
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
-    var deg = FlxG.random.float(0, 360);
-    var speed = FlxG.random.float(50, 100);
-    var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
-    p.scale.set(0.2, 0.2);
+    _elapsed += elapsed;
+
+    if(_elapsed > 0.05) {
+      _elapsed -= 0.05;
+      var deg = FlxG.random.float(0, 360);
+      var speed = FlxG.random.float(50, 100);
+      var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
+      p.scale.set(0.4, 0.4);
+    }
   }
 }
