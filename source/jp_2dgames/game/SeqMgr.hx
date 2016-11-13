@@ -3,6 +3,7 @@ package jp_2dgames.game;
 /**
  * 状態
  **/
+import jp_2dgames.game.global.NextBlockMgr;
 import jp_2dgames.game.token.Shot;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
@@ -113,8 +114,8 @@ class SeqMgr {
   }
 
   function _procAppearBlock():State {
-    // TOOD: 次に出現するブロックを抽選
-    _nextBlock = FlxG.random.int(2, 5);
+    // 次に出現するブロックを抽選
+    _nextBlock = NextBlockMgr.next();
     CursorUI.start(_nextBlock);
     return State.InputKey;
   }

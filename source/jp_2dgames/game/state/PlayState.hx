@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.global.NextBlockMgr;
+import jp_2dgames.game.gui.NextBlockUI;
 import jp_2dgames.game.token.Shot;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
@@ -68,6 +70,9 @@ class PlayState extends FlxTransitionableState {
     // ブロック生成
     Block.createParent(this);
 
+    // NEXTブロックUI生成
+    this.add(new NextBlockUI(0, 0));
+
     // 各種オブジェクト生成
     Field.createObjectsFromLayer();
 
@@ -92,6 +97,10 @@ class PlayState extends FlxTransitionableState {
     CursorUI.createInstance(this);
     this.add(new GameUI(player, enemy));
 
+    // NEXTブロック管理生成
+    NextBlockMgr.createInstance();
+    NextBlockMgr.init();
+
     // シーケンス管理生成
     _seq = new SeqMgr(player, enemy);
   }
@@ -107,6 +116,7 @@ class PlayState extends FlxTransitionableState {
     ParticleBmpFont.destroyParent();
     Input.destroyVirtualPad();
     CursorUI.destroyInstance();
+    NextBlockMgr.destroyInstance();
 
     super.destroy();
   }

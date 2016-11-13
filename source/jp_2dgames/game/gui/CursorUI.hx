@@ -56,7 +56,7 @@ class CursorUI extends FlxSprite {
   // 落下対象のブロック
   var _block:Block = null;
   // 経過時間
-  var _elapsed:Float = 0;
+  var _elapsed:Float = 0.0;
 
   /**
    * コンストラクタ

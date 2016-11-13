@@ -111,12 +111,20 @@ class Block extends Token {
    **/
   public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=0):Void {
     _state = State.Idle;
-    animation.play('${Number}');
+    setNumber(Number);
+
     _xgrid = xgrid;
     _ygrid = ygrid;
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
     _hp = Hp;
+  }
+
+  /**
+   * 番号を設定
+   **/
+  public function setNumber(Number:Int):Void {
+    animation.play('${Number}');
   }
 
   /**
