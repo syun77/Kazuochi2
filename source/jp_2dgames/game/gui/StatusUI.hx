@@ -59,7 +59,7 @@ class StatusUI extends FlxSpriteGroup {
     super.update(elapsed);
 
     // アクティブゲージ更新
-    _activeBar.setPercent(_actor.apratio);
+    _activeBar.setPercent(100 * _actor.apratio);
 
     // HP更新
     {

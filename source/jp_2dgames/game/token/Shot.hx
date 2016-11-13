@@ -108,6 +108,9 @@ class Shot extends Token {
     super.update(elapsed);
 
     _elapsed += elapsed;
+#if flash
+    _elapsed += 1;
+#end
 
     if(_elapsed > 0.05) {
       _elapsed -= 0.05;
