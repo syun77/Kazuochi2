@@ -40,6 +40,13 @@ class NextBlockMgr {
   }
 
   /**
+   * ブロックを抽選
+   **/
+  public static function put():Int {
+    return _instance._put();
+  }
+
+  /**
    * キューの要素を全走査
    **/
   public static function forEachWithIndex(func:Int->Int->Void):Void {
@@ -88,10 +95,17 @@ class NextBlockMgr {
   }
 
   /**
+   * ブロックを抽選
+   **/
+  function _put():Int {
+    return FlxG.random.int(_start, _end);
+  }
+
+  /**
    * 要素を追加する
    **/
   function _enque():Void {
-    var v = FlxG.random.int(_start, _end);
+    var v = _put();
     _blocks.enqueue(v);
   }
 

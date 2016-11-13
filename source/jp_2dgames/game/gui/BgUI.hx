@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.field.Field;
 import jp_2dgames.game.token.Shot;
 import flixel.tweens.FlxTween;
 import jp_2dgames.lib.MyColor;

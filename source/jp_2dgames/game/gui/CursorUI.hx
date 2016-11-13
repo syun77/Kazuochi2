@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.field.Field;
 import flixel.math.FlxMath;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Input;

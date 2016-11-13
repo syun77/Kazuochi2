@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.field;
 
 /**
  * 消去パラメータ

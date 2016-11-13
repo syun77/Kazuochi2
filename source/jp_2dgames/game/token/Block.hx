@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.game.field.Field;
 import flixel.effects.FlxFlicker;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -26,6 +27,11 @@ class Block extends Token {
   public static inline var SPECIAL:Int = 10; // スペシャルブロック
   public static inline var HARD:Int    = 11; // 固いブロック
   public static inline var SKULL:Int   = 12; // ドクロ
+
+  // HP関連
+  public static inline var HP_NORMAL:Int   = 0; // 通常ブロック
+  public static inline var HP_HARD:Int     = 1; // 固いブロック (中は見える)
+  public static inline var HP_VERYHARD:Int = 2; // とても固いブロック (中が見えない)
 
   public static var parent:FlxTypedGroup<Block>;
   public static function createParent(state:FlxState):Void {
@@ -109,7 +115,7 @@ class Block extends Token {
   /**
    * 初期化
    **/
-  public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=0):Void {
+  public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=HP_NORMAL):Void {
     _state = State.Idle;
     setNumber(Number);
 

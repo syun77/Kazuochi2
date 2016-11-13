@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.field.Field;
 import jp_2dgames.game.global.NextBlockMgr;
 import jp_2dgames.game.gui.NextBlockUI;
 import jp_2dgames.game.token.Shot;

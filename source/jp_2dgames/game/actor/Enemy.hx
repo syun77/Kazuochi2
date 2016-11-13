@@ -3,6 +3,7 @@ package jp_2dgames.game.actor;
 /**
  * 敵
  **/
+import jp_2dgames.game.field.RequestBlockParam;
 import flixel.tweens.FlxEase;
 import jp_2dgames.game.particle.Particle;
 import flixel.FlxG;
@@ -87,6 +88,30 @@ class Enemy extends Actor  {
         visible = false;
       }});
     }});
+  }
+
+  /**
+   * ターンを開始
+   **/
+  override public function beginTurn():Void {
+    addAp(30);
+    trace("ap:", ap);
+  }
+
+  /**
+   * ターン終了
+   **/
+  override public function endTurn():Void {
+  }
+
+  /**
+   * AIの実行
+   **/
+  public function execAI(req:RequestBlockParam):Void {
+    // TODO: 上から降らす
+    req.setUpper(3);
+
+    resetAp();
   }
 
 

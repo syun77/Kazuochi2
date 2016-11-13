@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.field;
 
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.token.Shot;

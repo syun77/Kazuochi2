@@ -1,5 +1,6 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.field.Field;
 import openfl.filesystem.File;
 import jp_2dgames.game.global.Global;
 import flixel.util.FlxSave;

@@ -3,6 +3,9 @@ package jp_2dgames.game;
 /**
  * 状態
  **/
+import jp_2dgames.game.field.RequestBlockParam;
+import jp_2dgames.game.field.EraseResult;
+import jp_2dgames.game.field.Field;
 import jp_2dgames.game.global.NextBlockMgr;
 import jp_2dgames.game.token.Shot;
 import jp_2dgames.game.actor.Enemy;
@@ -60,7 +63,8 @@ class SeqMgr {
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
   var _nextBlock:Int = 0; // 次に出現するブロックの番号
 
-  var _eraseResult:EraseResult; // 消去結果
+  var _eraseResult:EraseResult;        // 消去結果
+  var _requestBlock:RequestBlockParam; // ブロック落下情報
 
   // キャラクター
   var _player:Player;
@@ -74,6 +78,7 @@ class SeqMgr {
     _statePrev = _state;
 
     _eraseResult = new EraseResult();
+    _requestBlock = new RequestBlockParam();
 
     _player = player;
     _enemy  = enemy;
@@ -90,6 +95,22 @@ class SeqMgr {
     trace('${_state} -> ${next}');
     _statePrev = _state;
     _state = next;
+  }
+
+  /**
+   * ターン開始
+   **/
+  function _beginTurn():Void {
+    _player.beginTurn();
+    _enemy.beginTurn();
+  }
+
+  /**
+   * ターン終了
+   **/
+  function _endTurn():Void {
+    _player.endTurn();
+    _enemy.endTurn();
   }
 
   function _procInit():State {
@@ -114,6 +135,13 @@ class SeqMgr {
   }
 
   function _procAppearBlock():State {
+
+    // ターン終了
+    _endTurn();
+
+    // ターン開始
+    _beginTurn();
+
     // 次に出現するブロックを抽選
     _nextBlock = NextBlockMgr.next();
     CursorUI.start(_nextBlock);
@@ -236,18 +264,26 @@ class SeqMgr {
   }
 
   function _procEnemyAIExec():State {
-    // TODO: AI実行
-    if(false) {
-      // 上から降らす
-      return State.FallBlock;
+    // AI実行
+    if(_enemy.canAttack) {
+      _enemy.execAI(_requestBlock);
     }
-    else if(true) {
-      // 下からせり上げ
-      return State.AppearBottomCheck;
-    }
-    else {
-      // ブロック出現要求なし
-      return State.AppearBlock;
+
+    switch(_requestBlock.type) {
+      case RequestBlock.Upper:
+        // 上から降らす
+        _requestBlock.execute();
+        Field.fall();
+        return State.FallBlock;
+
+      case RequestBlock.Bottom:
+        // 下からせり上げ
+        _requestBlock.execute();
+        return State.AppearBottomCheck;
+
+      case RequestBlock.None:
+        // 要求なし
+        return State.AppearBlock;
     }
   }
 

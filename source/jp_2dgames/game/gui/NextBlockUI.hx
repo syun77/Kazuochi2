@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.field.Field;
 import jp_2dgames.game.token.Block;
 import jp_2dgames.game.global.NextBlockMgr;
 import flixel.group.FlxSpriteGroup;

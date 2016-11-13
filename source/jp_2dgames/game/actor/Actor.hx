@@ -1,5 +1,4 @@
 package jp_2dgames.game.actor;
-import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
@@ -28,6 +27,7 @@ class Actor extends Token {
   public var ap(get, never):Int;
   public var apmax(get, never):Int;
   public var apratio(get, never):Float;
+  public var canAttack(get, never):Bool;
 
   // ========================================
   // ■フィールド
@@ -71,7 +71,21 @@ class Actor extends Token {
    * 消滅演出
    **/
   public function vanish():Void {
+    // サブクラスで実装する
+  }
 
+  /**
+   * ターン開始
+   **/
+  public function beginTurn():Void {
+    // サブクラスで実装
+  }
+
+  /**
+   * ターン終了
+   **/
+  public function endTurn():Void {
+    // サブクラスで実装
   }
 
   /**
@@ -136,6 +150,20 @@ class Actor extends Token {
     _hp = FlxMath.maxAdd(_hp, v, _hpmax);
   }
 
+  /**
+   * APを加算する
+   **/
+  public function addAp(v:Int):Void {
+    _ap = FlxMath.maxAdd(_ap, v, _apmax);
+  }
+
+  /**
+   * APをリセットする
+   **/
+  public function resetAp():Void {
+    _ap = 0;
+  }
+
   // ========================================
   // ■プロパティ
   function get_hp() { return _hp; }
@@ -144,4 +172,5 @@ class Actor extends Token {
   function get_ap() { return _ap; }
   function get_apmax() { return _apmax; }
   function get_apratio() { return _ap / _apmax; }
+  function get_canAttack() { return _ap == _apmax; }
 }
