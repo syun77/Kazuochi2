@@ -178,6 +178,8 @@ class SeqMgr {
     var result = Field.checkErase(_eraseResult, _enemy);
     if(result.erase > 0) {
       // 消去できた
+      // 攻撃アニメーション開始
+      _player.requestAttack();
       // 連鎖続行
       _bKeepOnChain = true;
       return State.EraseExec;
