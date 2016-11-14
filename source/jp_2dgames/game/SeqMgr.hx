@@ -1,8 +1,5 @@
 package jp_2dgames.game;
 
-/**
- * 状態
- **/
 import jp_2dgames.game.field.RequestBlockParam;
 import jp_2dgames.game.field.EraseResult;
 import jp_2dgames.game.field.Field;
@@ -15,6 +12,10 @@ import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.token.Block;
 import flixel.FlxG;
+
+/**
+ * 状態
+ **/
 private enum State {
 
   None;              // 無効
@@ -65,6 +66,7 @@ class SeqMgr {
 
   var _eraseResult:EraseResult;        // 消去結果
   var _requestBlock:RequestBlockParam; // ブロック落下情報
+  var _nDamageBlock:Int;               // ダメージブロックの数
 
   // キャラクター
   var _player:Player;
@@ -79,6 +81,7 @@ class SeqMgr {
 
     _eraseResult = new EraseResult();
     _requestBlock = new RequestBlockParam();
+    _nDamageBlock = 0;
 
     _player = player;
     _enemy  = enemy;
@@ -215,20 +218,28 @@ class SeqMgr {
   }
 
   function _procDamageCheck():State {
-    // TODO: フィールド外のブロックをチェック
-    if(false) {
-      // TODO: 存在する場合はダメージ処理
+
+    // ダメージブロック数を取得
+    _nDamageBlock = Field.checkEraseOutside(_player);
+
+    if(_nDamageBlock > 0) {
+      // 存在する場合はダメージ処理
       return State.DamageExec;
     }
     else {
-      // TODO: 存在しない場合は勝敗チェック
+      // 存在しない場合は勝敗チェック
       return State.WinLoseCheck;
     }
   }
 
   function _procDamageExec():State {
 
-    var nEraseBlock:Int = 1; // 消滅したブロック数
+    if(Shot.count() > 0) {
+      // 演出完了待ち
+      return State.None;
+    }
+
+    var nEraseBlock:Int = _nDamageBlock; // 消滅したブロック数
     var v:Int = 0;  // 最終的なダメージ値
     var d:Int = 30; // 基準
     for(i in 0...nEraseBlock) {
@@ -238,6 +249,7 @@ class SeqMgr {
     }
 
     // TODO: プレイヤーにダメージを与える
+    _player.damage(v);
 
     return State.WinLoseCheck;
   }

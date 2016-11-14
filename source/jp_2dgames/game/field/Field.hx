@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.token.Shot;
 import flixel.math.FlxMath;
@@ -210,6 +211,42 @@ class Field {
       cnt = _checkEraseRecursion(_layer, px, py, dx, dy, val, cnt);
     }
     return cnt;
+  }
+
+  /**
+   * 領域外のブロックをチェック
+   **/
+  public static function checkEraseOutside(player:Player):Int {
+
+    var ret:Int = 0;
+
+    _layer.forEach(function(i:Int, j:Int, v:Int) {
+      if(v == 0) {
+        // チェック不要
+        return;
+      }
+      if(j > 0) {
+        // チェック不要
+        return;
+      }
+
+      ret++;
+
+      // ダメージ演出生成
+      var px = OFFSET_X + (i + 0.5) * TILE_WIDTH;
+      var py = OFFSET_Y + (i + 0.5) * TILE_HEIGHT;
+      var xtarget = player.xcenter;
+      var ytarget = player.ycenter;
+      Shot.add(px, py, xtarget, ytarget);
+
+      // 対象のブロックを消す
+      var block = Block.search(i, j);
+      block.erase();
+      // レイヤーからも消す
+      _layer.set(i, j, 0);
+    });
+
+    return ret;
   }
 
   /**
