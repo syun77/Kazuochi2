@@ -17,6 +17,7 @@ class Player extends Actor {
   // ==========================================
   // ■定数
   static inline var TIMER_ATTACK:Int = 40;
+  static inline var TIMER_DAMAGE:Int = 40;
 
   // ==========================================
   // ■フィールド
@@ -69,10 +70,26 @@ class Player extends Actor {
         }
       case AnimState.Damage:
         // ダメージ
+        y = ystart;
+        _tAnim++;
+        if(_tAnim >= TIMER_DAMAGE){
+          _anim = AnimState.Idle;
+        }
     }
 
     animation.play('${_anim}');
   }
+
+  /**
+   * ダメージ
+   **/
+  override public function damage(v:Int):Void {
+    super.damage(v);
+    // ダメージ演出開始
+    _anim = AnimState.Damage;
+    _tAnim = 0;
+  }
+
 
   /**
    * アニメーションの登録
