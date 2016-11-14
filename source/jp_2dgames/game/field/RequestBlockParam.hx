@@ -98,7 +98,7 @@ class RequestBlockParam {
 
     // どこから降らすかを決める
     var arr = [for(i in 0...Field.GRID_X) i];
-    FlxG.random.shuffleArray(arr, 3);
+    FlxG.random.shuffle(arr);
 
     var field = Field.getLayer();
     var count = FlxMath.minInt(_count, Field.GRID_X); // 最大 Field.GRID_X まで
