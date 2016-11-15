@@ -1,5 +1,7 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.game.block.BlockUtil;
+import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.Field;
 import flixel.effects.FlxFlicker;
 import flixel.tweens.FlxEase;
@@ -28,10 +30,6 @@ class Block extends Token {
   public static inline var HARD:Int    = 11; // 固いブロック
   public static inline var SKULL:Int   = 12; // ドクロ
 
-  // HP関連
-  public static inline var HP_NORMAL:Int   = 0; // 通常ブロック
-  public static inline var HP_HARD:Int     = 1; // 固いブロック (中は見える)
-  public static inline var HP_VERYHARD:Int = 2; // とても固いブロック (中が見えない)
 
   public static var parent:FlxTypedGroup<Block>;
   public static function createParent(state:FlxState):Void {
@@ -41,9 +39,14 @@ class Block extends Token {
   public static function destroyParent():Void {
     parent = null;
   }
-  public static function add(Type:Int, xgrid:Int, ygrid:Int):Block {
+  public static function add(number:Int, xgrid:Int, ygrid:Int):Block {
     var block:Block = parent.recycle(Block);
-    block.init(Type, xgrid, ygrid);
+    block.init(number, xgrid, ygrid);
+    return block;
+  }
+  public static function addNewer(number:Int, xgrid:Int, ygrid:Int):Block {
+    var block:Block = parent.recycle(Block);
+    block.init(number, xgrid, ygrid, BlockUtil.HP_NORMAL, true);
     return block;
   }
   public static function search(xgrid:Int, ygrid:Int):Block {
@@ -90,14 +93,16 @@ class Block extends Token {
   // ■プロパティ
   public var xgrid(get, never):Int;
   public var ygrid(get, never):Int;
+  public var isNewer(get, never):Bool;
 
   // ==========================================================
   // ■フィールド
-  var _xgrid:Int;  // グリッド座標(X)
-  var _ygrid:Int;  // グリッド座標(Y)
-  var _number:Int; // 数値
-  var _hp:Int;     // ブロックの堅さ
+  var _xgrid:Int;   // グリッド座標(X)
+  var _ygrid:Int;   // グリッド座標(Y)
+  var _number:Int;  // 数値
+  var _hp:Int;      // ブロックの堅さ
   var _state:State; // 状態
+  var _bNewer:Bool; // プレイヤーが新しく配置したブロックかどうか
 
   /**
    * コンストラクタ
@@ -115,15 +120,16 @@ class Block extends Token {
   /**
    * 初期化
    **/
-  public function init(Number:Int, xgrid:Int, ygrid:Int, Hp:Int=HP_NORMAL):Void {
+  public function init(number:Int, xgrid:Int, ygrid:Int, hp:Int=BlockUtil.HP_NORMAL, bNewer:Bool=false):Void {
     _state = State.Idle;
-    setNumber(Number);
+    setNumber(number);
 
     _xgrid = xgrid;
     _ygrid = ygrid;
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
-    _hp = Hp;
+    _hp = hp;
+    _bNewer = bNewer;
   }
 
   /**
@@ -188,6 +194,7 @@ class Block extends Token {
 
   // ======================================================================
   // ■アクセサ
-  function get_xgrid() { return _xgrid; }
-  function get_ygrid() { return _ygrid; }
+  function get_xgrid()   { return _xgrid; }
+  function get_ygrid()   { return _ygrid; }
+  function get_isNewer() { return _bNewer; }
 }

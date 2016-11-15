@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import jp_2dgames.game.actor.Player;
@@ -114,6 +115,9 @@ class Field {
       // テンポラリレイヤー初期化
       _tmpLayer.initialize(_layer.width, _layer.height);
 
+      // 数値に変換
+      v = BlockUtil.getNumber(v);
+
       // 消去できる数を計算する
       var cnt = _checkEraseRecursion(_layer, i, j, 0, 0, v, 0);
       if(cnt < v) {
@@ -195,6 +199,7 @@ class Field {
       return cnt;
     }
 
+    val2 = BlockUtil.getNumber(val2);
     if(val2 != val) {
       // 消去対象とならない
       return cnt;
@@ -227,20 +232,37 @@ class Field {
         // チェック不要
         return;
       }
+
+      var bNewer = BlockUtil.isNewer(v);
       if(j > Field.GRID_Y_TOP) {
         // チェック不要
+        // フラグを下げる
+        v = BlockUtil.offNewer(v);
+        _layer.set(i, j, v);
         return;
       }
 
-      ret++;
-
-      // ダメージ演出生成
-      var px = OFFSET_X + (i + 0.5) * TILE_WIDTH;
-      var py = OFFSET_Y + (i + 0.5) * TILE_HEIGHT;
-      var xtarget = player.xcenter;
-      var ytarget = player.ycenter;
-      var shot = Shot.add(px, py, xtarget, ytarget);
-      shot.color = FlxColor.RED;
+      if(bNewer) {
+        // そのターンにプレイヤーが置いたブロック
+        // 下にあるブロックも消す
+        var py = j+1;
+        var bottom = Block.search(i, py);
+        bottom.erase();
+        // レイヤーからも消す
+        _layer.set(i, py, 0);
+      }
+      else {
+        // ダメージを受ける
+        v = BlockUtil.getNumber(v);
+        ret++;
+        // ダメージ演出生成
+        var px = OFFSET_X + (i + 0.5) * TILE_WIDTH;
+        var py = OFFSET_Y + (i + 0.5) * TILE_HEIGHT;
+        var xtarget = player.xcenter;
+        var ytarget = player.ycenter;
+        var shot = Shot.add(px, py, xtarget, ytarget);
+        shot.color = FlxColor.RED;
+      }
 
       // 対象のブロックを消す
       var block = Block.search(i, j);

@@ -59,6 +59,17 @@ class MyMath {
   }
 
   /**
+   * 指定の桁の値を取り出す
+   **/
+  public static function pickDigit(n:Int, digit:Int):Int {
+    var str:String = Std.string(n);
+    if(digit >= str.length) {
+      return 0;
+    }
+    return Std.parseInt(str.charAt(digit));
+  }
+
+  /**
    * 視界の内外判定
    * @param x 自分の座標(X)
    * @param y 自分の座標(Y)

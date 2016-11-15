@@ -157,7 +157,7 @@ class CursorUI extends FlxSprite {
   function _start(nextBlock:Int):Void {
     var px = Field.GRID_NEXT_X;
     var py = Field.GRID_NEXT_Y;
-    _block = Block.add(nextBlock, px, py);
+    _block = Block.addNewer(nextBlock, px, py);
 #if flash
     _block.visible = false;
 #end

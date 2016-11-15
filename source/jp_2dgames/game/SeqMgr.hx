@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.RequestBlockParam;
 import jp_2dgames.game.field.EraseResult;
 import jp_2dgames.game.field.Field;
@@ -158,7 +159,8 @@ class SeqMgr {
       // ブロックを配置
       var block = CursorUI.getBlock();
       var layer = Field.getLayer();
-      layer.set(block.xgrid, block.ygrid, _nextBlock);
+      var data  = BlockUtil.toData(_nextBlock, false, 0, true);
+      layer.set(block.xgrid, block.ygrid, data);
       // 落下開始
       Field.fall();
       return State.FallBlock;

@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
@@ -150,7 +151,7 @@ class RequestBlockParam {
   public function setUpperVerd(count:Int):Void {
     _type  = RequestBlock.Upper;
     _count = count;
-    _hp    = Block.HP_HARD;
+    _hp    = BlockUtil.HP_HARD;
   }
 
   /**
@@ -159,7 +160,7 @@ class RequestBlockParam {
   public function setUpperVeryHard(count:Int):Void {
     _type  = RequestBlock.Upper;
     _count = count;
-    _hp    = Block.HP_VERYHARD;
+    _hp    = BlockUtil.HP_VERYHARD;
   }
 
   /**
@@ -178,7 +179,7 @@ class RequestBlockParam {
   public function setBottom(nLine:Int):Void {
     _type  = RequestBlock.Bottom;
     _nLine = nLine;
-    _hp    = Block.HP_NORMAL;
+    _hp    = BlockUtil.HP_NORMAL;
   }
 
   /**
@@ -187,7 +188,7 @@ class RequestBlockParam {
   public function setBottomHard(nLine:Int):Void {
     _type  = RequestBlock.Bottom;
     _nLine = nLine;
-    _hp    = Block.HP_HARD;
+    _hp    = BlockUtil.HP_HARD;
   }
 
   // ===================================================================
