@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.util.FlxColor;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.token.Shot;
@@ -237,7 +238,8 @@ class Field {
       var py = OFFSET_Y + (i + 0.5) * TILE_HEIGHT;
       var xtarget = player.xcenter;
       var ytarget = player.ycenter;
-      Shot.add(px, py, xtarget, ytarget);
+      var shot = Shot.add(px, py, xtarget, ytarget);
+      shot.color = FlxColor.RED;
 
       // 対象のブロックを消す
       var block = Block.search(i, j);

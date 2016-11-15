@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -64,7 +65,7 @@ class Shot extends Token {
     y = Y - origin.y;
 
     _elapsed = 0;
-
+    color = FlxColor.WHITE;
 
     // 制御点
     var xctrl = LEFT;
