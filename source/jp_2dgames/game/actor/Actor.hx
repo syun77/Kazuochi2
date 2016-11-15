@@ -140,6 +140,13 @@ class Actor extends Token {
   }
 
   /**
+   * 攻撃開始
+   **/
+  public function beginAttack():Void {
+    // サブクラスで実装する
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {

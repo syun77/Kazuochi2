@@ -44,7 +44,7 @@ class Player extends Actor {
   /**
    * 攻撃アニメーション再生要求
    **/
-  public function requestAttack():Void {
+  override public function beginAttack():Void {
     _anim = AnimState.Attack;
     _tAnim = 0;
   }

@@ -182,7 +182,7 @@ class SeqMgr {
     if(result.erase > 0) {
       // 消去できた
       // 攻撃アニメーション開始
-      _player.requestAttack();
+      _player.beginAttack();
       // 連鎖続行
       _bKeepOnChain = true;
       return State.EraseExec;
@@ -278,9 +278,11 @@ class SeqMgr {
   }
 
   function _procEnemyAIExec():State {
-    // AI実行
     if(_enemy.canAttack) {
+      // AI実行
       _enemy.execAI(_requestBlock);
+      // 攻撃アニメーション再生
+      _enemy.beginAttack();
     }
 
     switch(_requestBlock.type) {

@@ -44,6 +44,16 @@ class Enemy extends Actor  {
   }
 
   /**
+   * 攻撃開始
+   **/
+  override public function beginAttack():Void {
+    var xtarget = xstart - 128;
+    FlxTween.tween(this, {x:xtarget}, 0.25, {ease:FlxEase.quadOut, onComplete:function(_) {
+      FlxTween.tween(this, {x:xstart}, 0.25, {ease:FlxEase.quadOut});
+    }});
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
