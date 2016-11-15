@@ -17,21 +17,21 @@ class Field {
 
   // フィールドサイズ
   public static inline var GRID_X:Int = 7;
-  public static inline var GRID_Y:Int = 8;
+  public static inline var GRID_Y:Int = 9;
 
-  // Xの中心
-  public static inline var GRID_X_CENTER:Int = 3;
+  public static inline var GRID_X_CENTER:Int = 3; // Xの中心
+  public static inline var GRID_Y_TOP:Int = 1; // Yの一番上
 
   // 次のブロックの位置
-  public static inline var GRID_NEXT_X:Int = 3;
-  public static inline var GRID_NEXT_Y:Int = 0;
+  public static inline var GRID_NEXT_X:Int = GRID_X_CENTER;
+  public static inline var GRID_NEXT_Y:Int = 1;
 
   // オブジェクトレイヤー
   static inline var LAYER_NAME:String = "object";
 
   // 描画オフセット
   public static inline var OFFSET_X:Int = 20;
-  public static inline var OFFSET_Y:Int = 128;
+  public static inline var OFFSET_Y:Int = 128 - GRID_Y_TOP * TILE_HEIGHT;
 
   // タイルサイズ
   static inline var TILE_WIDTH:Int  = Block.WIDTH;
@@ -225,7 +225,7 @@ class Field {
         // チェック不要
         return;
       }
-      if(j > 0) {
+      if(j > Field.GRID_Y_TOP) {
         // チェック不要
         return;
       }

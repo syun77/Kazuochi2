@@ -47,7 +47,7 @@ class BgUI extends FlxGroup {
     // 危険ライン
     {
       var px = Field.toWorldX(0);
-      var py = Field.toWorldY(1);
+      var py = Field.toWorldY(Field.GRID_Y_TOP + 1);
       var w  = Block.WIDTH * Field.GRID_X+4;
       var h  = 8;
       px -= 2;
@@ -91,15 +91,15 @@ class BgUI extends FlxGroup {
     var rect = new Rectangle();
     for(i in 0...Field.GRID_X+1) {
       var px = i * Block.WIDTH;
-      var py1 = 0;
-      var py2 = Field.GRID_Y * Block.HEIGHT;
+      var py1 = Field.GRID_Y_TOP * Block.HEIGHT;
+      var py2 = (Field.GRID_Y - Field.GRID_Y_TOP) * Block.HEIGHT;
       rect.x = px;
       rect.width = THICK;
       rect.y = py1;
       rect.height = py2;
       bitmap.fillRect(rect, FlxColor.WHITE);
     }
-    for(j in 0...Field.GRID_Y+1) {
+    for(j in Field.GRID_Y_TOP...Field.GRID_Y+1) {
       var py = j * Block.HEIGHT;
       var px1 = 0;
       var px2 = Field.GRID_X * Block.WIDTH;

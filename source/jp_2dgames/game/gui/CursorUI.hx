@@ -138,9 +138,9 @@ class CursorUI extends FlxSprite {
     // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
-    var ygrid = 0;
+    var ygrid = Field.GRID_Y_TOP;
 
-    // 画面外に出ないようにする
+    // フィールド外に出ないようにする
     xgrid = FlxMath.maxInt(xgrid, 0);
     xgrid = FlxMath.minInt(xgrid, Field.GRID_X-1);
 

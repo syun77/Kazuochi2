@@ -12,6 +12,11 @@ import flash.display.BlendMode;
  **/
 class Shot extends Token {
 
+  static inline var LEFT   = 0;
+  static inline var TOP    = 0;
+  static inline var RIGHT  = 320-32;
+  static inline var BOTTOM = 480-TOP;
+
   public static var parent:FlxTypedGroup<Shot> = null;
   public static function createParent(state:FlxState):Void {
     parent = new FlxTypedGroup<Shot>();
@@ -60,22 +65,23 @@ class Shot extends Token {
 
     _elapsed = 0;
 
+
     // 制御点
-    var xctrl = -200;
-    var yctrl = -200;
-    var xctrl2 = 200;
-    var yctrl2 = 200;
+    var xctrl = LEFT;
+    var yctrl = TOP;
+    var xctrl2 = RIGHT;
+    var yctrl2 = BOTTOM;
 
     if(X > FlxG.width/2) {
-      xctrl = 200;
-      yctrl2 = 0;
+      xctrl = RIGHT;
+      yctrl2 = TOP;
     }
 
     if(FlxG.random.bool()) {
-      xctrl = FlxG.random.int(0, 200);
+      xctrl = FlxG.random.int(LEFT, RIGHT);
     }
     else {
-      yctrl = FlxG.random.int(0, 200);
+      yctrl = FlxG.random.int(TOP, 320);
     }
     if(FlxG.random.bool()) {
       xctrl2 = 120 + FlxG.random.int(0, 100);
