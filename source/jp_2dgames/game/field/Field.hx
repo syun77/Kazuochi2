@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import jp_2dgames.game.actor.Player;
 import jp_2dgames.game.actor.Enemy;
@@ -35,9 +36,9 @@ class Field {
   public static inline var OFFSET_Y:Int = 128 - GRID_Y_TOP * TILE_HEIGHT;
 
   // タイルサイズ
-  static inline var TILE_WIDTH:Int  = Block.WIDTH;
-  static inline var TILE_HEIGHT:Int = Block.HEIGHT;
-  static inline var GRID_SIZE:Int   = Block.WIDTH;
+  public static inline var TILE_WIDTH:Int  = Block.WIDTH;
+  public static inline var TILE_HEIGHT:Int = Block.HEIGHT;
+  public static inline var GRID_SIZE:Int   = Block.WIDTH;
 
   static var _tmx:TmxLoader = null;
   static var _map:FlxTilemap = null;

@@ -37,6 +37,8 @@ class Player extends Actor {
     _registerAnimations();
 
     _anim = AnimState.Idle;
+
+    ID = 0;
   }
 
   /**

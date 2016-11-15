@@ -1,5 +1,8 @@
 package jp_2dgames.game.field;
 
+import flash.display.BlendMode;
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.global.NextBlockMgr;
 import flixel.math.FlxMath;
 import flixel.FlxG;
@@ -111,7 +114,13 @@ class RequestBlockParam {
       var b = Block.add(number, xgrid, ygrid);
       // TODO: 固ぷよ
       // TODO: ドクロブロック
-      // TODO: 出現演出
+      // 出現演出
+      var px = Field.toWorldX(xgrid) + Field.TILE_WIDTH/2;
+      var py = Field.toWorldY(ygrid) + Field.TILE_HEIGHT/2;
+      var p = Particle.add(ParticleType.Circle, px, py, 0, 0);
+      var sc = 0.8;
+      p.scale.set(sc, sc);
+      p.color = FlxColor.RED;
     }
 
     // 出現したぶんだけ減らす

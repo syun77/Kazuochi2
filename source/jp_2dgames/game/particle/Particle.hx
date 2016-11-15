@@ -2,8 +2,6 @@ package jp_2dgames.game.particle;
 
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle.ParticleType;
-import jp_2dgames.game.particle.Particle.ParticleType;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import jp_2dgames.game.token.Token;
@@ -12,10 +10,11 @@ import jp_2dgames.game.token.Token;
  * パーティクルの種類
  **/
 enum ParticleType {
-  Ball;  // 球体
-  Ring;  // ドーナッツ状の円
-  Blade; // 長細い
-  Rect;  // 矩形
+  Ball;   // 球体
+  Ring;   // ドーナッツ状の円
+  Blade;  // 長細い
+  Rect;   // 矩形
+  Circle; // 円
 }
 
 /**
@@ -113,6 +112,11 @@ class Particle extends Token {
         var sc = elapsed;
         scale.add(sc, sc);
         alpha -= elapsed;
+
+      case ParticleType.Circle: // 円
+        var sc = elapsed * 1.5;
+        scale.add(sc, sc);
+        alpha -= elapsed * 1.5;
     }
 
     super.update(elapsed);
@@ -122,10 +126,11 @@ class Particle extends Token {
    * アニメーションの登録
    **/
   function _registerAnimations():Void {
-    animation.add('${ParticleType.Ball}',  [0]);
-    animation.add('${ParticleType.Ring}',  [1]);
-    animation.add('${ParticleType.Blade}', [2]);
-    animation.add('${ParticleType.Rect}' , [3]);
+    animation.add('${ParticleType.Ball}',   [0]);
+    animation.add('${ParticleType.Ring}',   [1]);
+    animation.add('${ParticleType.Blade}',  [2]);
+    animation.add('${ParticleType.Rect}' ,  [3]);
+    animation.add('${ParticleType.Circle}', [4]);
   }
 
   // ===========================================

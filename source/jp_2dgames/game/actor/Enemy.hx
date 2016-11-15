@@ -24,6 +24,9 @@ class Enemy extends Actor  {
     loadGraphic(AssetPaths.IMAGE_ENEMY, true);
     _registerAnimations();
     animation.play("5");
+
+    // TODo: 敵のID設定
+    ID = 5;
   }
 
   /**

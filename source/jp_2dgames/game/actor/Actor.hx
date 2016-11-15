@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
@@ -92,6 +93,7 @@ class Actor extends Token {
    * ダメージを与える
    **/
   public function damage(v:Int):Void {
+
     _hp = FlxMath.maxAdd(_hp, -v, _hpmax);
 
     ParticleBmpFont.startNumber(xcenter, ycenter+8, v, FlxColor.WHITE, Dir.Up);
@@ -107,6 +109,21 @@ class Actor extends Token {
       y = ystart;
       _tween = null;
     }});
+
+    // ダメージ演出
+    var deg = FlxG.random.float(0, 360);
+    for(i in 0...6) {
+      deg += 360/5 + FlxG.random.float(0, 30);
+      var speed = FlxG.random.float(200, 400);
+      var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
+      var sc = FlxG.random.float(0.6, 1.2);
+      p.scale.set(sc, sc);
+      p.acceleration.y = 200;
+      if(ID == 0) {
+        // プレイヤー
+        p.color = FlxColor.RED;
+      }
+    }
   }
 
   /**
