@@ -1,5 +1,8 @@
 package jp_2dgames.game.token;
 
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle;
+import flixel.FlxG;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.Field;
@@ -103,6 +106,7 @@ class Block extends Token {
   var _hp:Int;      // ブロックの堅さ
   var _state:State; // 状態
   var _bNewer:Bool; // プレイヤーが新しく配置したブロックかどうか
+  var _elapsed:Float;
 
   /**
    * コンストラクタ
@@ -130,6 +134,7 @@ class Block extends Token {
     y = Field.toWorldY(_ygrid);
     _hp = hp;
     _bNewer = bNewer;
+    _elapsed = 0;
   }
 
   /**
@@ -138,6 +143,45 @@ class Block extends Token {
   public function setNumber(Number:Int):Void {
     animation.play('${Number}');
   }
+
+  /**
+   * 更新
+   **/
+  override public function update(elapsed:Float):Void {
+    switch(_state) {
+      case State.Idle:
+      case State.Fall:
+        _updateFall(elapsed);
+      case State.Flicker:
+    }
+  }
+
+  /**
+   * 更新・落下
+   **/
+  function _updateFall(elapsed:Float):Void {
+
+    if(isNewer == false) {
+      // 新しく配置したブロックだけ
+      return;
+    }
+
+    _elapsed += elapsed;
+
+    if(_elapsed > 0.05) {
+      _elapsed -= 0.05;
+      var deg = FlxG.random.float(0, 360);
+      var speed = FlxG.random.float(40, 80);
+      /*
+      var p = Particle.add(ParticleType.Ball, xcenter, bottom, deg, speed);
+      p.scale.set(0.4, 0.4);
+      */
+      var p = Particle.add(ParticleType.Rect, xcenter, ycenter, 0, 0);
+//      p.scale.set(0.4, 0.4);
+      p.color = FlxColor.RED;
+    }
+  }
+
 
   /**
    * 移動する
@@ -151,6 +195,7 @@ class Block extends Token {
 
     // 落下中
     _state = State.Fall;
+    _elapsed = 0;
     var xnext = Field.toWorldX(_xgrid);
     var ynext = Field.toWorldY(_ygrid);
 
@@ -160,6 +205,7 @@ class Block extends Token {
     FlxTween.tween(this, {x:xnext, y:ynext}, speed, {ease:FlxEase.quadIn, startDelay:delay, onComplete:function(_) {
       // 移動完了
       _state = State.Idle;
+      _bNewer = false;
     }});
   }
 
