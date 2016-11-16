@@ -258,6 +258,11 @@ class SeqMgr {
 
   function _procWinLoseCheck():State {
 
+    if(Block.isIdleAll() == false) {
+      // ブロック消去中
+      return State.None;
+    }
+
     if(false) {
       // TODO: プレイヤー死亡
       return State.Lose;
