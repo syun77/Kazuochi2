@@ -170,14 +170,7 @@ class Block extends Token {
 
     if(_elapsed > 0.05) {
       _elapsed -= 0.05;
-      var deg = FlxG.random.float(0, 360);
-      var speed = FlxG.random.float(40, 80);
-      /*
-      var p = Particle.add(ParticleType.Ball, xcenter, bottom, deg, speed);
-      p.scale.set(0.4, 0.4);
-      */
       var p = Particle.add(ParticleType.Rect, xcenter, ycenter, 0, 0);
-//      p.scale.set(0.4, 0.4);
       p.color = FlxColor.RED;
     }
   }
@@ -187,6 +180,11 @@ class Block extends Token {
    * 移動する
    **/
   public function move(xgrid:Int, ygrid:Int, cntDelay:Int):Void {
+
+    if(_xgrid == xgrid && _ygrid == ygrid) {
+      // 同じ位置なので落下不要
+      return;
+    }
 
     var dy = ygrid - _ygrid;
 
