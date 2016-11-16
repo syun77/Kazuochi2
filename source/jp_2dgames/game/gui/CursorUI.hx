@@ -1,5 +1,7 @@
 package jp_2dgames.game.gui;
 
+import flash.display.BlendMode;
+import flixel.group.FlxGroup;
 import jp_2dgames.game.field.Field;
 import flixel.math.FlxMath;
 import jp_2dgames.game.particle.Particle;
@@ -22,7 +24,12 @@ private enum State {
 /**
  * カーソルUI
  **/
-class CursorUI extends FlxSprite {
+class CursorUI extends FlxGroup {
+
+  // ===================================================
+  // ■定数
+  static inline var BG_ALPHA:Float = 0.3;
+  static inline var CURSOR_ALPHA:Float = 0.2;
 
   static var _instance:CursorUI = null;
   public static function createInstance(state:FlxState):Void {
@@ -58,6 +65,12 @@ class CursorUI extends FlxSprite {
   var _block:Block = null;
   // 経過時間
   var _elapsed:Float = 0.0;
+  // カーソル背景
+  var _bg:FlxSprite;
+  // ブロックを光らせる
+  var _cursor:FlxSprite;
+  // アニメーションタイマー
+  var _tAnim:Float = 0.0;
 
   /**
    * コンストラクタ
@@ -65,11 +78,21 @@ class CursorUI extends FlxSprite {
   public function new() {
     super();
 
+    // 背景
     var w = Block.WIDTH;
-    var h = Block.HEIGHT * Field.GRID_Y;
-    makeGraphic(w, h, FlxColor.WHITE);
-    alpha = 0.2;
-    visible = false;
+    var h = Block.HEIGHT * (Field.GRID_Y - Field.GRID_Y_TOP);
+    _bg = new FlxSprite().makeGraphic(w, h, FlxColor.WHITE);
+    _bg.alpha = BG_ALPHA;
+    _bg.visible = false;
+    this.add(_bg);
+
+    // ブロックカーソル
+    _cursor = new FlxSprite().makeGraphic(Block.WIDTH, Block.HEIGHT, FlxColor.WHITE);
+    _cursor.visible = false;
+    _cursor.alpha = CURSOR_ALPHA;
+    _cursor.blend = BlendMode.ADD;
+    this.add(_cursor);
+
     _state = State.End;
   }
 
@@ -78,13 +101,17 @@ class CursorUI extends FlxSprite {
    **/
   override public function update(elapsed:Float):Void {
 
+    _tAnim += elapsed;
+
     switch(_state) {
       case State.End:
         // カーソル非表示
-        visible = false;
+        _bg.visible = false;
+        _cursor.visible = false;
       case State.AppearBlock:
         // カーソル非表示
-        visible = false;
+        _bg.visible = false;
+        _cursor.visible = true;
       #if flash
         // カーソル移動へ
         _state = State.MoveCursor;
@@ -95,30 +122,33 @@ class CursorUI extends FlxSprite {
         }
       #end
       case State.MoveCursor:
-        visible = true;
+        _bg.visible = true;
+        _cursor.visible = true;
       #if flash
         _block.visible = true;
         if(FlxG.mouse.justPressed) {
           // 離したのでおしまい
           _state = State.End;
         }
-        else {
-          // 移動中
-          _updateMoveCursor();
-        }
       #else
         if(Input.touchJustReleased) {
           // 離したのでおしまい
           _state = State.End;
         }
-        else {
-          // 移動中
-          _updateMoveCursor();
-        }
       #end
     }
 
     if(_state != State.End) {
+
+      // カーソル移動
+      _updateMoveCursor();
+
+      // カーソル点滅
+      var d = Math.sin(_tAnim * 4);
+      _bg.alpha = BG_ALPHA + 0.05 * d;
+      _cursor.alpha = CURSOR_ALPHA + 0.1 * d;
+
+      // エフェクト出現
       _elapsed += elapsed;
       if(_elapsed > 0.3) {
         var p = Particle.add(ParticleType.Rect, _block.xcenter, _block.ycenter, 0, 0);
@@ -144,8 +174,10 @@ class CursorUI extends FlxSprite {
     xgrid = FlxMath.maxInt(xgrid, 0);
     xgrid = FlxMath.minInt(xgrid, Field.GRID_X-1);
 
-    x = Field.toWorldX(xgrid);
-    y = Field.toWorldY(ygrid);
+    _bg.x = Field.toWorldX(xgrid);
+    _bg.y = Field.toWorldY(ygrid);
+    _cursor.x = _bg.x;
+    _cursor.y = _bg.y;
 
     // ブロックも一緒に移動
     _block.moveNoWait(xgrid, ygrid);
