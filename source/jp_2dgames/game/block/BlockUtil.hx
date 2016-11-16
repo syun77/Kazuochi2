@@ -23,9 +23,9 @@ class BlockUtil {
 
 
   public static function toData(number:Int, bSkull:Bool, hp:Int, bNewer:Bool):Int {
-    var skull:Int = bSkull ? 10 : 0;
-    var hpval:Int = hp * 100;
-    var newer:Int = bNewer ? 1000 : 0;
+    var skull:Int = bSkull ? OFS_SKULL : 0;
+    var hpval:Int = hp * OFS_HP;
+    var newer:Int = bNewer ? OFS_NEWER : 0;
     return number + skull + hpval + newer;
   }
 
@@ -39,6 +39,13 @@ class BlockUtil {
   public static function getHp(data:Int):Int {
     var v = data%OFS_NEWER;
     return Math.floor(v/OFS_HP);
+  }
+  public static function subHp(data:Int):Int {
+    var hp = getHp(data);
+    if(hp > 0) {
+      data -= OFS_HP;
+    }
+    return data;
   }
   public static function isNewer(data:Int):Bool {
     return data >= OFS_NEWER;

@@ -2,8 +2,6 @@ package jp_2dgames.game.token;
 
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
-import flixel.FlxG;
-import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.Field;
 import flixel.effects.FlxFlicker;
@@ -26,12 +24,18 @@ private enum State {
  **/
 class Block extends Token {
 
+  // ===============================================
+  // ■定数
   public static inline var WIDTH:Int = 40;
   public static inline var HEIGHT:Int = 40;
 
   public static inline var SPECIAL:Int = 10; // スペシャルブロック
   public static inline var HARD:Int    = 11; // 固いブロック
   public static inline var SKULL:Int   = 12; // ドクロ
+
+  static inline var ANIM_HARD_OFS:Int = 10;
+  static inline var ANIM_VERYHARD:String = "veryhard";
+  static inline var ANIM_SKULL:String = "skull";
 
 
   public static var parent:FlxTypedGroup<Block>;
@@ -42,9 +46,9 @@ class Block extends Token {
   public static function destroyParent():Void {
     parent = null;
   }
-  public static function add(number:Int, xgrid:Int, ygrid:Int):Block {
+  public static function add(number:Int, xgrid:Int, ygrid:Int, hp:Int=BlockUtil.HP_NORMAL):Block {
     var block:Block = parent.recycle(Block);
-    block.init(number, xgrid, ygrid);
+    block.init(number, xgrid, ygrid, hp);
     return block;
   }
   public static function addNewer(number:Int, xgrid:Int, ygrid:Int):Block {
@@ -116,9 +120,12 @@ class Block extends Token {
 
     // 画像読み込み
     loadGraphic(AssetPaths.IMAGE_BLOCK, true, WIDTH, HEIGHT);
-    for(i in 0...12) {
-      animation.add('${i+1}', [i]);
+    for(i in 0...9) {
+      animation.add('${i+1}',  [i]);
+      animation.add('${i+1+ANIM_HARD_OFS}', [12 + i]);
     }
+    animation.add(ANIM_VERYHARD, [11]);
+    animation.add(ANIM_SKULL, [12]);
   }
 
   /**
@@ -126,13 +133,13 @@ class Block extends Token {
    **/
   public function init(number:Int, xgrid:Int, ygrid:Int, hp:Int=BlockUtil.HP_NORMAL, bNewer:Bool=false):Void {
     _state = State.Idle;
+    _hp = hp;
     setNumber(number);
 
     _xgrid = xgrid;
     _ygrid = ygrid;
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
-    _hp = hp;
     _bNewer = bNewer;
     _elapsed = 0;
   }
@@ -141,7 +148,32 @@ class Block extends Token {
    * 番号を設定
    **/
   public function setNumber(Number:Int):Void {
-    animation.play('${Number}');
+
+    _number = Number;
+
+    if(_hp == BlockUtil.HP_VERYHARD) {
+      // とても固い
+      animation.play(ANIM_VERYHARD);
+      return;
+    }
+
+    var num = Number;
+    if(_hp == BlockUtil.HP_HARD) {
+      // 固い
+      num += ANIM_HARD_OFS;
+    }
+    animation.play('${num}');
+  }
+
+  /**
+   * HPを1つ減らす
+   **/
+  public function damage():Void {
+    _hp -= 1;
+    if(_hp < 0) {
+      _hp = 0;
+    }
+    setNumber(_number);
   }
 
   /**

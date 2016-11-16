@@ -107,8 +107,8 @@ class Enemy extends Actor  {
    * ターンを開始
    **/
   override public function beginTurn():Void {
+    // TODO:
     addAp(30);
-    trace("ap:", ap);
   }
 
   /**
@@ -122,7 +122,8 @@ class Enemy extends Actor  {
    **/
   public function execAI(req:RequestBlockParam):Void {
     // TODO: 上から降らす
-    req.setUpper(3);
+    //req.setUpper(3);
+    req.setUpperHard(3);
 
     resetAp();
   }

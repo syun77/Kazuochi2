@@ -111,9 +111,12 @@ class RequestBlockParam {
       var number = NextBlockMgr.put();
       var xgrid  = arr[i];
       var ygrid  = 0;
-      field.set(xgrid, ygrid, number);
-      var b = Block.add(number, xgrid, ygrid);
-      // TODO: 固ぷよ
+      {
+        // レイヤーに設定
+        var data = BlockUtil.toData(number, _bSkull, _hp, false);
+        field.set(xgrid, ygrid, data);
+      }
+      var b = Block.add(number, xgrid, ygrid, _hp);
       // TODO: ドクロブロック
       // 出現演出
       var px = Field.toWorldX(xgrid) + Field.TILE_WIDTH/2;
@@ -148,7 +151,7 @@ class RequestBlockParam {
   /**
    * 上から出現 (固ぷよ)
    */
-  public function setUpperVerd(count:Int):Void {
+  public function setUpperHard(count:Int):Void {
     _type  = RequestBlock.Upper;
     _count = count;
     _hp    = BlockUtil.HP_HARD;

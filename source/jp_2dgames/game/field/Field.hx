@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.math.FlxPoint;
 import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
@@ -106,6 +107,9 @@ class Field {
 
     result.init();
 
+    // 消える場所のリスト
+    var pList = new Array<FlxPoint>();
+
     _layer.forEach(function(i:Int, j:Int, v:Int) {
       if(v == 0) {
         // チェック不要
@@ -154,9 +158,13 @@ class Field {
           // レイヤーからも消す
           _layer.set(xgrid, ygrid, 0);
 
+          // 消去リストに入れる
+          pList.push(FlxPoint.get(xgrid, ygrid));
+
           // 座標の合計を求める
           xgridTotal += xgrid;
           ygridTotal += ygrid;
+
         }
         else {
           trace('error:${xgrid},${ygrid}');
@@ -181,6 +189,37 @@ class Field {
       result.chain = 0;
     }
 
+    // ブロックへのダメージ処理
+    for(p in pList) {
+
+      var xgrid = Std.int(p.x);
+      var ygrid = Std.int(p.y);
+      p.put();
+
+      // 上下左右のブロックにダメージを与える
+      var xtbl = [-1, 0, 1, 0];
+      var ytbl = [0, -1, 0, 1];
+      for(i in 0...xtbl.length) {
+        // 再帰検索
+        var dx = xtbl[i];
+        var dy = ytbl[i];
+        var px = xgrid + dx;
+        var py = ygrid + dy;
+        var val2 = _layer.get(px, py);
+        if(BlockUtil.getHp(val2) > 0) {
+          // ダメージを与える
+          _layer.set(px, py, BlockUtil.subHp(val2));
+          var block2 = Block.search(px, py);
+          if(block2 != null) {
+            block2.damage();
+          }
+          else {
+            trace(px, py, "none");
+          }
+        }
+      }
+    }
+
     // トータル消去数を返す
     return result;
   }
@@ -199,6 +238,10 @@ class Field {
       return cnt;
     }
 
+    if(BlockUtil.getHp(val2) > 0) {
+      // 消去対象とならない
+      return cnt;
+    }
     val2 = BlockUtil.getNumber(val2);
     if(val2 != val) {
       // 消去対象とならない
