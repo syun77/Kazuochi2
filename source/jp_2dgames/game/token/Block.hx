@@ -1,5 +1,7 @@
 package jp_2dgames.game.token;
 
+import flash.display.BlendMode;
+import flixel.FlxG;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.block.BlockUtil;
@@ -172,6 +174,17 @@ class Block extends Token {
     _hp -= 1;
     if(_hp < 0) {
       _hp = 0;
+    }
+    else {
+      // 破片を散らす
+      var deg = FlxG.random.float(360);
+      for(i in 0...8) {
+        var speed = FlxG.random.int(60, 90);
+        var p = Particle.add(ParticleType.Stone, xcenter, ycenter, deg, speed);
+        p.acceleration.y = 200;
+        p.blend = BlendMode.ALPHA;
+        deg += 70 + FlxG.random.float(45);
+      }
     }
     setNumber(_number);
   }

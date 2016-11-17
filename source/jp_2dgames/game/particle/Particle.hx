@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import flixel.effects.FlxFlicker;
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import flixel.FlxState;
@@ -15,6 +16,7 @@ enum ParticleType {
   Blade;  // 長細い
   Rect;   // 矩形
   Circle; // 円
+  Stone;  // ブロック破片
 }
 
 /**
@@ -117,6 +119,14 @@ class Particle extends Token {
         var sc = elapsed * 1.5;
         scale.add(sc, sc);
         alpha -= elapsed * 1.5;
+
+      case ParticleType.Stone:
+        if(_lifespan/age > 0.7) {
+          if(FlxFlicker.isFlickering(this) == false) {
+            // 点滅開始
+            FlxFlicker.flicker(this, _lifespan);
+          }
+        }
     }
 
     super.update(elapsed);
@@ -131,6 +141,7 @@ class Particle extends Token {
     animation.add('${ParticleType.Blade}',  [2]);
     animation.add('${ParticleType.Rect}' ,  [3]);
     animation.add('${ParticleType.Circle}', [4]);
+    animation.add('${ParticleType.Stone}',  [5]);
   }
 
   // ===========================================
