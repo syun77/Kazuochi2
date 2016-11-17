@@ -56,4 +56,18 @@ class BlockUtil {
     }
     return data;
   }
+
+  /**
+   * 他と接続するかどうか
+   **/
+  public static function isConnect(data:Int):Bool {
+    if(getHp(data) > 0) {
+      return false;
+    }
+    if(isSkull(data)) {
+      return false;
+    }
+    // 接続可能
+    return true;
+  }
 }

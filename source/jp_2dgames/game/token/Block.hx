@@ -49,14 +49,19 @@ class Block extends Token {
   public static function destroyParent():Void {
     parent = null;
   }
-  public static function add(number:Int, xgrid:Int, ygrid:Int, hp:Int=BlockUtil.HP_NORMAL):Block {
+  public static function add(xgrid:Int, ygrid:Int, type:BlockType):Block {
     var block:Block = parent.recycle(Block);
-    block.init(number, xgrid, ygrid, hp);
+    block.init(xgrid, ygrid, type);
     return block;
   }
   public static function addNewer(number:Int, xgrid:Int, ygrid:Int):Block {
     var block:Block = parent.recycle(Block);
-    block.init(number, xgrid, ygrid, BlockUtil.HP_NORMAL, true);
+    block.init(xgrid, ygrid, BlockType.Newer(number));
+    return block;
+  }
+  public static function addSkull(xgrid:Int, ygrid:Int):Block {
+    var block:Block = parent.recycle(Block);
+    block.init(xgrid, ygrid, BlockType.Skull);
     return block;
   }
   public static function search(xgrid:Int, ygrid:Int):Block {
@@ -104,6 +109,7 @@ class Block extends Token {
   public var xgrid(get, never):Int;
   public var ygrid(get, never):Int;
   public var isNewer(get, never):Bool;
+  public var isSkull(get, never):Bool;
 
   // ==========================================================
   // ■フィールド
@@ -113,6 +119,7 @@ class Block extends Token {
   var _hp:Int;      // ブロックの堅さ
   var _state:State; // 状態
   var _bNewer:Bool; // プレイヤーが新しく配置したブロックかどうか
+  var _bSkull:Bool; // ドクロブロックかどうか
   var _elapsed:Float;
 
   /**
@@ -135,16 +142,41 @@ class Block extends Token {
   /**
    * 初期化
    **/
-  public function init(number:Int, xgrid:Int, ygrid:Int, hp:Int=BlockUtil.HP_NORMAL, bNewer:Bool=false):Void {
-    _state = State.Idle;
-    _hp = hp;
+  public function init(xgrid:Int, ygrid:Int, type:BlockType):Void {
+
+    // 変数初期化
+    _state  = State.Idle;
+    _hp     = BlockUtil.HP_NORMAL;
+    _bNewer = false;
+    _bSkull = false;
+
+    // パラメータデフォルト値
+    var number = 0;
+    switch(type) {
+      case BlockType.Normal(num):
+        // 通常ブロック
+        number = num;
+
+      case BlockType.Number(num, hp):
+        // 通常ブロックHP指定バージョン
+        number = num;
+        _hp = hp;
+
+      case BlockType.Newer(num):
+        // 新しく配置したブロック
+        number = num;
+        _bNewer = true;
+
+      case BlockType.Skull:
+        // ドクロブロック
+        _bSkull = true;
+    }
     setNumber(number);
 
     _xgrid = xgrid;
     _ygrid = ygrid;
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
-    _bNewer = bNewer;
     _elapsed = 0;
   }
 
@@ -152,6 +184,12 @@ class Block extends Token {
    * 番号を設定
    **/
   public function setNumber(Number:Int):Void {
+
+    if(_bSkull) {
+      // ドクロブロック
+      animation.play(ANIM_SKULL);
+      return;
+    }
 
     _number = Number;
 
@@ -288,4 +326,5 @@ class Block extends Token {
   function get_xgrid()   { return _xgrid; }
   function get_ygrid()   { return _ygrid; }
   function get_isNewer() { return _bNewer; }
+  function get_isSkull() { return _bSkull; }
 }

@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.token.BlockType;
 import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
 import flixel.util.FlxColor;
@@ -109,6 +110,9 @@ class RequestBlockParam {
 
     for(i in 0...count) {
       var number = NextBlockMgr.put();
+      if(_bSkull) {
+        number = 0;
+      }
       var xgrid  = arr[i];
       var ygrid  = 0;
       {
@@ -116,8 +120,14 @@ class RequestBlockParam {
         var data = BlockUtil.toData(number, _bSkull, _hp, false);
         field.set(xgrid, ygrid, data);
       }
-      var b = Block.add(number, xgrid, ygrid, _hp);
-      // TODO: ドクロブロック
+
+      if(_bSkull) {
+        // ドクロブロック
+        Block.addSkull(xgrid, ygrid);
+      }
+      else {
+        Block.add(xgrid, ygrid, BlockType.Number(number, _hp));
+      }
       // 出現演出
       var px = Field.toWorldX(xgrid) + Field.TILE_WIDTH/2;
       var py = Field.toWorldY(ygrid) + Field.TILE_HEIGHT/2;

@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.block.BlockUtil;
+import jp_2dgames.game.token.BlockType;
 import jp_2dgames.game.field.Field;
 import jp_2dgames.game.token.Block;
 import jp_2dgames.game.global.NextBlockMgr;
@@ -23,7 +25,7 @@ class NextBlockUI extends FlxSpriteGroup {
 
     for(i in 0...NextBlockMgr.MAX) {
       var spr = new Block();
-      spr.init(1, Field.GRID_X_CENTER, Field.GRID_Y_TOP);
+      spr.init(Field.GRID_X_CENTER, Field.GRID_Y_TOP, BlockType.Normal(1));
       var sc = 0.8 - 0.2 * i;
       spr.scale.set(sc, sc);
 

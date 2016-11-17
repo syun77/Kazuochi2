@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.token.BlockType;
 import flixel.math.FlxPoint;
 import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
@@ -95,7 +96,7 @@ class Field {
     layer.forEach(function(i:Int, j:Int, v:Int) {
       switch(v) {
         case 1,2,3,4,5,6,7,8,9:
-          Block.add(v, i, j);
+          Block.add(i, j, BlockType.Normal(v));
       }
     });
   }
@@ -113,6 +114,11 @@ class Field {
     _layer.forEach(function(i:Int, j:Int, v:Int) {
       if(v == 0) {
         // チェック不要
+        return;
+      }
+
+      if(BlockUtil.isConnect(v) == false) {
+        // 他と接続できないブロック
         return;
       }
 
@@ -217,6 +223,17 @@ class Field {
             trace(px, py, "none");
           }
         }
+        else if(BlockUtil.isSkull(val2)) {
+          // ドクロブロック
+          _layer.set(px, py, 0);
+          var block2 = Block.search(px, py);
+          if(block2 != null) {
+            // 消去
+            block2.erase();
+            // 消去数をアップ
+            result.erase++;
+          }
+        }
       }
     }
 
@@ -238,13 +255,14 @@ class Field {
       return cnt;
     }
 
-    if(BlockUtil.getHp(val2) > 0) {
-      // 消去対象とならない
+    if(BlockUtil.isConnect(val2) == false) {
+      // 他と接続できないブロック
       return cnt;
     }
+
     val2 = BlockUtil.getNumber(val2);
     if(val2 != val) {
-      // 消去対象とならない
+      // 数値が違うので消去対象とならない
       return cnt;
     }
 
