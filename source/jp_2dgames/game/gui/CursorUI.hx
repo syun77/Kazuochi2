@@ -108,6 +108,7 @@ class CursorUI extends FlxGroup {
         // カーソル非表示
         _bg.visible = false;
         _cursor.visible = false;
+
       case State.AppearBlock:
         // カーソル非表示
         _bg.visible = false;
@@ -121,6 +122,7 @@ class CursorUI extends FlxGroup {
           _state = State.MoveCursor;
         }
       #end
+
       case State.MoveCursor:
         _bg.visible = true;
         _cursor.visible = true;
@@ -165,6 +167,14 @@ class CursorUI extends FlxGroup {
    * カーソル移動中
    **/
   function _updateMoveCursor():Void {
+
+  #if mobile
+    if(Input.on.A == false) {
+      // タッチしていなかったら移動処理はしない
+      return;
+    }
+  #end
+
     // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
