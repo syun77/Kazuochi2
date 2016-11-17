@@ -123,7 +123,8 @@ class Enemy extends Actor  {
   public function execAI(req:RequestBlockParam):Void {
     // TODO: 上から降らす
     //req.setUpper(3);
-    req.setUpperHard(3);
+//    req.setUpperHard(3);
+    req.setUpperVeryHard(3);
 
     resetAp();
   }

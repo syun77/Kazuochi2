@@ -38,6 +38,7 @@ class Block extends Token {
   static inline var ANIM_HARD_OFS:Int = 10;
   static inline var ANIM_VERYHARD:String = "veryhard";
   static inline var ANIM_SKULL:String = "skull";
+  static inline var ANIM_SPECIAL:String = "special";
 
 
   public static var parent:FlxTypedGroup<Block>;
@@ -126,8 +127,9 @@ class Block extends Token {
       animation.add('${i+1}',  [i]);
       animation.add('${i+1+ANIM_HARD_OFS}', [12 + i]);
     }
-    animation.add(ANIM_VERYHARD, [11]);
-    animation.add(ANIM_SKULL, [12]);
+    animation.add(ANIM_VERYHARD, [10]);
+    animation.add(ANIM_SKULL, [11]);
+    animation.add(ANIM_SPECIAL, [9]);
   }
 
   /**
@@ -181,7 +183,7 @@ class Block extends Token {
       for(i in 0...8) {
         var speed = FlxG.random.int(60, 90);
         var p = Particle.add(ParticleType.Stone, xcenter, ycenter, deg, speed);
-        p.acceleration.y = 200;
+        p.acceleration.y = 100;
         p.blend = BlendMode.ALPHA;
         deg += 70 + FlxG.random.float(45);
       }
