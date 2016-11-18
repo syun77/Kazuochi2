@@ -19,6 +19,8 @@ class BgUI extends FlxGroup {
 
   static inline var THICK:Int = 2; // 線の太さ
   static inline var MAX_BLACK:Float = 0.4;
+  static inline var BG_COLOR:Int = 0xFFD0D0D0;
+  static inline var BG_DARK:Int = MyColor.CHARCOAL;
 
   // ==================================
   // ■フィールド
@@ -128,6 +130,6 @@ class BgUI extends FlxGroup {
       _tBlack = Math.max(_tBlack - elapsed, 0);
     }
 
-    _bg.color = FlxColor.interpolate(FlxColor.WHITE, MyColor.CHARCOAL, _tBlack/MAX_BLACK);
+    _bg.color = FlxColor.interpolate(BG_COLOR, BG_DARK, _tBlack/MAX_BLACK);
   }
 }

@@ -281,7 +281,7 @@ class SeqMgr {
       return State.Win;
     }
     if(_bKeepOnChain) {
-      // TODO: 連鎖あり
+      // 連鎖あり
       // 落下処理
       Field.fall();
       return State.FallBlock;
