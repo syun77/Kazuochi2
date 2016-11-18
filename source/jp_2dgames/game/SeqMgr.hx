@@ -63,7 +63,6 @@ class SeqMgr {
   var _statePrev:State;
 
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
-  var _nextBlock:Int = 0; // 次に出現するブロックの番号
 
   var _eraseResult:EraseResult;        // 消去結果
   var _requestBlock:RequestBlockParam; // ブロック落下情報
@@ -90,6 +89,13 @@ class SeqMgr {
     // デバッグ用
     FlxG.watch.add(this, "_state");
     FlxG.watch.add(this, "_statePrev");
+  }
+
+  /**
+   * セーブ・ロード可能な状態かどうか
+   **/
+  public function canSaveAndLoad():Bool {
+    return _state == State.InputKey;
   }
 
   /**
@@ -147,8 +153,8 @@ class SeqMgr {
     _beginTurn();
 
     // 次に出現するブロックを抽選
-    _nextBlock = NextBlockMgr.next();
-    CursorUI.start(_nextBlock);
+    var next = NextBlockMgr.next();
+    CursorUI.start(next);
     return State.InputKey;
   }
 
@@ -159,7 +165,9 @@ class SeqMgr {
       // ブロックを配置
       var block = CursorUI.getBlock();
       var layer = Field.getLayer();
-      var data  = BlockUtil.toData(_nextBlock, false, 0, true);
+      var data  = CursorUI.getNowBlockData();
+      // NEW属性をつける
+      data = BlockUtil.onNewer(data);
       layer.set(block.xgrid, block.ygrid, data);
       // 落下開始
       Field.fall();

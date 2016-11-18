@@ -206,13 +206,16 @@ class PlayState extends FlxTransitionableState {
       FlxG.resetState();
 //      FlxG.switchState(new PlayInitState());
     }
-    if(FlxG.keys.justPressed.S) {
-      Save.save(true, true);
-    }
-    if(FlxG.keys.justPressed.A) {
-      Save.load(true, true);
-      Block.killAll();
-      Field.createObjectsFromLayer();
+
+    if(_seq.canSaveAndLoad()) {
+      if(FlxG.keys.justPressed.S) {
+        Save.save(true, true);
+      }
+      if(FlxG.keys.justPressed.A) {
+        Block.killAll();
+        Save.load(true, true);
+        Field.createObjectsFromLayer();
+      }
     }
 #end
 #end

@@ -29,6 +29,10 @@ class BlockUtil {
     return number + skull + hpval + newer;
   }
 
+  public static function isNone(data:Int):Bool {
+    return data == 0;
+  }
+
   public static function getNumber(data:Int):Int {
     return data%OFS_SKULL;
   }
@@ -50,6 +54,14 @@ class BlockUtil {
   public static function isNewer(data:Int):Bool {
     return data >= OFS_NEWER;
   }
+  // New属性をつける
+  public static function onNewer(data:Int):Int {
+    if(isNewer(data) == false) {
+      return data + OFS_NEWER;
+    }
+    return data;
+  }
+  // New属性を取る
   public static function offNewer(data:Int):Int {
     if(isNewer(data)) {
       return data - OFS_NEWER;

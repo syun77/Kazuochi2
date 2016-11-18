@@ -110,6 +110,7 @@ class Block extends Token {
   public var ygrid(get, never):Int;
   public var isNewer(get, never):Bool;
   public var isSkull(get, never):Bool;
+  public var number(get, never):Int;
 
   // ==========================================================
   // ■フィールド
@@ -147,6 +148,13 @@ class Block extends Token {
     // 変数初期化
     _state  = State.Idle;
     _hp     = BlockUtil.HP_NORMAL;
+
+    // 座標設定
+    _xgrid = xgrid;
+    _ygrid = ygrid;
+    x = Field.toWorldX(_xgrid);
+    y = Field.toWorldY(_ygrid);
+
     _bNewer = false;
     _bSkull = false;
 
@@ -173,10 +181,6 @@ class Block extends Token {
     }
     setNumber(number);
 
-    _xgrid = xgrid;
-    _ygrid = ygrid;
-    x = Field.toWorldX(_xgrid);
-    y = Field.toWorldY(_ygrid);
     _elapsed = 0;
   }
 
@@ -204,6 +208,12 @@ class Block extends Token {
       // 固い
       num += ANIM_HARD_OFS;
     }
+
+    if(num == 0) {
+      trace(xgrid, ygrid, _number, _bSkull, _hp);
+      throw "error";
+    }
+
     animation.play('${num}');
   }
 
@@ -327,4 +337,5 @@ class Block extends Token {
   function get_ygrid()   { return _ygrid; }
   function get_isNewer() { return _bNewer; }
   function get_isSkull() { return _bSkull; }
+  function get_number()  { return _number; }
 }

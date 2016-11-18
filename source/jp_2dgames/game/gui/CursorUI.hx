@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
 import flixel.group.FlxGroup;
 import jp_2dgames.game.field.Field;
@@ -57,12 +58,19 @@ class CursorUI extends FlxGroup {
     return block;
   }
 
+  // 現在操作中のブロックを取得する
+  public static function getNowBlockData():Int {
+    return _instance._data;
+  }
+
   // ==========================================
   // ■フィールド
   // 状態
   var _state:State = State.End;
   // 落下対象のブロック
   var _block:Block = null;
+  // 元のブロックの情報
+  var _data:Int = 0;
   // 経過時間
   var _elapsed:Float = 0.0;
   // カーソル背景
@@ -197,9 +205,16 @@ class CursorUI extends FlxGroup {
    * カーソル処理開始
    **/
   function _start(nextBlock:Int):Void {
+
+    // 保存
+    _data = nextBlock;
+
     var px = Field.GRID_NEXT_X;
     var py = Field.GRID_NEXT_Y;
-    _block = Block.addNewer(nextBlock, px, py);
+
+    // TODO: 数値のみ
+    var number = BlockUtil.getNumber(nextBlock);
+    _block = Block.addNewer(number, px, py);
 #if flash
     _block.visible = false;
 #end

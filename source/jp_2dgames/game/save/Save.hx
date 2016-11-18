@@ -1,5 +1,7 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.gui.CursorUI;
+import jp_2dgames.game.global.NextBlockMgr;
 import jp_2dgames.game.field.Field;
 import openfl.filesystem.File;
 import jp_2dgames.game.global.Global;
@@ -50,6 +52,36 @@ private class _Field {
   }
 }
 
+/**
+ * NEXTブロック
+ **/
+private class _NextBlock {
+  public var data:Array<Int>;
+  public var start:Int; // 出現範囲・開始
+  public var end:Int;   // 出現範囲・終端
+  public var now:Int;   // 現在のブロック
+
+  public function new() {
+    data = new Array<Int>();
+  }
+  // セーブ
+  public function save():Void {
+    NextBlockMgr.forEachWithIndex(function(idx:Int, v:Int) {
+      data.push(v);
+    });
+
+    start = NextBlockMgr.getRangeStart();
+    end   = NextBlockMgr.getRangeEnd();
+    now   = CursorUI.getNowBlockData();
+  }
+  // ロード
+  public function load(data:Dynamic):Void {
+    NextBlockMgr.setRange(data.start, data.end);
+    NextBlockMgr.setNextBlocks(data.data);
+    CursorUI.start(data.now);
+  }
+}
+
 
 /**
  * セーブデータ
@@ -57,22 +89,26 @@ private class _Field {
 private class SaveData {
   public var global:_Global;
   public var field:_Field;
+  public var next:_NextBlock;
 
   public function new() {
     global = new _Global();
-    field = new _Field();
+    field  = new _Field();
+    next   = new _NextBlock();
   }
 
   // セーブ
   public function save() {
     global.save();
     field.save();
+    next.save();
   }
 
   // ロード
   public function load(data:Dynamic) {
     global.load(data.global);
     field.load(data.field);
+    next.load(data.next);
   }
 }
 

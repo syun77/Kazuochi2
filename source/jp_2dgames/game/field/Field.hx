@@ -94,10 +94,23 @@ class Field {
   public static function createObjectsFromLayer():Void {
     var layer = _tmx.getLayer(LAYER_NAME);
     layer.forEach(function(i:Int, j:Int, v:Int) {
-      switch(v) {
-        case 1,2,3,4,5,6,7,8,9:
-          Block.add(i, j, BlockType.Normal(v));
+
+      if(BlockUtil.isNone(v)) {
+        // 何も配置しない
+        return;
       }
+
+      if(BlockUtil.isSkull(v)) {
+        // ドクロ
+        Block.addSkull(i, j);
+        return;
+      }
+
+      // 数値ブロック
+      var hp = BlockUtil.getHp(v);
+      var number = BlockUtil.getNumber(v);
+
+      Block.add(i, j, BlockType.Number(number, hp));
     });
   }
 

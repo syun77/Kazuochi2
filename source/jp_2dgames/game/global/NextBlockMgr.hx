@@ -26,6 +26,13 @@ class NextBlockMgr {
   }
 
   /**
+   * NEXTブロックを設定する
+   **/
+  public static function setNextBlocks(arr:Array<Int>):Void {
+    _instance._setNextBlocks(arr);
+  }
+
+  /**
    * 次のブロックを取り出し
    **/
   public static function next():Int {
@@ -37,6 +44,20 @@ class NextBlockMgr {
    **/
   public static function setRange(start:Int, end:Int):Void {
     _instance._setRange(start, end);
+  }
+
+  /**
+   * ブロック出現範囲の開始を取得する
+   **/
+  public static function getRangeStart():Int {
+    return _instance._start;
+  }
+
+  /**
+   * ブロック出現範囲の終端を取得する
+   **/
+  public static function getRangeEnd():Int {
+    return _instance._end;
   }
 
   /**
@@ -87,6 +108,20 @@ class NextBlockMgr {
   }
 
   /**
+   * NEXTブロックを設定する
+   **/
+  function _setNextBlocks(arr:Array<Int>):Void {
+
+    // キューをクリア
+    _blocks.clear();
+
+    for(i in 0...MAX) {
+      var v = arr[i];
+      _blocks.enqueue(v);
+    }
+  }
+
+  /**
    * ブロック出現範囲を設定
    **/
   function _setRange(start:Int, end:Int):Void {
@@ -117,6 +152,9 @@ class NextBlockMgr {
     return _blocks.dequeue();
   }
 
+  /**
+   * デバッグ出力
+   **/
   function _dump():Void {
     _blocks.dump();
   }
