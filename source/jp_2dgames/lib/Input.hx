@@ -233,6 +233,7 @@ class Input {
   public static var y(get, never):Float;
   public static var virtualPad(get, never):FlxVirtualPad;
   public static var touchJustPressed(get, never):Bool;
+  public static var touchPressed(get, never):Bool;
   public static var touchJustReleased(get, never):Bool;
 
   public static var mouse:InputMouse = new InputMouse();
@@ -295,6 +296,18 @@ class Input {
     return _virtualPad;
   }
   static function get_touchJustPressed() {
+#if FLX_TOUCH
+    for(touch in FlxG.touches.list) {
+      if(touch.pressed) {
+        return true;
+      }
+    }
+    return false;
+#else
+    return press.A;
+#end
+  }
+  static function get_touchPressed() {
 #if FLX_TOUCH
     for(touch in FlxG.touches.list) {
       if(touch.pressed) {

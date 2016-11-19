@@ -176,13 +176,6 @@ class CursorUI extends FlxGroup {
    **/
   function _updateMoveCursor():Void {
 
-  #if mobile
-    if(Input.on.A == false) {
-      // タッチしていなかったら移動処理はしない
-      return;
-    }
-  #end
-
     // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
@@ -194,6 +187,14 @@ class CursorUI extends FlxGroup {
 
     _bg.x = Field.toWorldX(xgrid);
     _bg.y = Field.toWorldY(ygrid);
+
+  #if mobile
+    if(Input.touchPressed == false) {
+      // タッチしていなかったら移動処理はしない
+      return;
+    }
+  #end
+
     _cursor.x = _bg.x;
     _cursor.y = _bg.y;
 
@@ -215,6 +216,9 @@ class CursorUI extends FlxGroup {
     // TODO: 数値のみ
     var number = BlockUtil.getNumber(nextBlock);
     _block = Block.addNewer(number, px, py);
+    _cursor.x = Field.toWorldX(px);
+    _cursor.y = Field.toWorldY(py);
+
 #if flash
     _block.visible = false;
 #end
