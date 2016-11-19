@@ -160,7 +160,7 @@ class Save {
 #if neko
     str = sys.io.File.getContent(AssetPaths.PATH_SAVE);
     if(bLog) {
-      trace("load ----------------------");
+      trace("_load ----------------------");
       trace(str);
     }
 #end

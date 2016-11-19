@@ -38,6 +38,7 @@ class Actor extends Token {
   var _apmax:Int; // 最大行動ポイント
   var _tDamage:Float; // ダメージタイマー
   var _tween:FlxTween;
+  var _bPlayer:Bool; // プレイヤーかどうか
 
   /**
    * コンストラクタ
@@ -45,6 +46,7 @@ class Actor extends Token {
   public function new(X:Float=0.0, Y:Float=0.0) {
     super(X, Y);
     setStartPosition(X, Y);
+    _bPlayer = false;
   }
 
   /**
@@ -119,7 +121,7 @@ class Actor extends Token {
       var sc = FlxG.random.float(0.6, 1.2);
       p.scale.set(sc, sc);
       p.acceleration.y = 200;
-      if(ID == 0) {
+      if(_bPlayer) {
         // プレイヤー
         p.color = FlxColor.RED;
       }

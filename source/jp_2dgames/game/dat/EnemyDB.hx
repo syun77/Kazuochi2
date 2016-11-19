@@ -47,4 +47,7 @@ class EnemyDB {
       case Enemies_block.Skull:    BlockUtil.HP_NORMAL;
     }
   }
+  public static function getBlockCount(id:EnemiesKind):Int {
+    return get(id).count;
+  }
 }

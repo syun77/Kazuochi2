@@ -26,6 +26,11 @@
 					"name": "hp"
 				},
 				{
+					"typeStr": "4",
+					"name": "ap",
+					"display": 1
+				},
+				{
 					"typeStr": "5:Upper,Bottom",
 					"name": "direction",
 					"display": null
@@ -33,6 +38,10 @@
 				{
 					"typeStr": "5:Normal,Hard,VeryHard,Skull",
 					"name": "block"
+				},
+				{
+					"typeStr": "3",
+					"name": "count"
 				},
 				{
 					"typeStr": "1",
@@ -49,16 +58,31 @@
 					"image": "../../../../assets/images/player.png",
 					"block": 0,
 					"direction": 0,
-					"id": "Player"
+					"id": "Player",
+					"count": 0,
+					"ap": 0
 				},
 				{
-					"hp": 150,
+					"hp": 30,
 					"name": "スライム",
 					"pic": "57300b7471f4b9f63ac276ad51849b14",
 					"image": "../../../../assets/images/enemies/pipo-enemy009.png",
 					"block": 0,
 					"direction": 0,
-					"id": "Slime"
+					"id": "Slime",
+					"count": 3,
+					"ap": 0.2
+				},
+				{
+					"id": "SlimeRed",
+					"name": "レッドスライム",
+					"pic": "95d2da899d3e647b9cc481869b5624b0",
+					"image": "../../../../assets/images/enemies/pipo-enemy009a.png",
+					"hp": 50,
+					"direction": 0,
+					"block": 0,
+					"count": 3,
+					"ap": 0.2
 				},
 				{
 					"name": "コウモリ",
@@ -67,7 +91,31 @@
 					"hp": 30,
 					"block": 3,
 					"direction": 0,
-					"id": "Bat"
+					"id": "Bat",
+					"count": 3,
+					"ap": 0.3
+				},
+				{
+					"id": "BatRed",
+					"name": "レッドコウモリ",
+					"pic": "b72e2e3dfbab1a321cae006232fc1683",
+					"image": "../../../../assets/images/enemies/pipo-enemy001a.png",
+					"hp": 50,
+					"direction": 0,
+					"block": 0,
+					"count": 3,
+					"ap": 0.3
+				},
+				{
+					"id": "Snake",
+					"name": "ヘビ",
+					"pic": "3ae358357d1f501af7cad1b0a1859d29",
+					"image": "../../../../assets/images/enemies/pipo-enemy003.png",
+					"hp": 200,
+					"direction": 0,
+					"block": 1,
+					"count": 3,
+					"ap": 0.2
 				}
 			],
 			"separators": [],

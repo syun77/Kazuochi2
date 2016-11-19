@@ -27,7 +27,7 @@ class CsvLoader {
     _datas = new Array<Map<String, String>>();
     var text:String = Assets.getText(filepath);
     if(text == null) {
-      FlxG.log.warn("CsvLoader.load() text is null. file:'" + filepath + "''");
+      FlxG.log.warn("CsvLoader._load() text is null. file:'" + filepath + "''");
       return;
     }
     _filepath = filepath;

@@ -13,6 +13,7 @@ import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.token.Block;
 import flixel.FlxG;
+import jp_2dgames.game.dat.MyDB;
 
 /**
  * 状態
@@ -126,7 +127,7 @@ class SeqMgr {
   function _procInit():State {
 
     // 敵出現
-    _enemy.appear();
+    _enemy.appear(EnemiesKind.Bat);
 
     // ブロック出現
     return State.AppearBlock;
@@ -329,8 +330,7 @@ class SeqMgr {
     }
 
     // TODO: 次の敵出現
-    _enemy.setParam(100);
-    _enemy.appear();
+    _enemy.appear(EnemiesKind.BatRed);
 
     // 落下開始
     Field.fall();

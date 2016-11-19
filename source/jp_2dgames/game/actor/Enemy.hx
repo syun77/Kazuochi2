@@ -25,18 +25,35 @@ class Enemy extends Actor  {
     super(X, Y);
     setStartPosition(X, Y);
 
+    // ひとまずコウモリにしておく
     _kind = EnemiesKind.Bat;
+    _load();
 
-    loadGraphic(EnemyDB.getImage(_kind));
-
+    // HPをひとまず1
     setParam(1);
+
+    // 消しておく
     visible = false;
+  }
+
+  /**
+   * 画像を読み込む
+   **/
+  function _load():Void {
+    loadGraphic(EnemyDB.getImage(_kind));
   }
 
   /**
    * 敵出現
    **/
-  public function appear():Void {
+  public function appear(kind:EnemiesKind):Void {
+
+    _kind = kind;
+    _load();
+
+    // HPを設定
+    var hp = EnemyDB.getHp(_kind);
+    setParam(hp);
 
     // 変数初期化
     _totalElapsed = 0;
@@ -129,7 +146,7 @@ class Enemy extends Actor  {
       EnemyDB.getDirection(_kind),
       EnemyDB.getBlockHp(_kind),
       EnemyDB.isBlockSkull(_kind),
-      3 // TODO:
+      EnemyDB.getBlockCount(_kind)
     );
 
     resetAp();

@@ -38,7 +38,8 @@ class Player extends Actor {
 
     _anim = AnimState.Idle;
 
-    ID = 0;
+    // プレイヤー
+    _bPlayer = true;
   }
 
   /**

@@ -115,7 +115,7 @@ class AdvScript {
     var scr:String = Assets.getText(filepath);
     if(scr == null) {
       // 読み込み失敗
-      var msg = "AdvScript.load() scr is null. file:'" + filepath + "''";
+      var msg = "AdvScript._load() scr is null. file:'" + filepath + "''";
       FlxG.log.warn(msg);
       return;
     }
