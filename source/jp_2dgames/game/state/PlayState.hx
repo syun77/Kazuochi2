@@ -47,11 +47,18 @@ class PlayState extends FlxTransitionableState {
   static inline var ENEMY_POS_Y:Int = -51;
 
   // ---------------------------------------
+  // ■プロパティ
+  public static var player(get, never):Player;
+  public static var enemy(get, never):Enemy;
+
+  // ---------------------------------------
   // ■フィールド
   var _state:State = State.Init;
 
   var _bg:BgUI;
   var _seq:SeqMgr;
+  var _player:Player;
+  var _enemy:Enemy;
 
   /**
    * 生成
@@ -78,13 +85,13 @@ class PlayState extends FlxTransitionableState {
     Field.createObjectsFromLayer();
 
     // プレイヤーの生成
-    var player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
-    player.setParam(100);
-    this.add(player);
+    _player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
+    _player.setParam(100);
+    this.add(_player);
 
     // 敵の生成
-    var enemy = new Enemy(ENEMY_POS_X, ENEMY_POS_Y);
-    this.add(enemy);
+    _enemy = new Enemy(ENEMY_POS_X, ENEMY_POS_Y);
+    this.add(_enemy);
 
     // ショット生成
     Shot.createParent(this);
@@ -188,6 +195,8 @@ class PlayState extends FlxTransitionableState {
 
   // -----------------------------------------------
   // ■アクセサ
+  static function get_player() { return cast(FlxG.state, PlayState)._player; }
+  static function get_enemy() { return cast(FlxG.state, PlayState)._enemy; }
 
   /**
    * デバッグ

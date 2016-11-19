@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.field.Field;
 import jp_2dgames.game.token.Shot;
 import flixel.tweens.FlxTween;
@@ -19,8 +20,10 @@ class BgUI extends FlxGroup {
 
   static inline var THICK:Int = 2; // 線の太さ
   static inline var MAX_BLACK:Float = 0.4;
+  static inline var MAX_RED:Float = 0.4;
   static inline var BG_COLOR:Int = 0xFFD0D0D0;
   static inline var BG_DARK:Int = MyColor.CHARCOAL;
+  static inline var BG_RED:Int = MyColor.RED;
 
   // ==================================
   // ■フィールド
@@ -29,6 +32,9 @@ class BgUI extends FlxGroup {
 
   // 暗くするタイマー
   var _tBlack:Float = 0.0;
+
+  // 赤くするタイマー
+  var _tRed:Float = 0.0;
 
   /**
    * コンストラクタ
@@ -130,6 +136,15 @@ class BgUI extends FlxGroup {
       _tBlack = Math.max(_tBlack - elapsed, 0);
     }
 
+    if(PlayState.player.isDanger()) {
+      // 危険状態
+      _tRed = Math.min(_tRed + elapsed, MAX_RED);
+    }
+    else {
+      _tRed = Math.max(_tRed - elapsed, 0);
+    }
+
     _bg.color = FlxColor.interpolate(BG_COLOR, BG_DARK, _tBlack/MAX_BLACK);
+    _bg.color = FlxColor.interpolate(_bg.color, BG_RED, _tRed/MAX_RED);
   }
 }

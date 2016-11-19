@@ -64,6 +64,13 @@ class Actor extends Token {
   }
 
   /**
+   * 危険状態かどうか
+   **/
+  public function isDanger():Bool {
+    return hpratio <= 0.3;
+  }
+
+  /**
    * 死亡しているかどうか
    **/
   public function isDead():Bool {
@@ -98,7 +105,7 @@ class Actor extends Token {
 
     _hp = FlxMath.maxAdd(_hp, -v, _hpmax);
 
-    ParticleBmpFont.startNumber(xcenter, ycenter+8, v, FlxColor.WHITE, Dir.Up);
+    ParticleBmpFont.startNumber(xcenter, ycenter, v, FlxColor.WHITE, Dir.Up);
     _tDamage = _getDamageTimer(v);
     FlxTween.color(this, 0.5, FlxColor.RED, FlxColor.WHITE);
 
