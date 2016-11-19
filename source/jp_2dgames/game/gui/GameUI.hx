@@ -50,7 +50,7 @@ class GameUI extends FlxSpriteGroup {
     this.add(_playerUI);
 
     // 敵UI作成
-    _enemyUI = new StatusUI(enemy.left+24, enemy.bottom-32, enemy);
+    _enemyUI = new StatusUI(enemy.left+84, enemy.bottom-92, enemy);
     this.add(_enemyUI);
 
 #if debug

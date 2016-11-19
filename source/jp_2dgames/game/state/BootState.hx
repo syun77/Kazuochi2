@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.dat.MyDBUtil;
 import jp_2dgames.lib.MyTransition;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -9,6 +10,9 @@ import flixel.FlxState;
 class BootState extends FlxState {
   override public function create():Void {
     super.create();
+
+    // CDB読み込み
+    MyDBUtil.load();
 
     // トランジション用オブジェクト生成
     MyTransition.create();

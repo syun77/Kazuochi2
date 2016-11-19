@@ -150,6 +150,13 @@ class RequestBlockParam {
 
   // =========================================================
   // ■各種要求
+
+  public function set(type:RequestBlock, hp:Int, bSkull:Bool, count:Int):Void {
+    _type   = type;
+    _hp     = hp;
+    _bSkull = bSkull;
+    _count  = count;
+  }
   /**
    * 上から出現
    */

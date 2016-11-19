@@ -4,13 +4,21 @@
 			"name": "enemies",
 			"columns": [
 				{
-					"typeStr": "3",
-					"name": "id",
-					"display": null
+					"typeStr": "0",
+					"name": "id"
 				},
 				{
 					"typeStr": "1",
-					"name": "ai",
+					"name": "name"
+				},
+				{
+					"typeStr": "7",
+					"name": "pic",
+					"display": null
+				},
+				{
+					"typeStr": "13",
+					"name": "image",
 					"display": null
 				},
 				{
@@ -18,8 +26,13 @@
 					"name": "hp"
 				},
 				{
-					"typeStr": "1",
-					"name": "fly"
+					"typeStr": "5:Upper,Bottom",
+					"name": "direction",
+					"display": null
+				},
+				{
+					"typeStr": "5:Normal,Hard,VeryHard,Skull",
+					"name": "block"
 				},
 				{
 					"typeStr": "1",
@@ -30,25 +43,31 @@
 			],
 			"lines": [
 				{
-					"id": 1,
-					"comment": "お化け",
-					"ai": "goast",
-					"hp": 3,
-					"fly": "wall"
+					"hp": 100,
+					"name": "プレイヤー",
+					"pic": "16aaf7effe681f8a4d382674f7ec90de",
+					"image": "../../../../assets/images/player.png",
+					"block": 0,
+					"direction": 0,
+					"id": "Player"
 				},
 				{
-					"id": 7,
-					"ai": "spike1",
-					"comment": "鉄球(左右)",
-					"hp": -1,
-					"fly": ""
+					"hp": 150,
+					"name": "スライム",
+					"pic": "57300b7471f4b9f63ac276ad51849b14",
+					"image": "../../../../assets/images/enemies/pipo-enemy009.png",
+					"block": 0,
+					"direction": 0,
+					"id": "Slime"
 				},
 				{
-					"id": 9,
-					"ai": "spike2",
-					"comment": "鉄球(上下)",
-					"hp": -1,
-					"fly": ""
+					"name": "コウモリ",
+					"pic": "5f18084f1f042d9ee964323f9cb31274",
+					"image": "../../../../assets/images/enemies/pipo-enemy001.png",
+					"hp": 30,
+					"block": 3,
+					"direction": 0,
+					"id": "Bat"
 				}
 			],
 			"separators": [],

@@ -43,8 +43,8 @@ class PlayState extends FlxTransitionableState {
   // ■定数
   static inline var PLAYER_POS_X:Int = 0;
   static inline var PLAYER_POS_Y:Int = 0;
-  static inline var ENEMY_POS_X:Int = 192;
-  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y+9;
+  static inline var ENEMY_POS_X:Int = 132;
+  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y-51;
 
   // ---------------------------------------
   // ■フィールド
@@ -84,7 +84,6 @@ class PlayState extends FlxTransitionableState {
 
     // 敵の生成
     var enemy = new Enemy(ENEMY_POS_X, ENEMY_POS_Y);
-    enemy.setParam(1000);
     this.add(enemy);
 
     // ショット生成

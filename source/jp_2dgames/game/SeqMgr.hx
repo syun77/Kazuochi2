@@ -124,6 +124,10 @@ class SeqMgr {
   }
 
   function _procInit():State {
+
+    // 敵出現
+    _enemy.appear();
+
     // ブロック出現
     return State.AppearBlock;
   }

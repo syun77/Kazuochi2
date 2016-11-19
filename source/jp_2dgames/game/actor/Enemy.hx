@@ -1,18 +1,22 @@
 package jp_2dgames.game.actor;
 
-/**
- * 敵
- **/
+import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.field.RequestBlockParam;
 import flixel.tweens.FlxEase;
 import jp_2dgames.game.particle.Particle;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
+import jp_2dgames.game.dat.MyDB;
+
+/**
+ * 敵
+ **/
 class Enemy extends Actor  {
 
   // ==========================================
   // ■フィールド
   var _totalElapsed:Float = 0.0;
+  var _kind:EnemiesKind;
 
   /**
    * コンストラクタ
@@ -21,12 +25,12 @@ class Enemy extends Actor  {
     super(X, Y);
     setStartPosition(X, Y);
 
-    loadGraphic(AssetPaths.IMAGE_ENEMY, true);
-    _registerAnimations();
-    animation.play("5");
+    _kind = EnemiesKind.Bat;
 
-    // TODo: 敵のID設定
-    ID = 5;
+    loadGraphic(EnemyDB.getImage(_kind));
+
+    setParam(1);
+    visible = false;
   }
 
   /**
@@ -37,7 +41,7 @@ class Enemy extends Actor  {
     // 変数初期化
     _totalElapsed = 0;
 
-    scale.set(1, 1);
+    scale.set(0.5, 0.5);
     x = FlxG.width * 1.5;
     visible = true;
     FlxTween.tween(this, {x:xstart}, 1, {ease:FlxEase.expoOut});
@@ -76,13 +80,13 @@ class Enemy extends Actor  {
    **/
   override public function vanish():Void {
 
-    FlxTween.tween(scale, {x:0.1, y:2}, 0.5, {ease:FlxEase.elasticIn, onComplete:function(_) {
+    FlxTween.tween(scale, {x:0.05, y:1}, 0.5, {ease:FlxEase.elasticIn, onComplete:function(_) {
       var deg = FlxG.random.float(0, 360);
       for(i in 0...12) {
         deg += 360/7 + FlxG.random.float(0, 20);
         var speed = FlxG.random.float(200, 400);
         var p = Particle.add(ParticleType.Ball, xcenter, ycenter, deg, speed);
-        var sc = FlxG.random.float(0.6, 1.2);
+        var sc = FlxG.random.float(0.3, 0.6);
         p.scale.set(sc, sc);
         p.acceleration.y = 200;
       }
@@ -95,8 +99,8 @@ class Enemy extends Actor  {
         x = xstart;
         y = ystart;
       }
-      scale.y = 0.5;
-      FlxTween.tween(scale, {x:4, y:0}, 0.3, {ease:FlxEase.expoOut, onComplete:function(_) {
+      scale.y = 0.25;
+      FlxTween.tween(scale, {x:2, y:0}, 0.3, {ease:FlxEase.expoOut, onComplete:function(_) {
         // 見た目だけ消す
         visible = false;
       }});
@@ -121,22 +125,15 @@ class Enemy extends Actor  {
    * AIの実行
    **/
   public function execAI(req:RequestBlockParam):Void {
-    // TODO: 上から降らす
-    //req.setUpper(3);
-    //req.setUpperHard(3);
-    //req.setUpperVeryHard(3);
-    req.setUpperSkull(3);
+    req.set(
+      EnemyDB.getDirection(_kind),
+      EnemyDB.getBlockHp(_kind),
+      EnemyDB.isBlockSkull(_kind),
+      3 // TODO:
+    );
 
     resetAp();
   }
 
 
-  /**
-   * アニメーションの登録
-   **/
-  function _registerAnimations():Void {
-    for(i in 0...5) {
-      animation.add('${i+1}', [i]);
-    }
-  }
 }
