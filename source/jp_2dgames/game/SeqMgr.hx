@@ -330,7 +330,7 @@ class SeqMgr {
     }
 
     // TODO: 次の敵出現
-    _enemy.appear(EnemiesKind.BatRed);
+    _enemy.appear(EnemiesKind.Snake);
 
     // 落下開始
     Field.fall();

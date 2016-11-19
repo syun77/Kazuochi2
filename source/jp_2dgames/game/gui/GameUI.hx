@@ -46,7 +46,7 @@ class GameUI extends FlxSpriteGroup {
     _txtLevel.y -= FONT_SIZE-4;
 
     // プレイヤーUI作成
-    _playerUI = new StatusUI(player.left+32, player.bottom-32, player);
+    _playerUI = new StatusUI(player.left+32, player.bottom-48, player);
     this.add(_playerUI);
 
     // 敵UI作成

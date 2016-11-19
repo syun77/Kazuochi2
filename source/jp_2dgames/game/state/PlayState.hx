@@ -42,9 +42,9 @@ class PlayState extends FlxTransitionableState {
   // ---------------------------------------
   // ■定数
   static inline var PLAYER_POS_X:Int = 0;
-  static inline var PLAYER_POS_Y:Int = 0;
+  static inline var PLAYER_POS_Y:Int = 16;
   static inline var ENEMY_POS_X:Int = 132;
-  static inline var ENEMY_POS_Y:Int = PLAYER_POS_Y-51;
+  static inline var ENEMY_POS_Y:Int = -51;
 
   // ---------------------------------------
   // ■フィールド
