@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import flixel.tweens.FlxTween;
+import jp_2dgames.lib.DirUtil;
 import jp_2dgames.game.token.BlockType;
 import jp_2dgames.game.block.BlockUtil;
 import flash.display.BlendMode;
@@ -142,10 +144,23 @@ class RequestBlockParam {
   }
 
   /**
-   * 下から降らす
+   * 下からせり上げる
    **/
   function _executeBottom():Void {
+    var field = Field.getLayer();
+    field.shift(Dir.Up);
+    Block.slideAll(Dir.Up);
 
+    for(i in 0...field.width) {
+      var j = Field.GRID_Y_BOTTOM;
+      var number = NextBlockMgr.put();
+      var data = BlockUtil.toData(number, _bSkull, _hp, false);
+      field.set(i, j, data);
+      var block = Block.add(i, j+1, BlockType.Number(number, _hp));
+      block.moveSlide(i, j+1, i, j, true);
+    }
+    // せり上げ回数を減らす
+    _count--;
   }
 
   // =========================================================

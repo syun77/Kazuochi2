@@ -23,9 +23,6 @@ private enum State {
   None;              // 無効
 
   Init;              // 初期化
-  // 下から出現
-  AppearBottomCheck; // チェック
-  AppearBottomExec;  // 実行
 
   AppearBlock;       // ブロック出現
   InputKey;          // 落下場所選択
@@ -133,22 +130,6 @@ class SeqMgr {
     return State.AppearBlock;
   }
 
-  function _procAppearBottomCheck():State {
-    // せり上げチェック
-    return State.AppearBottomExec;
-  }
-
-  function _procAppearBottomExec():State {
-    // 消滅チェック
-    if(false) {
-      // 下から出現
-      return State.EraseCheck;
-    }
-
-    // 出現終わり
-    return State.AppearBlock;
-  }
-
   function _procAppearBlock():State {
 
     // ターン終了
@@ -183,7 +164,7 @@ class SeqMgr {
   }
 
   function _procFallBlock():State {
-    // TODO: 落下処理
+    // 落下処理
     if(Block.isIdleAll() == false) {
       // ブロック落下中
       return State.None;
@@ -319,7 +300,7 @@ class SeqMgr {
       case RequestBlock.Bottom:
         // 下からせり上げ
         _requestBlock.execute();
-        return State.AppearBottomCheck;
+        return State.FallBlock;
 
       case RequestBlock.None:
         // 要求なし
@@ -365,9 +346,6 @@ class SeqMgr {
     var ret = RET_NONE;
     var tbl = [
       State.Init              => _procInit,       // 初期化
-      // 下から出現
-      State.AppearBottomCheck => _procAppearBottomCheck, // チェック
-      State.AppearBottomExec  => _procAppearBottomExec,  // 実行
 
       State.AppearBlock       => _procAppearBlock,       // ブロック出現
       State.InputKey          => _procInputKey,          // 落下場所選択

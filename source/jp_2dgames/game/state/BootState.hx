@@ -1,7 +1,7 @@
 package jp_2dgames.game.state;
+import flixel.FlxG;
 import jp_2dgames.game.dat.MyDBUtil;
 import jp_2dgames.lib.MyTransition;
-import flixel.FlxG;
 import flixel.FlxState;
 
 /**
@@ -16,7 +16,6 @@ class BootState extends FlxState {
 
     // トランジション用オブジェクト生成
     MyTransition.create();
-
   }
 
   override public function destroy():Void {

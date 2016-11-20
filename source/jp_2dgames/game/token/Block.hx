@@ -1,5 +1,7 @@
 package jp_2dgames.game.token;
 
+import flixel.math.FlxPoint;
+import jp_2dgames.lib.DirUtil;
 import flash.display.BlendMode;
 import flixel.FlxG;
 import flixel.util.FlxColor;
@@ -19,6 +21,7 @@ private enum State {
   Idle;    // 待機中
   Fall;    // 落下中
   Flicker; // 点滅中
+  Slide;   // スライド移動中
 }
 
 /**
@@ -86,6 +89,18 @@ class Block extends Token {
   public static function killAll():Void {
     forEach(function(b:Block) {
       b.kill();
+    });
+  }
+  /**
+   * すべてスライド移動する
+   **/
+  public static function slideAll(dir:Dir):Void {
+    var pt = FlxPoint.get(0, 0);
+    DirUtil.move(dir, pt);
+    var dx = Std.int(pt.x);
+    var dy = Std.int(pt.y);
+    forEach(function(b:Block) {
+      b.moveSlide(b.xgrid, b.ygrid, b.xgrid+dx, b.ygrid+dy);
     });
   }
   public static function forEach(func:Block->Void):Void {
@@ -248,6 +263,7 @@ class Block extends Token {
       case State.Fall:
         _updateFall(elapsed);
       case State.Flicker:
+      case State.Slide:
     }
   }
 
@@ -311,6 +327,32 @@ class Block extends Token {
 
     x = Field.toWorldX(_xgrid);
     y = Field.toWorldY(_ygrid);
+  }
+
+  /**
+   * スライド移動
+   **/
+  public function moveSlide(fromX:Int, fromY:Int, toX:Int, toY:Int, bFade:Bool=false):Void {
+
+    _state = State.Slide;
+
+    // まずは移動元に移動
+    moveNoWait(fromX, fromY);
+
+    var xnext = Field.toWorldX(toX);
+    var ynext = Field.toWorldY(toY);
+
+    var speed = 0.3;
+
+    if(bFade) {
+      // フェードあり
+      alpha = 0;
+    }
+    FlxTween.tween(this, {x:xnext, y:ynext, alpha:1}, speed, {onComplete:function(_) {
+      // 移動完了
+      _state = State.Idle;
+      moveNoWait(toX, toY);
+    }});
   }
 
   /**

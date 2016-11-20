@@ -2,6 +2,7 @@ package jp_2dgames.lib;
 
 import flixel.FlxG;
 import flixel.math.FlxPoint;
+import jp_2dgames.lib.DirUtil;
 
 /**
  * ２次元配列操作
@@ -387,5 +388,42 @@ class Array2D {
 
     // 見つからなかった
     return false;
+  }
+
+  /**
+   * 指定の方向にずらす
+   * @dir ずらす方向
+   * @count ずらす回数
+   **/
+  public function shift(dir:Dir, count:Int=1):Void {
+
+    var funcShift = function(x:Int, y:Int, dx:Int, dy:Int) {
+      // 移動
+      var v = get(x, y);
+      set(x+dx, y+dy, v);
+      // 移動元の値はデフォルト値にする
+      set(x, y, m_Default);
+    };
+
+    var funcForEach = function(xtbl:Array<Int>, ytbl:Array<Int>, dx:Int, dy:Int) {
+      for(x in xtbl) {
+        for(y in ytbl) {
+          funcShift(x, y, dx, dy);
+        }
+      }
+    };
+
+    switch(dir) {
+      case Dir.Left:
+        funcForEach([for(i in 0...width) i], [for(j in 0...height) j], -count, 0);
+      case Dir.Up:
+        funcForEach([for(i in 0...width) i], [for(j in 0...height) j], 0, -count);
+      case Dir.Right:
+        funcForEach([for(i in 0...width) width-i-1], [for(j in 0...height) j], count, 0);
+      case Dir.Down:
+        funcForEach([for(i in 0...width) i], [for(j in 0...height) height-j-1], 0, count);
+      case Dir.None:
+        // 何もしない
+    }
   }
 }

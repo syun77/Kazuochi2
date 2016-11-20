@@ -26,7 +26,8 @@ class Field {
   public static inline var GRID_Y:Int = 9;
 
   public static inline var GRID_X_CENTER:Int = 3; // Xの中心
-  public static inline var GRID_Y_TOP:Int = 1; // Yの一番上
+  public static inline var GRID_Y_TOP:Int    = 1; // Yの一番上
+  public static inline var GRID_Y_BOTTOM:Int = 8; // Yの一番下
 
   // 次のブロックの位置
   public static inline var GRID_NEXT_X:Int = GRID_X_CENTER;
