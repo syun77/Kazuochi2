@@ -16,7 +16,8 @@ class Enemy extends Actor  {
   // ==========================================
   // ■フィールド
   var _totalElapsed:Float = 0.0;
-  var _kind:EnemiesKind;
+  var _kind:EnemiesKind; // 敵の種類
+  var _tStun:Int = 0; // スタンするターン数
 
   /**
    * コンストラクタ
@@ -34,6 +35,7 @@ class Enemy extends Actor  {
 
     // 消しておく
     visible = false;
+    _tStun = 0;
   }
 
   /**
@@ -90,6 +92,9 @@ class Enemy extends Actor  {
    **/
   override public function damage(v:Int):Void {
     super.damage(v);
+
+    // 1ターンスタンさせる
+    _tStun = 1;
   }
 
   /**
@@ -135,8 +140,15 @@ class Enemy extends Actor  {
    * ターンを開始
    **/
   override public function beginTurn():Void {
-    // TODO:
-    addAp(30);
+
+    if(_tStun > 0) {
+      // スタン中は行動不可
+      _tStun--;
+      return;
+    }
+
+    var ap = EnemyDB.getAp(_kind);
+    addAp(ap);
   }
 
   /**
@@ -157,6 +169,10 @@ class Enemy extends Actor  {
     );
 
     resetAp();
+    if(_tStun == 0) {
+      // 攻撃後は休憩
+      _tStun = 1;
+    }
   }
 
 

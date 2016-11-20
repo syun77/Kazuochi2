@@ -26,6 +26,10 @@ class EnemyDB {
     return get(id).hp;
   }
 
+  public static function getAp(id:EnemiesKind):Int {
+    return Math.floor(get(id).ap * 100);
+  }
+
   public static function getDirection(id:EnemiesKind):RequestBlock {
     var direction = get(id).direction;
     switch(direction) {
