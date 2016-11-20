@@ -1,5 +1,7 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.block.BlockSpecial;
+import jp_2dgames.game.global.NextBlockMgr;
 import flixel.ui.FlxButton;
 import jp_2dgames.game.state.SubMenuState;
 import jp_2dgames.game.actor.Enemy;
@@ -60,6 +62,13 @@ class GameUI extends FlxSpriteGroup {
       FlxG.state.openSubState(new SubMenuState());
     });
     this.add(btnMenu);
+
+    // スペシャルボタン
+    var btnSpecial = new MyButton(0, FlxG.height-48, "Special", function() {
+      // 全消しブロック出現
+      NextBlockMgr.addTailSpecial(BlockSpecial.AllErase);
+    });
+    this.add(btnSpecial);
 
     scrollFactor.set();
   }

@@ -26,9 +26,9 @@ class Shot extends Token {
   public static function destroyParent():Void {
     parent = null;
   }
-  public static function add(X:Float, Y:Float, TargetX:Float, TargetY:Float):Shot {
+  public static function add(X:Float, Y:Float, xtarget:Float, ytarget:Float, duration:Float):Shot {
     var shot:Shot = parent.recycle(Shot);
-    shot.init(X, Y, TargetX, TargetY);
+    shot.init(X, Y, xtarget, ytarget, duration);
     return shot;
   }
 
@@ -60,7 +60,7 @@ class Shot extends Token {
   /**
    * 初期化
    **/
-  public function init(X:Float, Y:Float, xtarget:Float, ytarget:Float):Void {
+  public function init(X:Float, Y:Float, xtarget:Float, ytarget:Float, duration:Float):Void {
     x = X - origin.x;
     y = Y - origin.y;
 
@@ -100,11 +100,11 @@ class Shot extends Token {
     }
 
     if(FlxG.random.bool()) {
-      FlxTween.quadMotion(this, x, y, xctrl, yctrl, xtarget, ytarget, 0.5, true, {onComplete:func});
+      FlxTween.quadMotion(this, x, y, xctrl, yctrl, xtarget, ytarget, duration, true, {onComplete:func});
     }
     else {
 
-      FlxTween.cubicMotion(this, x, y, xctrl, yctrl, xctrl2, yctrl2, xtarget, ytarget, 0.5, {onComplete:func});
+      FlxTween.cubicMotion(this, x, y, xctrl, yctrl, xctrl2, yctrl2, xtarget, ytarget, duration, {onComplete:func});
     }
   }
 

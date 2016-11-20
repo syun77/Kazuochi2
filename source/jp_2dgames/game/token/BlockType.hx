@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.game.block.BlockSpecial;
 
 /**
  * ブロック種別
@@ -9,4 +10,5 @@ enum BlockType {
   Number(number:Int, hp:Int); // 通常ブロックHP指定バージョン
   Newer(number:Int); // 新しく配置したブロック
   Skull; // ドクロブロック
+  Special(type:BlockSpecial); // スペシャルブロック
 }

@@ -141,12 +141,12 @@ class Field {
       _tmpLayer.initialize(_layer.width, _layer.height);
 
       // 数値に変換
-      v = BlockUtil.getNumber(v);
+      var num = BlockUtil.getNumber(v);
 
       // 消去できる数を計算する
-      var cnt = _checkEraseRecursion(_layer, i, j, 0, 0, v, 0);
-      if(cnt < v) {
-        // 消去できない
+      var cnt = _checkEraseRecursion(_layer, i, j, 0, 0, num, 0);
+      if(cnt < num) {
+        // 接続数が足りないので消去できない
         return;
       }
 
@@ -158,7 +158,7 @@ class Field {
       result.kind++;
 
       // 消した数値をカウントアップ
-      result.number += v; // (v * cnt);
+      result.number += num; // (num * cnt);
 
       // 最大連結数
       result.setConnect(cnt);
@@ -189,7 +189,7 @@ class Field {
       var py = toWorldCenterY(ygridTotal / cnt);
       var xtarget = enemy.xstart + enemy.origin.x;
       var ytarget = enemy.ystart + enemy.origin.y;
-      Shot.add(px, py, xtarget, ytarget);
+      Shot.add(px, py, xtarget, ytarget, 0.3+0.05*num);
 
     });
 
@@ -314,7 +314,7 @@ class Field {
         var py = toWorldCenterY(j);
         var xtarget = player.xcenter;
         var ytarget = player.ycenter;
-        var shot = Shot.add(px, py, xtarget, ytarget);
+        var shot = Shot.add(px, py, xtarget, ytarget, 0.5);
         shot.color = FlxColor.RED;
       }
 

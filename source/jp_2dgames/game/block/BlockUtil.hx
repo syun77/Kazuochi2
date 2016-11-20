@@ -7,6 +7,7 @@ package jp_2dgames.game.block;
  * 2桁目: ドクロかどうか
  * 3桁目: HP
  * 4桁目: プレイヤーが新しく配置したブロックかどうか
+ * 5桁目: スペシャルブロックの種類
  **/
 class BlockUtil {
 
@@ -17,9 +18,10 @@ class BlockUtil {
   public static inline var HP_HARD:Int     = 1; // 固いブロック (中は見える)
   public static inline var HP_VERYHARD:Int = 2; // とても固いブロック (中が見えない)
   // データオフセット
-  public static inline var OFS_SKULL:Int = 10;
-  public static inline var OFS_HP:Int    = 100;
-  public static inline var OFS_NEWER:Int = 1000;
+  public static inline var OFS_SKULL:Int   = 10;
+  public static inline var OFS_HP:Int      = 100;
+  public static inline var OFS_NEWER:Int   = 1000;
+  public static inline var OFS_SPECIAL:Int = 10000;
 
 
   public static function toData(number:Int, bSkull:Bool, hp:Int, bNewer:Bool):Int {
@@ -27,6 +29,16 @@ class BlockUtil {
     var hpval:Int = hp * OFS_HP;
     var newer:Int = bNewer ? OFS_NEWER : 0;
     return number + skull + hpval + newer;
+  }
+  public static function toDataSpecial(type:BlockSpecial):Int {
+    var special:Int = 0;
+    switch(type) {
+      case BlockSpecial.None:
+        special = 0;
+      case BlockSpecial.AllErase:
+        special = OFS_SPECIAL * 1;
+    }
+    return special;
   }
 
   public static function isNone(data:Int):Bool {
@@ -37,8 +49,8 @@ class BlockUtil {
     return data%OFS_SKULL;
   }
   public static function isSkull(data:Int):Bool {
-    var v = data%OFS_HP;
-    return v >= OFS_SKULL;
+    var v = data%OFS_HP - getNumber(data);
+    return v == OFS_SKULL;
   }
   public static function getHp(data:Int):Int {
     var v = data%OFS_NEWER;
@@ -52,7 +64,8 @@ class BlockUtil {
     return data;
   }
   public static function isNewer(data:Int):Bool {
-    return data >= OFS_NEWER;
+    var v = data%OFS_SPECIAL;
+    return v >= OFS_NEWER;
   }
   // New属性をつける
   public static function onNewer(data:Int):Int {
@@ -67,6 +80,15 @@ class BlockUtil {
       return data - OFS_NEWER;
     }
     return data;
+  }
+  // スペシャルブロックかどうか
+  public static function isSpecial(data:Int):Bool {
+    return data >= OFS_SPECIAL;
+  }
+  // スペシャルブロックの種類を取得
+  public static function getSpecial(data:Int):BlockSpecial {
+    // TODO: 今のところ消しのみ
+    return BlockSpecial.AllErase;
   }
 
   /**

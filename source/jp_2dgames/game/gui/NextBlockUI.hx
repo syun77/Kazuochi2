@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.block.BlockSpecial;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.token.BlockType;
 import jp_2dgames.game.field.Field;
@@ -47,7 +48,17 @@ class NextBlockUI extends FlxSpriteGroup {
 
     NextBlockMgr.forEachWithIndex(function(idx:Int, v:Int) {
       var block:Block = cast members[idx];
-      block.setNumber(v);
+      if(BlockUtil.isSpecial(v)) {
+        // スペシャルブロック
+        var type = BlockUtil.getSpecial(v);
+        block.setSpecial(type);
+        block.setNumber(0);
+      }
+      else {
+        // 通常ブロック
+        block.setSpecial(BlockSpecial.None);
+        block.setNumber(v);
+      }
     });
   }
 }

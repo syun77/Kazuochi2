@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.block.BlockSpecial;
 import flixel.tweens.FlxTween;
 import jp_2dgames.lib.DirUtil;
 import jp_2dgames.game.token.BlockType;

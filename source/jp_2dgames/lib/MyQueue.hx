@@ -9,6 +9,10 @@ class MyQueue<T> {
   // ■プロパティ
   // 要素数
   public var length(get, never):Int;
+  // 先頭の要素
+  public var first(get, never):Null<T>;
+  // 末尾の要素
+  public var last(get, never):Null<T>;
 
   // ==============================
   // ■フィールド
@@ -78,4 +82,6 @@ class MyQueue<T> {
   // ==============================
   // ■アクセサ
   function get_length() { return _list.length; }
+  function get_first() { return _list.first(); }
+  function get_last() { return _list.last(); }
 }

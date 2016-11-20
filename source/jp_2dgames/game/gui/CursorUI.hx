@@ -243,9 +243,16 @@ class CursorUI extends FlxGroup {
     var px = Field.GRID_NEXT_X;
     var py = Field.GRID_NEXT_Y;
 
-    // TODO: 数値のみ
-    var number = BlockUtil.getNumber(nextBlock);
-    _block = Block.addNewer(number, px, py);
+    if(BlockUtil.isSpecial(nextBlock)) {
+      // スペシャルブロック
+      var type = BlockUtil.getSpecial(nextBlock);
+      _block = Block.addSpecial(px, py, type);
+    }
+    else {
+      // 通常ブロック
+      var number = BlockUtil.getNumber(nextBlock);
+      _block = Block.addNewer(number, px, py);
+    }
     _cursor.x = Field.toWorldX(px);
     _cursor.y = Field.toWorldY(py);
 

@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.game.block.BlockSpecial;
 import flixel.math.FlxPoint;
 import jp_2dgames.lib.DirUtil;
 import flash.display.BlendMode;
@@ -65,6 +66,11 @@ class Block extends Token {
   public static function addSkull(xgrid:Int, ygrid:Int):Block {
     var block:Block = parent.recycle(Block);
     block.init(xgrid, ygrid, BlockType.Skull);
+    return block;
+  }
+  public static function addSpecial(xgrid:Int, ygrid:Int, type:BlockSpecial):Block {
+    var block:Block = parent.recycle(Block);
+    block.init(xgrid, ygrid, BlockType.Special(type));
     return block;
   }
   public static function search(xgrid:Int, ygrid:Int):Block {
@@ -136,6 +142,7 @@ class Block extends Token {
   var _state:State; // 状態
   var _bNewer:Bool; // プレイヤーが新しく配置したブロックかどうか
   var _bSkull:Bool; // ドクロブロックかどうか
+  var _special:BlockSpecial; // スペシャルブロックの種類
   var _elapsed:Float;
 
   /**
@@ -172,6 +179,7 @@ class Block extends Token {
 
     _bNewer = false;
     _bSkull = false;
+    _special = BlockSpecial.None;
 
     // パラメータデフォルト値
     var number = 0;
@@ -193,6 +201,10 @@ class Block extends Token {
       case BlockType.Skull:
         // ドクロブロック
         _bSkull = true;
+
+      case BlockType.Special(type):
+        // スペシャルブロック
+        _special = type;
     }
     setNumber(number);
 
@@ -200,9 +212,22 @@ class Block extends Token {
   }
 
   /**
+   * スペシャルブロックを設定
+   **/
+  public function setSpecial(type:BlockSpecial):Void {
+    _special = type;
+  }
+
+  /**
    * 番号を設定
    **/
   public function setNumber(Number:Int):Void {
+
+    if(_special != BlockSpecial.None) {
+      // スペシャルブロック
+      animation.play(ANIM_SPECIAL);
+      return;
+    }
 
     if(_bSkull) {
       // ドクロブロック

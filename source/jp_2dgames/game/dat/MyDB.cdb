@@ -89,11 +89,11 @@
 					"pic": "5f18084f1f042d9ee964323f9cb31274",
 					"image": "../../../../assets/images/enemies/pipo-enemy001.png",
 					"hp": 30,
-					"block": 1,
-					"direction": 1,
+					"block": 3,
+					"direction": 0,
 					"id": "Bat",
 					"count": 1,
-					"ap": 0.8
+					"ap": 1
 				},
 				{
 					"id": "BatRed",

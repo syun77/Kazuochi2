@@ -1,4 +1,6 @@
 package jp_2dgames.game.global;
+import jp_2dgames.game.block.BlockUtil;
+import jp_2dgames.game.block.BlockSpecial;
 import flixel.FlxG;
 import jp_2dgames.lib.MyQueue;
 
@@ -37,6 +39,13 @@ class NextBlockMgr {
    **/
   public static function next():Int {
     return _instance._next();
+  }
+
+  /**
+   * 末尾にスペシャルブロックを設定する
+   **/
+  public static function addTailSpecial(type:BlockSpecial):Void {
+    _instance._addTailSpecial(type);
   }
 
   /**
@@ -150,6 +159,18 @@ class NextBlockMgr {
   function _next():Int {
     _enque();
     return _blocks.dequeue();
+  }
+
+  /**
+   * 末尾をスペシャルブロックに置き換える
+   **/
+  function _addTailSpecial(type:BlockSpecial):Void {
+    // 末尾を削除
+    var v = _blocks.last;
+    _blocks.remove(v);
+    // 末尾にスペシャルブロックを追加
+    var next = BlockUtil.toDataSpecial(type);
+    _blocks.enqueue(next);
   }
 
   /**

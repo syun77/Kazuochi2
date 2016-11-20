@@ -30,5 +30,6 @@
     <orderEntry type="library" name="4,2,0" level="project" />
     <orderEntry type="library" name="2,2,0" level="project" />
     <orderEntry type="library" name="3,6,1" level="project" />
+    <orderEntry type="library" name="std" level="project" />
   </component>
 </module>
