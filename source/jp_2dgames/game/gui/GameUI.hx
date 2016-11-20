@@ -56,7 +56,7 @@ class GameUI extends FlxSpriteGroup {
     this.add(_enemyUI);
 
     // メニューボタン
-    var btnMenu = new FlxButton(FlxG.width-88, 0, "MENU", function() {
+    var btnMenu = new FlxButton(FlxG.width-86, 0, "MENU", function() {
       FlxG.state.openSubState(new SubMenuState());
     });
     this.add(btnMenu);

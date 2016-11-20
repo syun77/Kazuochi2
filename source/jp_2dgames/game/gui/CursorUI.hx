@@ -202,6 +202,10 @@ class CursorUI extends FlxGroup {
    **/
   function _updateMoveCursor():Void {
 
+    if(_isInGrid() == false) {
+      return;
+    }
+
     // カーソル移動
     var xtouch = Input.x-Block.WIDTH/2;
     var xgrid = Math.floor(xtouch/Block.WIDTH);
