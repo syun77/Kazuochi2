@@ -1,8 +1,13 @@
 package jp_2dgames.game.state;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import openfl.display.BitmapData;
 import flixel.FlxG;
 import jp_2dgames.game.dat.MyDBUtil;
 import jp_2dgames.lib.MyTransition;
 import flixel.FlxState;
+
+@:keep @:bitmap("assets/images/transitions/diamond.png")
+class TransitionGraphicDiamond extends BitmapData {}
 
 /**
  * 起動画面
@@ -15,7 +20,7 @@ class BootState extends FlxState {
     MyDBUtil.load();
 
     // トランジション用オブジェクト生成
-    MyTransition.create();
+    MyTransition.create(48, 48, TransitionGraphicDiamond);
   }
 
   override public function destroy():Void {

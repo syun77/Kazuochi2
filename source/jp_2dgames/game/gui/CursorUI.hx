@@ -105,6 +105,22 @@ class CursorUI extends FlxGroup {
   }
 
   /**
+   * グリッド内かどうか
+   **/
+  function _isInGrid():Bool {
+    var ygrid = Field.toGridY(Input.y);
+    if(ygrid > Field.GRID_Y_BOTTOM) {
+      // グリッド外
+      return false;
+    }
+    if(ygrid < Field.GRID_Y_TOP) {
+      // グリッド外
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
@@ -121,19 +137,29 @@ class CursorUI extends FlxGroup {
         // カーソル非表示
         _bg.visible = false;
         _cursor.visible = true;
-      #if flash
-        // カーソル移動へ
-        _state = State.MoveCursor;
-      #else
-        if(Input.touchJustPressed) {
+
+        if(_isInGrid()) {
+#if flash
           // カーソル移動へ
           _state = State.MoveCursor;
+#else
+          if(Input.touchJustPressed) {
+            // カーソル移動へ
+            _state = State.MoveCursor;
+          }
         }
-      #end
+#end
 
       case State.MoveCursor:
         _bg.visible = true;
         _cursor.visible = true;
+
+        if(_isInGrid() == false) {
+          // グリッド外に出たので未選択状態へ
+          _state = State.AppearBlock;
+          return;
+        }
+
       #if flash
         _block.visible = true;
         if(FlxG.mouse.justPressed) {

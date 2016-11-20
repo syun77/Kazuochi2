@@ -1,5 +1,7 @@
 package jp_2dgames.game.gui;
 
+import flixel.ui.FlxButton;
+import jp_2dgames.game.state.SubMenuState;
 import jp_2dgames.game.actor.Enemy;
 import jp_2dgames.game.actor.Player;
 import flixel.math.FlxPoint;
@@ -53,18 +55,11 @@ class GameUI extends FlxSpriteGroup {
     _enemyUI = new StatusUI(enemy.left+84, enemy.bottom-92, enemy);
     this.add(_enemyUI);
 
-#if debug
-    // デバッグボタン
-    var btnDebug = new MyButton(0, FlxG.height-48, "Debug", function() {
-      FlxG.debugger.visible = !FlxG.debugger.visible;
+    // メニューボタン
+    var btnMenu = new FlxButton(FlxG.width-88, 0, "MENU", function() {
+      FlxG.state.openSubState(new SubMenuState());
     });
-    this.add(btnDebug);
-    // リトライ
-    var btnRetry = new MyButton(120, FlxG.height-48, "Retry", function() {
-      FlxG.resetState();
-    });
-    this.add(btnRetry);
-#end
+    this.add(btnMenu);
 
     scrollFactor.set();
   }
