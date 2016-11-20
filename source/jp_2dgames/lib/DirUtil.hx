@@ -81,6 +81,16 @@ class DirUtil {
   }
 
   /**
+   * 左・上・右・下の順で処理する
+   **/
+  public static function forEachLeftUpRightDown(func:Int->Int->Void):Void {
+    func(-1, 0);
+    func(0, -1);
+    func(1, 0);
+    func(0, 1);
+  }
+
+  /**
    * 水平方向かどうか
    **/
   public static function isHorizontal(dir:Dir):Bool {

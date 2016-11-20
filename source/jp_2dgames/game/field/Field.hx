@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.lib.DirUtil;
 import jp_2dgames.game.token.BlockType;
 import flixel.math.FlxPoint;
 import jp_2dgames.game.block.BlockUtil;
@@ -155,10 +156,11 @@ class Field {
       // 消去グループ数アップ
       result.kind++;
 
+      // 消した数値をカウントアップ
+      result.number += v; // (v * cnt);
+
       // 最大連結数
-      if(cnt > result.connect) {
-        result.connect = cnt;
-      }
+      result.setConnect(cnt);
 
       // 座標の合計
       var xgridTotal:Int = 0;
@@ -170,29 +172,20 @@ class Field {
           return;
         }
 
-        var block = Block.search(xgrid, ygrid);
-        if(block != null) {
-          // ブロックを消す
-          block.erase();
-          // レイヤーからも消す
-          _layer.set(xgrid, ygrid, 0);
-
+        // ブロックを消す
+        if(eraseBlock(xgrid, ygrid)) {
           // 消去リストに入れる
           pList.push(FlxPoint.get(xgrid, ygrid));
 
           // 座標の合計を求める
           xgridTotal += xgrid;
           ygridTotal += ygrid;
-
-        }
-        else {
-          trace('error:${xgrid},${ygrid}');
         }
       });
 
       // 攻撃演出生成
-      var px = OFFSET_X + (xgridTotal / cnt + 0.5) * TILE_WIDTH;
-      var py = OFFSET_Y + (ygridTotal / cnt + 0.5) * TILE_HEIGHT;
+      var px = toWorldCenterX(xgridTotal / cnt);
+      var py = toWorldCenterY(ygridTotal / cnt);
       var xtarget = enemy.xstart + enemy.origin.x;
       var ytarget = enemy.ystart + enemy.origin.y;
       Shot.add(px, py, xtarget, ytarget);
@@ -216,12 +209,7 @@ class Field {
       p.put();
 
       // 上下左右のブロックにダメージを与える
-      var xtbl = [-1, 0, 1, 0];
-      var ytbl = [0, -1, 0, 1];
-      for(i in 0...xtbl.length) {
-        // 再帰検索
-        var dx = xtbl[i];
-        var dy = ytbl[i];
+      DirUtil.forEachLeftUpRightDown(function(dx:Int, dy:Int) {
         var px = xgrid + dx;
         var py = ygrid + dy;
         var val2 = _layer.get(px, py);
@@ -237,17 +225,14 @@ class Field {
           }
         }
         else if(BlockUtil.isSkull(val2)) {
-          // ドクロブロック
-          _layer.set(px, py, 0);
-          var block2 = Block.search(px, py);
-          if(block2 != null) {
-            // 消去
-            block2.erase();
+          // ドクロブロックを消去
+          if(eraseBlock(px, py)) {
             // 消去数をアップ
             result.erase++;
           }
         }
-      }
+      });
+
     }
 
     // トータル消去数を返す
@@ -283,21 +268,18 @@ class Field {
     _tmpLayer.set(px, py, 1);
     cnt++;
 
-    var xtbl = [-1, 0, 1, 0];
-    var ytbl = [0, -1, 0, 1];
-    for(i in 0...xtbl.length) {
+    DirUtil.forEachLeftUpRightDown(function(dx:Int, dy:Int) {
       // 再帰検索
-      var dx = xtbl[i];
-      var dy = ytbl[i];
       cnt = _checkEraseRecursion(_layer, px, py, dx, dy, val, cnt);
-    }
+    });
+
     return cnt;
   }
 
   /**
-   * 領域外のブロックをチェック
+   * 最上段のブロックをチェック
    **/
-  public static function checkEraseOutside(player:Player):Int {
+  public static function checkEraseTop(player:Player):Int {
 
     var ret:Int = 0;
 
@@ -309,7 +291,7 @@ class Field {
 
       var bNewer = BlockUtil.isNewer(v);
       if(j > Field.GRID_Y_TOP) {
-        // チェック不要
+        // 最上段でないのでチェック不要
         // フラグを下げる
         v = BlockUtil.offNewer(v);
         _layer.set(i, j, v);
@@ -318,20 +300,17 @@ class Field {
 
       if(bNewer) {
         // そのターンにプレイヤーが置いたブロック
-        // 下にあるブロックも消す
-        var py = j+1;
-        var bottom = Block.search(i, py);
-        bottom.erase();
-        // レイヤーからも消す
-        _layer.set(i, py, 0);
+        // すぐ下にあるブロックも消す
+        eraseBlock(i, j+1);
       }
       else {
         // ダメージを受ける
         v = BlockUtil.getNumber(v);
         ret++;
+
         // ダメージ演出生成
-        var px = OFFSET_X + (i + 0.5) * TILE_WIDTH;
-        var py = OFFSET_Y + (i + 0.5) * TILE_HEIGHT;
+        var px = toWorldCenterX(i);
+        var py = toWorldCenterY(j);
         var xtarget = player.xcenter;
         var ytarget = player.ycenter;
         var shot = Shot.add(px, py, xtarget, ytarget);
@@ -339,10 +318,7 @@ class Field {
       }
 
       // 対象のブロックを消す
-      var block = Block.search(i, j);
-      block.erase();
-      // レイヤーからも消す
-      _layer.set(i, j, 0);
+      eraseBlock(i, j);
     });
 
     return ret;
@@ -356,7 +332,7 @@ class Field {
       var cntZero:Int = 0;
       var cntDelay:Int = 0;
       // 下から調べる
-      var array = [for(a in 0..._layer.height) _layer.height-1-a];
+      var array = [for(a in 0..._layer.height) _layer.height-1-a]; // 逆順
       for(j in array) {
         var v = _layer.get(i, j);
         if(v > 0) {
@@ -379,6 +355,24 @@ class Field {
   }
 
   /**
+   * 指定の座標のブロックを消去
+   * @return 消去できたらtrue
+   **/
+  public static function eraseBlock(xgrid:Int, ygrid:Int):Bool {
+
+    // レイヤーからは確実に消しておく
+    _layer.set(xgrid, ygrid, 0);
+    var block = Block.search(xgrid, ygrid);
+    if(block != null) {
+      block.erase();
+      // 消すことができた
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * グリッド座標をワールド座標に変換(X)
    **/
   public static function toWorldX(i:Float):Float {
@@ -392,6 +386,20 @@ class Field {
    **/
   public static function toWorldY(j:Float):Float {
     return j * TILE_HEIGHT + OFFSET_Y;
+  }
+
+  /**
+   * グリッド座標をワールド座標(中心)に変換(X)
+   **/
+  public static function toWorldCenterX(i:Float):Float {
+    return (i+0.5) * TILE_WIDTH + OFFSET_X;
+  }
+
+  /**
+   * グリッド座標をワールド座標(中心)に変換(Y)
+   **/
+  public static function toWorldCenterY(j:Float):Float {
+    return (j+0.5) * TILE_HEIGHT + OFFSET_Y;
   }
 
   /**
@@ -411,14 +419,14 @@ class Field {
   /**
    * 座標をグリッドに合わせる(X)
    **/
-  public static function snapGridX(x:Float):Float {
+  public static function snapGridX(x:Float):Int {
     return Std.int((x-OFFSET_X) / GRID_SIZE) * GRID_SIZE + OFFSET_X;
   }
 
   /**
    * 座標をグリッドに合わせる(Y)
    **/
-  public static function snapGridY(y:Float):Float {
+  public static function snapGridY(y:Float):Int {
     return Std.int((y-OFFSET_Y) / GRID_SIZE) * GRID_SIZE + OFFSET_Y;
   }
 }

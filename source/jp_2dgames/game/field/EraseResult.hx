@@ -1,14 +1,16 @@
 package jp_2dgames.game.field;
 
+import flixel.math.FlxMath;
+
 /**
  * 消去パラメータ
  **/
-import flixel.math.FlxMath;
 class EraseResult {
 
   public var erase:Int;   // 消去数
   public var connect:Int; // 最大連結数
   public var kind:Int;    // 色数
+  public var number:Int;  // 消した数値の合計
 
   // init()で初期化しない項目
   public var chain:Int;   // 連鎖数
@@ -28,18 +30,27 @@ class EraseResult {
     erase   = 0;
     connect = 0;
     kind    = 0;
+    number  = 0;
   }
 
   /**
    * すべてを初期化
    **/
   public function initAll():Void {
-    erase   = 0;
-    connect = 0;
-    kind    = 0;
+    init();
 
     chain   = 0;
     combo   = 0;
+  }
+
+  /**
+   * 接続数を設定
+   **/
+  public function setConnect(v:Int):Void {
+    if(v > connect) {
+      // 最大数を越えていれば設定可能
+      connect = v;
+    }
   }
 
   /**
@@ -93,5 +104,12 @@ class EraseResult {
     }
 
     return Std.int(ret);
+  }
+
+  /**
+   * APダメージを計算
+   **/
+  public function calculateApDamage():Int {
+    return number * 5;
   }
 }

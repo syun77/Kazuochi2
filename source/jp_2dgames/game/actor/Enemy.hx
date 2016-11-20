@@ -93,6 +93,13 @@ class Enemy extends Actor  {
   }
 
   /**
+   * APダメージ処理
+   **/
+  public function damageAp(v:Int):Void {
+    subAp(v);
+  }
+
+  /**
    * 消滅
    **/
   override public function vanish():Void {

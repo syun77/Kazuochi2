@@ -191,6 +191,13 @@ class Actor extends Token {
   }
 
   /**
+   * APを減少させる
+   **/
+  public function subAp(v:Int):Void {
+    _ap = FlxMath.maxAdd(_ap, -v, _apmax);
+  }
+
+  /**
    * APをリセットする
    **/
   public function resetAp():Void {

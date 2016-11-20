@@ -222,11 +222,15 @@ class SeqMgr {
       return State.None;
     }
 
-    // ダメージ計算
-    var v = _eraseResult.calculateDamage();
-
-    // 敵にダメージを与える
-    _enemy.damage(v);
+    {
+      // ダメージ計算
+      var v = _eraseResult.calculateDamage();
+      // 敵にダメージを与える
+      _enemy.damage(v);
+      // APダメージ計算
+      var ap = _eraseResult.calculateApDamage();
+      _enemy.damageAp(v);
+    }
 
     // 勝利敗北判定
     return State.WinLoseCheck;
@@ -235,7 +239,7 @@ class SeqMgr {
   function _procDamageCheck():State {
 
     // ダメージブロック数を取得
-    _nDamageBlock = Field.checkEraseOutside(_player);
+    _nDamageBlock = Field.checkEraseTop(_player);
 
     if(_nDamageBlock > 0) {
       // 存在する場合はダメージ処理
