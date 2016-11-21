@@ -298,7 +298,7 @@ class Input {
   static function get_touchJustPressed() {
 #if FLX_TOUCH
     for(touch in FlxG.touches.list) {
-      if(touch.pressed) {
+      if(touch.justPressed) {
         return true;
       }
     }
@@ -316,7 +316,7 @@ class Input {
     }
     return false;
 #else
-    return press.A;
+    return on.A;
 #end
   }
 

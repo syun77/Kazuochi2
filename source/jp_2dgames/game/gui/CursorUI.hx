@@ -154,24 +154,24 @@ class CursorUI extends FlxGroup {
         _bg.visible = true;
         _cursor.visible = true;
 
-        if(_isInGrid() == false) {
-          // グリッド外に出たので未選択状態へ
-          _state = State.AppearBlock;
-          return;
-        }
-
       #if flash
         _block.visible = true;
-        if(FlxG.mouse.justPressed) {
+        if(FlxG.mouse.pressed == false) {
           // 離したのでおしまい
           _state = State.End;
         }
       #else
-        if(Input.touchJustReleased) {
+        if(Input.touchPressed == false) {
           // 離したのでおしまい
           _state = State.End;
         }
       #end
+        else {
+          if(_isInGrid() == false) {
+            // グリッド外に出たので未選択状態へ
+            _state = State.AppearBlock;
+          }
+        }
     }
 
     if(_state != State.End) {

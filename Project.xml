@@ -48,13 +48,13 @@
 
     <assets path="assets" include="*.png|*.jpg|*.tmx|*.csv|*.xml|*.ttf" />
     <!-- BGM -->
-    <assets path="assets/music" if="flash" include="*.mp3">
-    </assets>
-    <assets path="assets/music" unless="flash" include="*.ogg">
-    </assets>
+<!--     <assets path="assets/music" if="flash" include="*.mp3"> -->
+<!--     </assets> -->
+<!--     <assets path="assets/music" unless="flash" include="*.ogg"> -->
+<!--     </assets> -->
     <!-- SE -->
-    <assets path="assets/sounds" >
-    </assets>
+<!--     <assets path="assets/sounds" > -->
+<!--     </assets> -->
 
     <!-- _______________________________ Libraries ______________________________ -->
 
