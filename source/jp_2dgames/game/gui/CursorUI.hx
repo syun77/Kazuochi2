@@ -147,8 +147,8 @@ class CursorUI extends FlxGroup {
             // カーソル移動へ
             _state = State.MoveCursor;
           }
-        }
 #end
+        }
 
       case State.MoveCursor:
         _bg.visible = true;
@@ -156,8 +156,8 @@ class CursorUI extends FlxGroup {
 
       #if flash
         _block.visible = true;
-        if(FlxG.mouse.pressed == false) {
-          // 離したのでおしまい
+        if(FlxG.mouse.justPressed) {
+          // クリックしたので落下
           _state = State.End;
         }
       #else

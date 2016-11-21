@@ -19,8 +19,13 @@ class BootState extends FlxState {
     // CDB読み込み
     MyDBUtil.load();
 
+#if flash
+    // トランジション用オブジェクト生成
+    MyTransition.create();
+#else
     // トランジション用オブジェクト生成
     MyTransition.create(48, 48, TransitionGraphicDiamond);
+#end
   }
 
   override public function destroy():Void {

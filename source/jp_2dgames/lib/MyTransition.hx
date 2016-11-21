@@ -21,7 +21,7 @@ class MyTransition {
   /**
    * 生成
    **/
-  public static function create(width:Int=0, height:Int=0, image:Class<BitmapData>):Void {
+  public static function create(width:Int=0, height:Int=0, ?image:Class<BitmapData>):Void {
 
     // 菱形の幅と高さを設定
     if(width <= 0) {
