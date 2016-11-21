@@ -142,13 +142,28 @@ class Field {
 
       // 数値に変換
       var num = BlockUtil.getNumber(v);
-
-      // 消去できる数を計算する
-      var cnt = _checkEraseRecursion(_layer, i, j, 0, 0, num, 0);
-      if(cnt < num) {
-        // 接続数が足りないので消去できない
-        return;
+      var cnt:Int = 0;
+      if(BlockUtil.isSpecial(v)) {
+        // スペシャルブロック
+        // 自分自身を消す
+        _tmpLayer.set(i, j, 1);
+        // 下にあるブロックを取得
+        var v2 = _layer.get(i, j+1);
+        if(v2 > 0) {
+          // 消せる
+          cnt = _checkEraseSpecial(v2);
+        }
       }
+      else {
+        // 通常ブロック
+        // 消去できる数を計算する
+        cnt = _checkEraseRecursion(_layer, i, j, 0, 0, num, 0);
+        if(cnt < num) {
+          // 接続数が足りないので消去できない
+          return;
+        }
+      }
+
 
       // 消去できる
       // 消去数アップ
@@ -275,6 +290,23 @@ class Field {
     });
 
     return cnt;
+  }
+
+  /**
+   * 特殊ブロックによる消滅
+   **/
+  static function _checkEraseSpecial(val:Int):Int {
+    var ret:Int = 0;
+    _layer.forEach(function(i:Int, j:Int, v:Int) {
+      if(val == v) {
+        // 消去対象
+        _tmpLayer.set(i, j, 1);
+        ret++;
+
+      }
+    });
+
+    return ret;
   }
 
   /**
