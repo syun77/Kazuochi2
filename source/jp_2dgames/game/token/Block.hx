@@ -170,6 +170,7 @@ class Block extends Token {
     // 変数初期化
     _state  = State.Idle;
     _hp     = BlockUtil.HP_NORMAL;
+    color   = FlxColor.WHITE;
 
     // 座標設定
     _xgrid = xgrid;
@@ -280,11 +281,25 @@ class Block extends Token {
   }
 
   /**
+   * スペシャルブロックかどうか
+   **/
+  function _isSpecial():Bool {
+    return _special != BlockSpecial.None;
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
+
+    color = FlxColor.WHITE;
+
     switch(_state) {
       case State.Idle:
+        if(_isSpecial()) {
+          // スペシャルブロックであれば点滅
+          color = FlxG.random.color(FlxColor.GRAY, FlxColor.WHITE);
+        }
       case State.Fall:
         _updateFall(elapsed);
       case State.Flicker:
