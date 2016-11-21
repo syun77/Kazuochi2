@@ -30,6 +30,8 @@ class GameUI extends FlxSpriteGroup {
 
   var _playerUI:StatusUI;
   var _enemyUI:StatusUI;
+  var _btnSpecial:MyButton; // スペシャルボタン
+  var _canPressSpecialButton:Void->Bool; // スペシャルボタンを押すことができるかどうか
 
   /**
    * コンストラクタ
@@ -64,11 +66,11 @@ class GameUI extends FlxSpriteGroup {
     this.add(btnMenu);
 
     // スペシャルボタン
-    var btnSpecial = new MyButton(0, FlxG.height-48, "Special", function() {
+    _btnSpecial = new MyButton(0, FlxG.height-48, "Special", function() {
       // 全消しブロック出現
       NextBlockMgr.addTailSpecial(BlockSpecial.AllErase);
     });
-    this.add(btnSpecial);
+    this.add(_btnSpecial);
 
     scrollFactor.set();
   }
@@ -83,5 +85,14 @@ class GameUI extends FlxSpriteGroup {
 
 //    _txtScore.text = 'SCORE: ${Global.score}';
     _txtLevel.text = 'LEVEL: ${Global.level}';
+
+    _btnSpecial.visible = _canPressSpecialButton();
+  }
+
+  /**
+   * スペシャルボタンを押すことができるかどうか判定する関数を登録
+   **/
+  public function setCanPressSpecialFunc(func:Void->Bool):Void {
+    _canPressSpecialButton = func;
   }
 }

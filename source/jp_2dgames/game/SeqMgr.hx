@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.GameUI;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.RequestBlockParam;
 import jp_2dgames.game.field.EraseResult;
@@ -73,7 +74,7 @@ class SeqMgr {
   /**
    * コンストラクタ
    **/
-  public function new(player:Player, enemy:Enemy) {
+  public function new(player:Player, enemy:Enemy, ui:GameUI) {
     _state = State.Init;
     _statePrev = _state;
 
@@ -84,6 +85,8 @@ class SeqMgr {
     _player = player;
     _enemy  = enemy;
 
+    ui.setCanPressSpecialFunc(_canPressSpecialButton);
+
     // デバッグ用
     FlxG.watch.add(this, "_state");
     FlxG.watch.add(this, "_statePrev");
@@ -93,6 +96,13 @@ class SeqMgr {
    * セーブ・ロード可能な状態かどうか
    **/
   public function canSaveAndLoad():Bool {
+    return _state == State.InputKey;
+  }
+
+  /**
+   * スペシャルボタンを押すことができるかどうか
+   **/
+  function _canPressSpecialButton():Bool {
     return _state == State.InputKey;
   }
 

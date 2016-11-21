@@ -16,7 +16,6 @@ import flixel.input.FlxPointer;
 import flixel.input.IFlxInput;
 import flixel.input.mouse.FlxMouseButton;
 import flixel.input.touch.FlxTouch;
-import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;

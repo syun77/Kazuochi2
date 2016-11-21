@@ -102,14 +102,15 @@ class PlayState extends FlxTransitionableState {
 
     // GUI生成
     CursorUI.createInstance(this);
-    this.add(new GameUI(player, enemy));
+    var ui = new GameUI(player, enemy);
+    this.add(ui);
 
     // NEXTブロック管理生成
     NextBlockMgr.createInstance();
     NextBlockMgr.init();
 
     // シーケンス管理生成
-    _seq = new SeqMgr(player, enemy);
+    _seq = new SeqMgr(player, enemy, ui);
   }
 
   /**
