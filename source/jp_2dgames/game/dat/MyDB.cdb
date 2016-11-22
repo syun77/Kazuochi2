@@ -92,8 +92,8 @@
 					"block": 3,
 					"direction": 0,
 					"id": "Bat",
-					"count": 1,
-					"ap": 0.2
+					"count": 3,
+					"ap": 1
 				},
 				{
 					"id": "BatRed",

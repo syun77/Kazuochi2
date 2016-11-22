@@ -3,10 +3,12 @@ package jp_2dgames.game.actor;
 /**
  * アニメーション状態
  **/
+import flixel.FlxG;
 private enum AnimState {
-  Idle; // 待機
-  Damage;  // ダメージ
-  Attack;  // 攻撃
+  Idle;   // 待機
+  Damage; // ダメージ
+  Attack; // 攻撃
+  Danger; // 危険
 }
 
 /**
@@ -40,6 +42,8 @@ class Player extends Actor {
 
     // プレイヤー
     _bPlayer = true;
+
+    FlxG.watch.add(this, "_anim");
   }
 
   /**
@@ -56,12 +60,25 @@ class Player extends Actor {
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
+    // アニメーションの更新
+    _updateAnimation(elapsed);
+  }
+
+  /**
+   * アニメーションの更新
+   **/
+  function _updateAnimation(elapsed:Float):Void {
     _totalElapsed += elapsed;
 
     switch(_anim) {
       case AnimState.Idle:
         // 通常
         y = ystart + 4 * Math.sin(_totalElapsed*4);
+        if(isDanger()) {
+          // 危険状態
+          _anim = AnimState.Danger;
+        }
+
       case AnimState.Attack:
         // 攻撃
         x = xstart + 16;
@@ -76,6 +93,13 @@ class Player extends Actor {
         y = ystart;
         _tAnim++;
         if(_tAnim >= TIMER_DAMAGE){
+          _anim = AnimState.Idle;
+        }
+      case AnimState.Danger:
+        // 危険
+        y = ystart;
+        _tAnim++;
+        if(isDanger() == false) {
           _anim = AnimState.Idle;
         }
     }
@@ -101,5 +125,6 @@ class Player extends Actor {
     animation.add('${AnimState.Idle}', [1]);
     animation.add('${AnimState.Damage}', [2]);
     animation.add('${AnimState.Attack}', [0]);
+    animation.add('${AnimState.Danger}', [1, 2], 2);
   }
 }

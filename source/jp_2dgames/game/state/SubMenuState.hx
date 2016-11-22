@@ -27,6 +27,7 @@ class SubMenuState extends FlxSubState {
     FlxTween.tween(bg, {alpha:0.5}, 0.5, {ease:FlxEase.quartOut});
     this.add(bg);
 
+    // ズームイン
     _tween = FlxTween.tween(FlxG.camera, {zoom:1.2}, 0.3, {ease:FlxEase.backOut});
 
     var btnList = new Array<MyButton>();
@@ -73,7 +74,8 @@ class SubMenuState extends FlxSubState {
     super.destroy();
 
     _tween.cancel();
-    FlxG.camera.zoom = 1;
+    // ズームアウト
+    _tween = FlxTween.tween(FlxG.camera, {zoom:1.0}, 0.1, {ease:FlxEase.expoOut});
   }
 
   /**
