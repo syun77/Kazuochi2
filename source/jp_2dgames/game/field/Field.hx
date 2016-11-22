@@ -147,11 +147,12 @@ class Field {
         // スペシャルブロック
         // 自分自身を消す
         _tmpLayer.set(i, j, 1);
+        cnt = 1;
         // 下にあるブロックを取得
         var v2 = _layer.get(i, j+1);
         if(v2 > 0) {
           // 消せる
-          cnt = _checkEraseSpecial(v2);
+          cnt += _checkEraseSpecial(v2);
         }
       }
       else {
@@ -205,6 +206,8 @@ class Field {
       var xtarget = enemy.xstart + enemy.origin.x;
       var ytarget = enemy.ystart + enemy.origin.y;
       Shot.add(px, py, xtarget, ytarget, 0.3+0.05*num);
+      trace(cnt, xgridTotal, ygridTotal);
+      trace(px, py, xtarget, ytarget);
 
     });
 
