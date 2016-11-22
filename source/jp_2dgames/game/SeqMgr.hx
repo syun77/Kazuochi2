@@ -103,7 +103,15 @@ class SeqMgr {
    * スペシャルボタンを押すことができるかどうか
    **/
   function _canPressSpecialButton():Bool {
-    return _state == State.InputKey;
+    if(_state != State.InputKey) {
+      return false;
+    }
+    if(_player.apratio < 1) {
+      return false;
+    }
+
+    return true;
+
   }
 
   /**
@@ -191,6 +199,8 @@ class SeqMgr {
       _player.beginAttack();
       // 連鎖続行
       _bKeepOnChain = true;
+      // APゲージ増加
+      _player.addAp(result.calculateAp());
       return State.EraseExec;
     }
     else {
@@ -260,6 +270,7 @@ class SeqMgr {
 
     // TODO: プレイヤーにダメージを与える
     _player.damage(v);
+    _player.addAp(1);
 
     return State.WinLoseCheck;
   }
@@ -278,6 +289,7 @@ class SeqMgr {
     if(_enemy.isDead()) {
       // 敵死亡
       _enemy.vanish();
+      _player.addAp(2);
       return State.Win;
     }
     if(_bKeepOnChain) {

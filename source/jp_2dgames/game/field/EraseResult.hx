@@ -112,4 +112,11 @@ class EraseResult {
   public function calculateApDamage():Int {
     return number * 5;
   }
+
+  /**
+   * APゲージの増加値を取得する
+   **/
+  public function calculateAp():Int {
+    return 1 + combo + chain;
+  }
 }
