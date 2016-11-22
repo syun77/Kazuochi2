@@ -86,7 +86,7 @@ class GameUI extends FlxSpriteGroup {
 //    _txtScore.text = 'SCORE: ${Global.score}';
     _txtLevel.text = 'LEVEL: ${Global.level}';
 
-    _btnSpecial.visible = _canPressSpecialButton();
+    _btnSpecial.enabled = _canPressSpecialButton();
   }
 
   /**
