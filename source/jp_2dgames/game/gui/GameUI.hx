@@ -69,6 +69,8 @@ class GameUI extends FlxSpriteGroup {
     _btnSpecial = new MyButton(0, FlxG.height-48, "Special", function() {
       // 全消しブロック出現
       NextBlockMgr.addTailSpecial(BlockSpecial.AllErase);
+      // AP消費
+      player.subAp(player.apmax);
     });
     this.add(_btnSpecial);
 

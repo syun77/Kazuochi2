@@ -90,6 +90,8 @@ class SeqMgr {
     // デバッグ用
     FlxG.watch.add(this, "_state");
     FlxG.watch.add(this, "_statePrev");
+
+    _player.addAp(95);
   }
 
   /**

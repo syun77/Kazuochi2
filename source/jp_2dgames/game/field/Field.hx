@@ -206,8 +206,6 @@ class Field {
       var xtarget = enemy.xstart + enemy.origin.x;
       var ytarget = enemy.ystart + enemy.origin.y;
       Shot.add(px, py, xtarget, ytarget, 0.3+0.05*num);
-      trace(cnt, xgridTotal, ygridTotal);
-      trace(px, py, xtarget, ytarget);
 
     });
 
