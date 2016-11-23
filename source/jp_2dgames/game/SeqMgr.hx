@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.gui.GameUI;
 import jp_2dgames.game.block.BlockUtil;
 import jp_2dgames.game.field.RequestBlockParam;
@@ -199,6 +200,8 @@ class SeqMgr {
       // 消去できた
       // 攻撃アニメーション開始
       _player.beginAttack();
+      // 連鎖演出開始
+      ParticleChain.start(result.chain);
       // 連鎖続行
       _bKeepOnChain = true;
       // APゲージ増加
@@ -208,6 +211,7 @@ class SeqMgr {
     else {
       // ダメージチェックへ
       // 連鎖終了
+      ParticleChain.end();
       _bKeepOnChain = false;
       return State.DamageCheck;
     }
