@@ -67,7 +67,7 @@ class ParticleChain extends FlxSpriteGroup {
 
     // チェイン数
     _txtChain = new FlxText(0, 0, FlxG.width);
-    _txtChain.setFormat(null, 16, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK);
+    _txtChain.setFormat(null, 16, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
     this.add(_txtChain);
 
     visible = false;
