@@ -213,10 +213,6 @@ class Field {
       // 連鎖数を増やす
       result.chain++;
     }
-    else {
-      // 連鎖終了
-      result.chain = 0;
-    }
 
     // ブロックへのダメージ処理
     for(p in pList) {

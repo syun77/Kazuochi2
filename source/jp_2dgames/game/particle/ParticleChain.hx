@@ -1,17 +1,18 @@
 package jp_2dgames.game.particle;
 
 import jp_2dgames.lib.SprFont;
-import jp_2dgames.lib.SprFont;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flash.display.BlendMode;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
-import flixel.text.FlxText;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 
+/**
+ * 状態
+ **/
 private enum State {
   Appear; // 表示中
   Hide;   // 消えている

@@ -54,6 +54,17 @@ class EraseResult {
   }
 
   /**
+   * コンボ数を加算
+   **/
+  public function addCombo():Void {
+    combo++;
+  }
+
+  public function resetCombo():Void {
+    combo = 0;
+  }
+
+  /**
    * ダメージ量の計算
    **/
   public function calculateDamage():Int {

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.gui.GameUI;
 import jp_2dgames.game.block.BlockUtil;
@@ -198,6 +199,11 @@ class SeqMgr {
     var result = Field.checkErase(_eraseResult, _enemy);
     if(result.erase > 0) {
       // 消去できた
+      if(result.chain == 1) {
+        // 最初の連鎖でコンボ数を増やす
+        result.addCombo();
+        ParticleCombo.start(result.combo);
+      }
       // 攻撃アニメーション開始
       _player.beginAttack();
       // 連鎖演出開始
@@ -212,6 +218,13 @@ class SeqMgr {
       // ダメージチェックへ
       // 連鎖終了
       ParticleChain.end();
+      if(result.chain == 0) {
+        // 連鎖なしでコンボ終了
+        result.resetCombo();
+        ParticleCombo.end();
+      }
+      // 連鎖数をリセット
+      result.chain = 0;
       _bKeepOnChain = false;
       return State.DamageCheck;
     }

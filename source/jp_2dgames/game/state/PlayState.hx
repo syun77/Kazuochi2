@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.field.Field;
 import jp_2dgames.game.global.NextBlockMgr;
@@ -101,6 +102,7 @@ class PlayState extends FlxTransitionableState {
     Particle.createParent(this);
     ParticleBmpFont.createParent(this);
     ParticleChain.createInstance(this);
+    ParticleCombo.createInstance(this);
 
     // GUI生成
     CursorUI.createInstance(this);
@@ -125,6 +127,7 @@ class PlayState extends FlxTransitionableState {
     Particle.destroyParent();
     ParticleBmpFont.destroyParent();
     ParticleChain.destroyInstance();
+    ParticleCombo.destroyInstance();
     Input.destroyVirtualPad();
     CursorUI.destroyInstance();
     NextBlockMgr.destroyInstance();
