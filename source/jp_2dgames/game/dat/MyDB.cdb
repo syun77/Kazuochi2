@@ -23,6 +23,11 @@
 				},
 				{
 					"typeStr": "3",
+					"name": "yoffset",
+					"display": null
+				},
+				{
+					"typeStr": "3",
 					"name": "hp"
 				},
 				{
@@ -60,7 +65,8 @@
 					"direction": 0,
 					"id": "Player",
 					"count": 0,
-					"ap": 0
+					"ap": 0,
+					"yoffset": 0
 				},
 				{
 					"hp": 30,
@@ -71,7 +77,8 @@
 					"direction": 0,
 					"id": "Slime",
 					"count": 3,
-					"ap": 0.2
+					"ap": 0.2,
+					"yoffset": 16
 				},
 				{
 					"id": "SlimeRed",
@@ -82,7 +89,8 @@
 					"direction": 0,
 					"block": 0,
 					"count": 3,
-					"ap": 0.2
+					"ap": 0.2,
+					"yoffset": 16
 				},
 				{
 					"name": "コウモリ",
@@ -93,7 +101,8 @@
 					"direction": 0,
 					"id": "Bat",
 					"count": 3,
-					"ap": 0.3
+					"ap": 0.3,
+					"yoffset": 0
 				},
 				{
 					"id": "BatRed",
@@ -104,7 +113,8 @@
 					"direction": 0,
 					"block": 0,
 					"count": 3,
-					"ap": 0.3
+					"ap": 0.3,
+					"yoffset": 0
 				},
 				{
 					"id": "Snake",
@@ -115,11 +125,65 @@
 					"direction": 0,
 					"block": 1,
 					"count": 3,
-					"ap": 0.2
+					"ap": 0.2,
+					"yoffset": 16
 				}
 			],
 			"separators": [],
 			"props": {}
+		},
+		{
+			"name": "stages",
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "stage"
+				},
+				{
+					"typeStr": "8",
+					"name": "enemies",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"stage": 1,
+					"enemies": [
+						{
+							"enemy": "Slime"
+						},
+						{
+							"enemy": "Bat"
+						},
+						{
+							"enemy": "BatRed"
+						},
+						{
+							"enemy": "Slime"
+						},
+						{
+							"enemy": "Snake"
+						}
+					]
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "stages@enemies",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "6:enemies",
+					"name": "enemy",
+					"display": null
+				}
+			]
 		}
 	],
 	"customTypes": [],

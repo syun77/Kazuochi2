@@ -22,6 +22,10 @@ class EnemyDB {
     return StringTools.replace(image, "../../../../", "");
   }
 
+  public static function getOffsetY(id:EnemiesKind):Int {
+    return get(id).yoffset;
+  }
+
   public static function getHp(id:EnemiesKind):Int {
     return get(id).hp;
   }

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.dat.StageDB;
 import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.gui.GameUI;
@@ -146,7 +147,8 @@ class SeqMgr {
   function _procInit():State {
 
     // 敵出現
-    _enemy.appear(EnemiesKind.Bat);
+    var kind = StageDB.getEnemyKind(1, 0);
+    _enemy.appear(kind);
 
     // ブロック出現
     return State.AppearBlock;

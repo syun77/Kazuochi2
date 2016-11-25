@@ -43,6 +43,9 @@ class Enemy extends Actor  {
    **/
   function _load():Void {
     loadGraphic(EnemyDB.getImage(_kind));
+
+    // Y座標をずらす
+    offset.y = EnemyDB.getOffsetY(_kind);
   }
 
   /**
