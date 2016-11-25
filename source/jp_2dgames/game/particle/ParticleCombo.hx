@@ -1,7 +1,7 @@
 package jp_2dgames.game.particle;
 
-import flixel.util.FlxColor;
 import jp_2dgames.lib.SprFont;
+import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -20,8 +20,8 @@ private enum State {
  **/
 class ParticleCombo extends FlxSpriteGroup {
 
-  static var OFFSET_X:Int = 180;
-  static var OFFSET_Y:Int = 80;
+  static var OFFSET_X:Int = 188;
+  static var OFFSET_Y:Int = 40;
 
   static var _instance:ParticleCombo = null;
   public static function createInstance(state:FlxState):Void {
@@ -58,12 +58,11 @@ class ParticleCombo extends FlxSpriteGroup {
   public function new() {
     super(OFFSET_X, OFFSET_Y);
 
-
     // コンボ数
     {
       var size = SprFont.FONT_WIDTH;
-      var px = 8 * 2.5;
-      var py = 0;
+      var px = -4;
+      var py = -4;
       _sprCombo = new FlxSprite(px, py).makeGraphic(size * 3, size, FlxColor.TRANSPARENT);
       this.add(_sprCombo);
     }
@@ -86,9 +85,16 @@ class ParticleCombo extends FlxSpriteGroup {
 
     switch(_state) {
       case State.Appear:
+        var sc = _sprCombo.scale.x;
+        sc = Math.max(sc * 0.9, 1);
+        _sprCombo.scale.set(sc, sc);
+
       case State.Hide:
         if(alpha > 0) {
-          alpha -= alpha * 3;
+          var sc = _sprCombo.scale.x;
+          sc *= 0.9;
+          _sprCombo.scale.set(sc, sc);
+          alpha -= elapsed * 3;
           if(alpha <= 0) {
             visible = false;
           }
@@ -101,7 +107,9 @@ class ParticleCombo extends FlxSpriteGroup {
    **/
   function _start(combo:Int):Void {
 
-    SprFont.render(_sprCombo, '${combo}');
+    var str = '${combo}';
+    var xofs = SprFont.FONT_WIDTH*3/2 - SprFont.FONT_WIDTH*str.length/2;
+    SprFont.render(_sprCombo, '${combo}', xofs);
 
     alpha = 1;
     visible = true;
@@ -109,6 +117,9 @@ class ParticleCombo extends FlxSpriteGroup {
       obj.visible = true;
       obj.alpha = 1;
     }
+
+    var sc = 3;
+    _sprCombo.scale.set(sc, sc);
 
     // 出現状態にする
     _state = State.Appear;

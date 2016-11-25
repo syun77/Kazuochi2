@@ -93,7 +93,7 @@
 					"direction": 0,
 					"id": "Bat",
 					"count": 3,
-					"ap": 1
+					"ap": 0.3
 				},
 				{
 					"id": "BatRed",

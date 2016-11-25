@@ -42,9 +42,10 @@ class SprFont {
    * BitmapDataに文字をレンダリングする
    * @param spr 描画するスプライト
    * @param str 描画する文字
+   * @param xofs 描画位置のオフセット座標(X)
    * @return レンダリングの幅
    **/
-  public static function render(spr:FlxSprite, str:String):Int {
+  public static function render(spr:FlxSprite, str:String, xofs:Float=0):Int {
 
     // 描画をクリアする
     spr.pixels.fillRect(new Rectangle(0, 0, spr.pixels.width, FONT_WIDTH), FlxColor.TRANSPARENT);
@@ -57,7 +58,7 @@ class SprFont {
     var digit = str.length;
     for(i in 0...digit) {
       // フォントをレンダリングする
-      pt.x = i * FONT_WIDTH;
+      pt.x = i * FONT_WIDTH + xofs;
       var idx = _charToIdx(str.charAt(i));
       if(idx == -1) {
         continue;
