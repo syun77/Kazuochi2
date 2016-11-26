@@ -1,6 +1,7 @@
 package jp_2dgames.game;
 
-import jp_2dgames.game.dat.StageDB;
+import jp_2dgames.game.global.Global;
+import jp_2dgames.game.dat.LevelDB;
 import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.gui.GameUI;
@@ -147,7 +148,7 @@ class SeqMgr {
   function _procInit():State {
 
     // 敵出現
-    var kind = StageDB.getEnemyKind(1, 0);
+    var kind = LevelDB.getEnemyKind(Global.level, Global.stage);
     _enemy.appear(kind);
 
     // ブロック出現
@@ -357,12 +358,20 @@ class SeqMgr {
       return State.None;
     }
 
-    // TODO: 次の敵出現
-    _enemy.appear(EnemiesKind.Snake);
+    // 次のステージに進む
+    if(Global.nextStage()) {
+      // 次の敵出現
+      var kind = LevelDB.getEnemyKind(Global.level, Global.stage);
+      _enemy.appear(kind);
 
-    // 落下開始
-    Field.fall();
-    return State.FallBlock;
+      // 落下開始
+      Field.fall();
+      return State.FallBlock;
+    }
+    else {
+      // TODO: レベルクリア
+      return State.End;
+    }
   }
 
   function _procLose():State {

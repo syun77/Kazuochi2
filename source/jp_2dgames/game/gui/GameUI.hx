@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxColor;
 import jp_2dgames.game.block.BlockSpecial;
 import jp_2dgames.game.global.NextBlockMgr;
 import flixel.ui.FlxButton;
@@ -17,13 +18,14 @@ import flixel.group.FlxSpriteGroup;
  **/
 class GameUI extends FlxSpriteGroup {
 
-  static inline var FONT_SIZE:Int = 8;
+  static inline var FONT_SIZE:Int = 12;
   static inline var BAR_WIDTH:Int = 128;
   static inline var BAR_HEIGHT:Int = 8;
 
   // ---------------------------------------------------
   // ■フィールド
   var _txtLevel:FlxText;
+  var _txtStage:FlxText;
   var _txtScore:FlxText;
 
   var _tAnim:Int = 0;
@@ -48,8 +50,13 @@ class GameUI extends FlxSpriteGroup {
 
     // レベル
     _txtLevel = new FlxText(px, py+FONT_SIZE+4, 0, "", FONT_SIZE);
-//    this.add(_txtLevel);
+    this.add(_txtLevel);
     _txtLevel.y -= FONT_SIZE-4;
+
+    // ステージ
+    _txtStage = new FlxText(px, py+(FONT_SIZE+4)*2, 0, "", FONT_SIZE);
+    this.add(_txtStage);
+    _txtStage.y -= FONT_SIZE-4;
 
     // プレイヤーUI作成
     _playerUI = new StatusUI(player.left+32, player.bottom-48, player);
@@ -74,6 +81,11 @@ class GameUI extends FlxSpriteGroup {
     });
     this.add(_btnSpecial);
 
+    // フォントを設定
+    forEachOfType(FlxText, function(txt:FlxText) {
+      txt.setFormat(null, FONT_SIZE, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    });
+
     scrollFactor.set();
   }
 
@@ -87,6 +99,7 @@ class GameUI extends FlxSpriteGroup {
 
 //    _txtScore.text = 'SCORE: ${Global.score}';
     _txtLevel.text = 'LEVEL: ${Global.level}';
+    _txtStage.text = 'STAGE: ${Global.stage+1}/${Global.maxStage}';
 
     _btnSpecial.enabled = _canPressSpecialButton();
   }

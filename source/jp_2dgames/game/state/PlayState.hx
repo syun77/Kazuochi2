@@ -68,14 +68,14 @@ class PlayState extends FlxTransitionableState {
   override public function create():Void {
 
     // 初期化
-    Global.initLevel();
+    Global.startLevel(1);
 
     // 背景の生成
     _bg = new BgUI();
     this.add(_bg);
 
     // マップ読み込み
-    Field.loadLevel(Global.level);
+    Field.loadLevel(1);
 
     // ブロック生成
     Block.createParent(this);

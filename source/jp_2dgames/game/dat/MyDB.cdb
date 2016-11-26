@@ -133,11 +133,11 @@
 			"props": {}
 		},
 		{
-			"name": "stages",
+			"name": "levels",
 			"columns": [
 				{
 					"typeStr": "3",
-					"name": "stage"
+					"name": "level"
 				},
 				{
 					"typeStr": "8",
@@ -147,7 +147,6 @@
 			],
 			"lines": [
 				{
-					"stage": 1,
 					"enemies": [
 						{
 							"enemy": "Slime"
@@ -164,14 +163,15 @@
 						{
 							"enemy": "Snake"
 						}
-					]
+					],
+					"level": 1
 				}
 			],
 			"separators": [],
 			"props": {}
 		},
 		{
-			"name": "stages@enemies",
+			"name": "levels@enemies",
 			"props": {
 				"hide": true
 			},
