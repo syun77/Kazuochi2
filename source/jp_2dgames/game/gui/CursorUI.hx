@@ -187,7 +187,7 @@ class CursorUI extends FlxGroup {
       // エフェクト出現
       _elapsed += elapsed;
       if(_elapsed > 0.3) {
-        var p = Particle.add(ParticleType.Rect, _block.xcenter, _block.ycenter, 0, 0);
+        var p = Particle.add(ParticleType.Rect, _block.xcenter, _block.ycenter);
         p.color = FlxColor.RED;
         _elapsed -= 0.3;
       }

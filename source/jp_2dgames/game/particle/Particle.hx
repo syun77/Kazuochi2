@@ -36,7 +36,7 @@ class Particle extends Token {
   /**
    * 追加
    **/
-  public static function add(Type:ParticleType, X:Float, Y:Float, deg:Float, speed:Float):Particle {
+  public static function add(Type:ParticleType, X:Float, Y:Float, deg:Float=0, speed:Float=0):Particle {
     var particle:Particle = parent.recycle(Particle);
     particle.init(Type, X, Y, deg, speed);
     return particle;
@@ -44,7 +44,7 @@ class Particle extends Token {
 
   // ===========================================
   // ■プロパティ
-  var age(default, default):Float; // 死亡までの時間
+  public var age(default, default):Float; // 死亡までの時間
 
   // ===========================================
   // ■フィールド
@@ -92,23 +92,24 @@ class Particle extends Token {
     if(_lifespan >= age) {
       // 消滅
       kill();
+      return;
     }
 
     switch(_type) {
       case ParticleType.Ball:  // 球体
-        alpha -= elapsed;
+        alpha -= elapsed/age;
         scale.x *= 0.95;
         scale.y *= 0.95;
         velocity.x *= 0.97;
         velocity.y *= 0.97;
 
       case ParticleType.Ring:  // ドーナッツ状の円
-        var sc = elapsed * 4;
+        var sc = elapsed/age * 4;
         scale.add(sc, sc);
         alpha -= elapsed;
 
       case ParticleType.Blade: // 長細い
-        alpha -= elapsed;
+        alpha -= elapsed/age;
 
       case ParticleType.Rect:  // 矩形
         var sc = elapsed;
@@ -118,7 +119,7 @@ class Particle extends Token {
       case ParticleType.Circle: // 円
         var sc = elapsed * 1.5;
         scale.add(sc, sc);
-        alpha -= elapsed * 1.5;
+        alpha -= elapsed/age * 1.5;
 
       case ParticleType.Stone:
         if(_lifespan/age > 0.7) {

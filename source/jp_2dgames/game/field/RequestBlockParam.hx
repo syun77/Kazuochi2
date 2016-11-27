@@ -134,7 +134,7 @@ class RequestBlockParam {
       // 出現演出
       var px = Field.toWorldX(xgrid) + Field.TILE_WIDTH/2;
       var py = Field.toWorldY(ygrid) + Field.TILE_HEIGHT/2;
-      var p = Particle.add(ParticleType.Circle, px, py, 0, 0);
+      var p = Particle.add(ParticleType.Circle, px, py);
       var sc = 0.8;
       p.scale.set(sc, sc);
       p.color = FlxColor.RED;

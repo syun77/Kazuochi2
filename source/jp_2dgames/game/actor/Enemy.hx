@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxColor;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.field.RequestBlockParam;
 import flixel.tweens.FlxEase;
@@ -35,7 +36,6 @@ class Enemy extends Actor  {
 
     // 消しておく
     visible = false;
-    _tStun = 0;
   }
 
   /**
@@ -62,6 +62,8 @@ class Enemy extends Actor  {
 
     // 変数初期化
     _totalElapsed = 0;
+    _tStun = 0;
+    _tFrame = 0;
 
     scale.set(0.5, 0.5);
     x = FlxG.width * 1.5;
@@ -87,7 +89,9 @@ class Enemy extends Actor  {
 
     _totalElapsed += elapsed;
 
-    angle = 5 * Math.sin(_totalElapsed);
+    if(isDead() == false) {
+      angle = 5 * Math.sin(_totalElapsed);
+    }
   }
 
   /**
@@ -178,5 +182,9 @@ class Enemy extends Actor  {
     }
   }
 
-
+  /**
+   * APがちょうど満タンになった
+   **/
+  override function _cbJustApFull():Void {
+  }
 }

@@ -321,7 +321,7 @@ class Block extends Token {
 
     if(_elapsed > 0.05) {
       _elapsed -= 0.05;
-      var p = Particle.add(ParticleType.Rect, xcenter, ycenter, 0, 0);
+      var p = Particle.add(ParticleType.Rect, xcenter, ycenter);
       p.color = FlxColor.RED;
     }
   }

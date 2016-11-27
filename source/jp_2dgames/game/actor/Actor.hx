@@ -37,6 +37,7 @@ class Actor extends Token {
   var _ap:Int;    // 現在の行動ポイント
   var _apmax:Int; // 最大行動ポイント
   var _tDamage:Float; // ダメージタイマー
+  var _tFrame:Int = 0; // 経過フレーム数
   var _tween:FlxTween;
   var _bPlayer:Bool; // プレイヤーかどうか
 
@@ -58,6 +59,7 @@ class Actor extends Token {
     _ap    = 0;
     _apmax = 100;
     _tDamage = 0;
+    _tFrame = 0;
     _tween = null;
 
     visible = true;
@@ -161,8 +163,36 @@ class Actor extends Token {
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
+    _tFrame++;
+
     // 揺れの更新
     _updateShake();
+
+    if(ap == apmax) {
+      // APゲージ満タンアニメ
+      _updateApMax();
+    }
+  }
+
+  /**
+   * 更新・APゲージ満タン
+   **/
+  function _updateApMax():Void {
+
+    if(isDead()) {
+      // 死亡中は演出なし
+      return;
+    }
+
+    if(_tFrame%32 == 0) {
+      for(i in 0...2) {
+        var p = Particle.add(ParticleType.Circle, xcenter, ycenter+offset.y);
+        var sc = 0.2 + 0.1*i;
+        p.scale.set(sc, sc);
+        p.age = 1.5;
+        p.color = FlxColor.RED;
+      }
+    }
   }
 
   /**
@@ -187,7 +217,22 @@ class Actor extends Token {
    * APを加算する
    **/
   public function addAp(v:Int):Void {
+
+    var bJustFull = true;
+    if(apratio == 1) {
+      bJustFull = false;
+    }
+
     _ap = FlxMath.maxAdd(_ap, v, _apmax);
+
+    if(apratio < 1) {
+      bJustFull = false;
+    }
+
+    if(bJustFull) {
+      // APがちょうど満タンになった
+      _cbJustApFull();
+    }
   }
 
   /**
@@ -202,6 +247,15 @@ class Actor extends Token {
    **/
   public function resetAp():Void {
     _ap = 0;
+  }
+
+  // ========================================
+  // ■コールバック関数
+
+  /**
+   * APがちょうど満タンになったら
+   **/
+  function _cbJustApFull():Void {
   }
 
   // ========================================

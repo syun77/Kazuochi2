@@ -43,7 +43,8 @@ class Player extends Actor {
     // プレイヤー
     _bPlayer = true;
 
-    FlxG.watch.add(this, "_anim");
+    FlxG.watch.add(this, "ap");
+    FlxG.watch.add(this, "apmax");
   }
 
   /**
@@ -73,7 +74,6 @@ class Player extends Actor {
     switch(_anim) {
       case AnimState.Idle:
         // 通常
-        y = ystart + 4 * Math.sin(_totalElapsed*4);
         if(isDanger()) {
           // 危険状態
           _anim = AnimState.Danger;
@@ -105,6 +105,18 @@ class Player extends Actor {
     }
 
     animation.play('${_anim}');
+
+    if(_anim != AnimState.Damage) {
+      // ダメージ中でなければふわふわ動く
+      _updateFloating();
+    }
+  }
+
+  /**
+   * サインカーブでふわふわ動く
+   **/
+  function _updateFloating():Void {
+    y = ystart + 2 * Math.sin(_totalElapsed*4);
   }
 
   /**
@@ -117,6 +129,11 @@ class Player extends Actor {
     _tAnim = 0;
   }
 
+  /**
+   * APゲージがちょうど満タンになった
+   **/
+  override function _cbJustApFull():Void {
+  }
 
   /**
    * アニメーションの登録
