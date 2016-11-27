@@ -59,7 +59,7 @@ class SeqMgr {
 
   public static var RET_NONE:Int    = 0;
   public static var RET_DEAD:Int    = 3; // プレイヤー死亡
-  public static var RET_STAGECLEAR:Int  = 5; // ステージクリア
+  public static var RET_LEVEL_COMPLETED:Int  = 5; // レベルクリア
 
   // 状態
   var _state:State;
@@ -367,7 +367,7 @@ class SeqMgr {
       return State.FallBlock;
     }
     else {
-      // TODO: レベルクリア
+      // レベルクリア
       return State.End;
     }
   }
@@ -424,6 +424,11 @@ class SeqMgr {
     if(next != State.None) {
       // 状態遷移
       _change(next);
+    }
+
+    if(_state == State.End) {
+      // ステージクリア
+      return RET_LEVEL_COMPLETED;
     }
 
     return RET_NONE;

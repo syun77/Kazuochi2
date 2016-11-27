@@ -33,7 +33,7 @@ private enum State {
   Main;
   DeadWait;
   Gameover;
-  Stageclear;
+  LevelCompleted;
 }
 
 /**
@@ -156,9 +156,10 @@ class PlayState extends FlxTransitionableState {
       case State.Gameover:
         // ゲームオーバー
 
-      case State.Stageclear:
-        // 次のレベルに進む
-        StageClearUI.nextLevel();
+      case State.LevelCompleted:
+        // レベルクリア
+        // TODO: タイトル画面に戻る
+        FlxG.switchState(new EndingState());
     }
 
     #if debug
@@ -185,9 +186,9 @@ class PlayState extends FlxTransitionableState {
         _startGameover();
         Snd.stopMusic();
         return;
-      case SeqMgr.RET_STAGECLEAR:
-        // ステージクリア
-        _state = State.Stageclear;
+      case SeqMgr.RET_LEVEL_COMPLETED:
+        // レベルクリア
+        _state = State.LevelCompleted;
         Snd.stopMusic(1);
     }
   }
