@@ -15,6 +15,12 @@ class StatusUI extends FlxSpriteGroup {
   // HP数値の最大桁数
   static inline var MAX_DIGIT:Int = 8;
 
+  // =================================================
+  // ■プロパティ
+  public var actor(get, never):Actor;
+
+  // =================================================
+  // ■フィールド
   // アクティブゲージ
   var _activeBar:StatusBar;
   // HP
@@ -72,4 +78,8 @@ class StatusUI extends FlxSpriteGroup {
       }
     }
   }
+
+  // =================================================
+  // ■アクセサ
+  function get_actor() { return _actor; }
 }

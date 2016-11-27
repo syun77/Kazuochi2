@@ -27,9 +27,11 @@ class GameUI extends FlxSpriteGroup {
   var _txtLevel:FlxText;
   var _txtStage:FlxText;
   var _txtScore:FlxText;
+  var _txtWait:FlxText;
 
   var _tAnim:Int = 0;
 
+  var _enemy:Enemy;
   var _playerUI:StatusUI;
   var _enemyUI:StatusUI;
   var _btnSpecial:MyButton; // スペシャルボタン
@@ -40,6 +42,8 @@ class GameUI extends FlxSpriteGroup {
    **/
   public function new(player:Player, enemy:Enemy) {
     super(4, 2);
+
+    _enemy = enemy;
 
     var px:Float = 0;
     var py:Float = 0;
@@ -65,6 +69,10 @@ class GameUI extends FlxSpriteGroup {
     // 敵UI作成
     _enemyUI = new StatusUI(enemy.left+84, enemy.bottom-92, enemy);
     this.add(_enemyUI);
+
+    // 敵が攻撃するまでのターン数
+    _txtWait = new FlxText(enemy.xcenter-8, enemy.ycenter-40, 0, "");
+    this.add(_txtWait);
 
     // メニューボタン
     var btnMenu = new FlxButton(FlxG.width-86, 0, "MENU", function() {
@@ -101,6 +109,22 @@ class GameUI extends FlxSpriteGroup {
     _txtLevel.text = 'LEVEL: ${Global.level}';
     _txtStage.text = 'STAGE: ${Global.stage+1}/${Global.maxStage}';
 
+    // 敵の攻撃までのターン数を計算
+    {
+      var wait = _enemy.calculateWaitTurnCount();
+      if(wait < 0) {
+        _txtWait.text = "";
+      }
+      else {
+        _txtWait.text = 'WAIT: ${wait}';
+      }
+      _txtWait.color = FlxColor.WHITE;
+      if(wait <= 1) {
+        _txtWait.color = FlxColor.RED;
+      }
+    }
+
+    // スペシャルボタンを有効にするかどうか
     _btnSpecial.enabled = _canPressSpecialButton();
   }
 

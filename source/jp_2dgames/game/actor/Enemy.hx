@@ -1,6 +1,5 @@
 package jp_2dgames.game.actor;
 
-import flixel.util.FlxColor;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.field.RequestBlockParam;
 import flixel.tweens.FlxEase;
@@ -10,15 +9,28 @@ import flixel.tweens.FlxTween;
 import jp_2dgames.game.dat.MyDB;
 
 /**
+ * 状態
+ **/
+private enum State {
+  Appear;  // 出現中
+  Standby; // 待機中
+  Attack;  // 攻撃中
+}
+
+/**
  * 敵
  **/
 class Enemy extends Actor  {
 
   // ==========================================
+  // ■プロパティ
+  var kind(get, never):EnemiesKind;
+
   // ■フィールド
   var _totalElapsed:Float = 0.0;
   var _kind:EnemiesKind; // 敵の種類
   var _tStun:Int = 0; // スタンするターン数
+  var _state:State = State.Appear; // 状態
 
   /**
    * コンストラクタ
@@ -53,6 +65,7 @@ class Enemy extends Actor  {
    **/
   public function appear(kind:EnemiesKind):Void {
 
+    _state = State.Appear;
     _kind = kind;
     _load();
 
@@ -68,16 +81,23 @@ class Enemy extends Actor  {
     scale.set(0.5, 0.5);
     x = FlxG.width * 1.5;
     visible = true;
-    FlxTween.tween(this, {x:xstart}, 1, {ease:FlxEase.expoOut});
+    FlxTween.tween(this, {x:xstart}, 1, {ease:FlxEase.expoOut, onComplete:function(_) {
+      _state = State.Standby;
+    }});
   }
 
   /**
    * 攻撃開始
    **/
   override public function beginAttack():Void {
+
+    _state = State.Attack;
+
     var xtarget = xstart - 128;
     FlxTween.tween(this, {x:xtarget}, 0.25, {ease:FlxEase.quadOut, onComplete:function(_) {
-      FlxTween.tween(this, {x:xstart}, 0.25, {ease:FlxEase.quadOut});
+      FlxTween.tween(this, {x:xstart}, 0.25, {ease:FlxEase.quadOut, onComplete:function(_) {
+        _state = State.Standby;
+      }});
     }});
   }
 
@@ -159,6 +179,26 @@ class Enemy extends Actor  {
   }
 
   /**
+   * 攻撃までの残りターン数を取得する
+   **/
+  public function calculateWaitTurnCount():Int {
+
+    if(isDead()) {
+      return -1;
+    }
+
+    switch(_state) {
+      case State.Appear:
+        return -1;
+      case State.Standby:
+        var d = apmax - ap;
+        return Math.ceil(d / EnemyDB.getAp(_kind)) + 1;
+      case State.Attack:
+        return 0;
+    }
+  }
+
+  /**
    * ターン終了
    **/
   override public function endTurn():Void {
@@ -187,4 +227,8 @@ class Enemy extends Actor  {
    **/
   override function _cbJustApFull():Void {
   }
+
+  // =================================================
+  // ■アクセサ
+  function get_kind() { return _kind; }
 }

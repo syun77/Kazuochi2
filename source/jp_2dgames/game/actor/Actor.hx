@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -234,7 +235,6 @@ class Actor extends Token {
       _cbJustApFull();
     }
   }
-
   /**
    * APを減少させる
    **/
