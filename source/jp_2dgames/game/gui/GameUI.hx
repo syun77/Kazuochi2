@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.lib.MyColor;
 import flixel.util.FlxColor;
 import jp_2dgames.game.block.BlockSpecial;
 import jp_2dgames.game.global.NextBlockMgr;
@@ -112,15 +113,15 @@ class GameUI extends FlxSpriteGroup {
     // 敵の攻撃までのターン数を計算
     {
       var wait = _enemy.calculateWaitTurnCount();
-      if(wait < 0) {
+      if(wait <= 0) {
         _txtWait.text = "";
       }
       else {
         _txtWait.text = 'WAIT: ${wait}';
       }
       _txtWait.color = FlxColor.WHITE;
-      if(wait <= 1) {
-        _txtWait.color = FlxColor.RED;
+      if(wait <= 1 && _tAnim%48 < 24) {
+        _txtWait.color = MyColor.GOLDENROD;
       }
     }
 
