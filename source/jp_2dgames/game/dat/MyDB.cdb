@@ -141,6 +141,10 @@
 				},
 				{
 					"typeStr": "8",
+					"name": "blocks"
+				},
+				{
+					"typeStr": "8",
 					"name": "enemies",
 					"display": null
 				}
@@ -164,7 +168,15 @@
 							"enemy": "Snake"
 						}
 					],
-					"level": 1
+					"level": 1,
+					"blocks": [
+						{
+							"number": 2
+						},
+						{
+							"number": 5
+						}
+					]
 				}
 			],
 			"separators": [],
@@ -182,6 +194,20 @@
 					"typeStr": "6:enemies",
 					"name": "enemy",
 					"display": null
+				}
+			]
+		},
+		{
+			"name": "levels@blocks",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "number"
 				}
 			]
 		}

@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.dat.LevelDB;
 import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
 import jp_2dgames.game.field.Field;
@@ -111,7 +112,14 @@ class PlayState extends FlxTransitionableState {
 
     // NEXTブロック管理生成
     NextBlockMgr.createInstance();
+    // 出現するブロックを設定
+    {
+      var start = LevelDB.getStartBlock(Global.level);
+      var end   = LevelDB.getEndBlock(Global.level);
+      NextBlockMgr.setRange(start, end);
+    }
     NextBlockMgr.init();
+
 
     // シーケンス管理生成
     _seq = new SeqMgr(player, enemy, ui);

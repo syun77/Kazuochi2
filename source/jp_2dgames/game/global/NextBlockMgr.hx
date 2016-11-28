@@ -99,8 +99,7 @@ class NextBlockMgr {
   public function new() {
     _blocks = new MyQueue();
 
-    _start = 2;
-    _end   = 5;
+    _setRange(2, 5);
   }
 
   /**
