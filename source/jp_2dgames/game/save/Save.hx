@@ -84,6 +84,15 @@ private class _NextBlock {
   }
 }
 
+/**
+ * キャラクター
+ **/
+private class _Actor {
+  public var hp:Int;
+  public var hpmax:Int;
+  public var ap:Float;
+}
+
 
 /**
  * セーブデータ

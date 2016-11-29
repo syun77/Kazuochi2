@@ -30,8 +30,8 @@ class EnemyDB {
     return get(id).hp;
   }
 
-  public static function getAp(id:EnemiesKind):Int {
-    return Math.floor(get(id).ap * 100);
+  public static function getAp(id:EnemiesKind):Float {
+    return get(id).ap * 100;
   }
 
   public static function getDirection(id:EnemiesKind):RequestBlock {

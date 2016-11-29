@@ -84,11 +84,9 @@ class PlayState extends FlxTransitionableState {
     // マップ読み込み
     {
       var file = LevelDB.getTmx(Global.level);
-      if(file != "") {
-        Field.loadLevelFromFile(file);
-        // 各種オブジェクト生成
-        Field.createObjectsFromLayer();
-      }
+      Field.loadLevelFromFile(file);
+      // 各種オブジェクト生成
+      Field.createObjectsFromLayer();
     }
 
     // プレイヤーの生成

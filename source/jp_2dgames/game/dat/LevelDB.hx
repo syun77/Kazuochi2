@@ -27,6 +27,10 @@ class LevelDB {
 
   public static function getTmx(level:Int):String {
     var tmx = get(level).tmx;
+    if(tmx == "") {
+      // 未設定の場合は 000.tmx を使用する
+      return "assets/data/000.tmx";
+    }
     return StringTools.replace(tmx, "../../../../", "");
   }
 

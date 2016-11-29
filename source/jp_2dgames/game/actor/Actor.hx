@@ -26,18 +26,18 @@ class Actor extends Token {
   public var hp(get, never):Int;
   public var hpmax(get, never):Int;
   public var hpratio(get, never):Float;
-  public var ap(get, never):Int;
-  public var apmax(get, never):Int;
+  public var ap(get, never):Float;
+  public var apmax(get, never):Float;
   public var apratio(get, never):Float;
   public var canAttack(get, never):Bool;
 
   // ========================================
   // ■フィールド
-  var _hp:Int;    // 現在のHP
-  var _hpmax:Int; // 最大HP
-  var _ap:Int;    // 現在の行動ポイント
-  var _apmax:Int; // 最大行動ポイント
-  var _tDamage:Float; // ダメージタイマー
+  var _hp:Int;         // 現在のHP
+  var _hpmax:Int;      // 最大HP
+  var _ap:Float;       // 現在の行動ポイント
+  var _apmax:Float;    // 最大行動ポイント
+  var _tDamage:Float;  // ダメージタイマー
   var _tFrame:Int = 0; // 経過フレーム数
   var _tween:FlxTween;
   var _bPlayer:Bool; // プレイヤーかどうか
@@ -217,14 +217,14 @@ class Actor extends Token {
   /**
    * APを加算する
    **/
-  public function addAp(v:Int):Void {
+  public function addAp(v:Float):Void {
 
     var bJustFull = true;
     if(apratio == 1) {
       bJustFull = false;
     }
 
-    _ap = FlxMath.maxAdd(_ap, v, _apmax);
+    _ap = Math.min(_ap + v, _apmax);
 
     if(apratio < 1) {
       bJustFull = false;
@@ -238,8 +238,8 @@ class Actor extends Token {
   /**
    * APを減少させる
    **/
-  public function subAp(v:Int):Void {
-    _ap = FlxMath.maxAdd(_ap, -v, _apmax);
+  public function subAp(v:Float):Void {
+    _ap = Math.max(_ap - v, _apmax);
   }
 
   /**
