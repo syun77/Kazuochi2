@@ -56,8 +56,17 @@ class Field {
   public static function loadLevel(level:Int):Void {
 
     var name = TextUtil.fillZero(level, 3);
+    var file = 'assets/data/${name}.tmx';
+    loadLevelFromFile(file);
+  }
+
+  /**
+   * マップデータ読み込み (ファイルから読み込み)
+   **/
+  public static function loadLevelFromFile(file:String):Void {
+
     _tmx = new TmxLoader();
-    _tmx.load('assets/data/${name}.tmx');
+    _tmx.load(file);
     _layer = _tmx.getLayer(LAYER_NAME);
     _tmpLayer = new Array2D(_layer.width, _layer.height);
   }

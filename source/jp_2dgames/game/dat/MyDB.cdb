@@ -144,6 +144,11 @@
 					"name": "blocks"
 				},
 				{
+					"typeStr": "13",
+					"name": "tmx",
+					"display": null
+				},
+				{
 					"typeStr": "8",
 					"name": "enemies",
 					"display": null
@@ -176,7 +181,8 @@
 						{
 							"number": 5
 						}
-					]
+					],
+					"tmx": ""
 				}
 			],
 			"separators": [],

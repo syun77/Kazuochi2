@@ -75,17 +75,21 @@ class PlayState extends FlxTransitionableState {
     _bg = new BgUI();
     this.add(_bg);
 
-    // マップ読み込み
-    Field.loadLevel(1);
-
     // ブロック生成
     Block.createParent(this);
 
     // NEXTブロックUI生成
     this.add(new NextBlockUI(0, 0));
 
-    // 各種オブジェクト生成
-    Field.createObjectsFromLayer();
+    // マップ読み込み
+    {
+      var file = LevelDB.getTmx(Global.level);
+      if(file != "") {
+        Field.loadLevelFromFile(file);
+        // 各種オブジェクト生成
+        Field.createObjectsFromLayer();
+      }
+    }
 
     // プレイヤーの生成
     _player = new Player(PLAYER_POS_X, PLAYER_POS_Y);
