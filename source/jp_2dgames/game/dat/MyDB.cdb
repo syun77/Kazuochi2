@@ -182,7 +182,24 @@
 							"number": 5
 						}
 					],
-					"tmx": ""
+					"tmx": "../../../../assets/data/900.tmx"
+				},
+				{
+					"level": 2,
+					"blocks": [
+						{
+							"number": 2
+						},
+						{
+							"number": 5
+						}
+					],
+					"tmx": "../../../../assets/data/900.tmx",
+					"enemies": [
+						{
+							"enemy": "Slime"
+						}
+					]
 				}
 			],
 			"separators": [],

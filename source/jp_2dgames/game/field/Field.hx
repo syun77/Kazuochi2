@@ -69,6 +69,37 @@ class Field {
     _tmx.load(file);
     _layer = _tmx.getLayer(LAYER_NAME);
     _tmpLayer = new Array2D(_layer.width, _layer.height);
+
+    // *.tmxから読み込んだ場合は変換が必要
+    _tmxToObjects();
+  }
+
+  /**
+   * *.tmxの情報をオブジェクト情報に変換する
+   **/
+  static function _tmxToObjects():Void {
+    _layer.forEach(function(x:Int, y:Int, v:Int) {
+      switch(v) {
+        case 1, 2, 3, 4, 5, 6, 7, 8, 9:
+          // 1-9はそのまま
+        case 10:
+          // スペシャルブロック
+        case 11:
+          // 未使用
+        case 12:
+          // ドクロ
+          v = BlockUtil.toDataSkull();
+        case 13, 14, 15, 16, 17, 18, 19, 20, 21:
+          // 固いブロック
+          var num = v - 12;
+          v = BlockUtil.toData(num, false, 1, false);
+        case 25, 26, 27, 28, 29, 30, 31, 32, 33:
+          var num = v - 24;
+          v = BlockUtil.toData(num, false, 2, false);
+      }
+
+      _layer.set(x, y, v);
+    });
   }
 
   /**

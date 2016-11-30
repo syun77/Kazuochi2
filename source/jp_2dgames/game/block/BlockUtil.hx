@@ -40,6 +40,9 @@ class BlockUtil {
     }
     return special;
   }
+  public static function toDataSkull():Int {
+    return toData(0, true, 0, false);
+  }
 
   public static function isNone(data:Int):Bool {
     return data == 0;
