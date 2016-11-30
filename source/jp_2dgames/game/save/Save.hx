@@ -1,5 +1,6 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.state.PlayState;
 import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.global.NextBlockMgr;
 import jp_2dgames.game.field.Field;
@@ -7,6 +8,7 @@ import openfl.filesystem.File;
 import jp_2dgames.game.global.Global;
 import flixel.util.FlxSave;
 import haxe.Json;
+import jp_2dgames.game.dat.MyDB;
 
 // グローバル
 private class _Global {
@@ -91,6 +93,45 @@ private class _Actor {
   public var hp:Int;
   public var hpmax:Int;
   public var ap:Float;
+  public var apmax:Float;
+  public function new() {}
+}
+
+private class _Actors {
+  public var player:_Actor;
+  public var enemy:_Actor;
+  public var kind:EnemiesKind;
+  public function new() {
+    player = new _Actor();
+    enemy  = new _Actor();
+    kind   = EnemiesKind.Player;
+  }
+  // セーブ
+  public function save():Void {
+    var p = PlayState.player;
+    var e = PlayState.enemy;
+    player.hp    = p.hp;
+    player.hpmax = p.hpmax;
+    player.ap    = p.ap;
+    player.apmax = p.apmax;
+    enemy.hp     = e.hp;
+    enemy.hpmax  = e.hpmax;
+    enemy.ap     = e.ap;
+    enemy.apmax  = e.apmax;
+    kind         = e.kind;
+  }
+  // ロード
+  public function load(data:Dynamic):Void {
+    var p:_Actor = cast data.player;
+    var e:_Actor = cast data.enemy;
+
+    var player = PlayState.player;
+    var enemy = PlayState.enemy;
+    player.setParamEx(p.hp, p.hpmax, p.ap, p.apmax);
+    enemy.setParamEx(e.hp, e.hpmax, e.ap, e.apmax);
+    enemy.appear(data.kind, false);
+
+  }
 }
 
 
@@ -101,11 +142,13 @@ private class SaveData {
   public var global:_Global;
   public var field:_Field;
   public var next:_NextBlock;
+  public var actors:_Actors;
 
   public function new() {
     global = new _Global();
     field  = new _Field();
     next   = new _NextBlock();
+    actors = new _Actors();
   }
 
   // セーブ
@@ -113,6 +156,7 @@ private class SaveData {
     global.save();
     field.save();
     next.save();
+    actors.save();
   }
 
   // ロード
@@ -120,6 +164,7 @@ private class SaveData {
     global.load(data.global);
     field.load(data.field);
     next.load(data.next);
+    actors.load(data.actors);
   }
 }
 

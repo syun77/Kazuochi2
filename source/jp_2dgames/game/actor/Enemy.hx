@@ -24,7 +24,7 @@ class Enemy extends Actor  {
 
   // ==========================================
   // ■プロパティ
-  var kind(get, never):EnemiesKind;
+  public var kind(get, never):EnemiesKind;
 
   // ■フィールド
   var _totalElapsed:Float = 0.0;
@@ -63,15 +63,17 @@ class Enemy extends Actor  {
   /**
    * 敵出現
    **/
-  public function appear(kind:EnemiesKind):Void {
+  public function appear(kind:EnemiesKind, bReset:Bool=true):Void {
 
     _state = State.Appear;
     _kind = kind;
     _load();
 
-    // HPを設定
-    var hp = EnemyDB.getHp(_kind);
-    setParam(hp);
+    if(bReset) {
+      // HPを設定
+      var hp = EnemyDB.getHp(_kind);
+      setParam(hp);
+    }
 
     // 変数初期化
     _totalElapsed = 0;

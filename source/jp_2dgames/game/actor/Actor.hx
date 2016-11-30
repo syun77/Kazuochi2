@@ -66,6 +66,13 @@ class Actor extends Token {
     visible = true;
   }
 
+  public function setParamEx(hp:Int, hpmax:Int, ap:Float, apmax:Float):Void {
+    setParam(hpmax);
+    _hp    = hp;
+    _ap    = ap;
+    _apmax = apmax;
+  }
+
   /**
    * 危険状態かどうか
    **/

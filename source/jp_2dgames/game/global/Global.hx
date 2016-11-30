@@ -23,7 +23,7 @@ class Global {
     _stage = START_STAGE;
   }
 
-  public static function setLevel(stage:Int, lv:Int):Void {
+  public static function setLevel(lv:Int, stage:Int):Void {
     _level = lv;
     _stage = stage;
   }
