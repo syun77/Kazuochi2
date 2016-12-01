@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.particle.StartStageUI;
 import jp_2dgames.game.global.Global;
 import jp_2dgames.game.dat.LevelDB;
 import jp_2dgames.game.particle.ParticleCombo;
@@ -148,6 +149,9 @@ class SeqMgr {
     // 敵出現
     var kind = LevelDB.getEnemyKind(Global.level, Global.stage);
     _enemy.appear(kind);
+
+    // 開始演出
+    StartStageUI.start();
 
     // ブロック出現
     return State.AppearBlock;
@@ -361,6 +365,9 @@ class SeqMgr {
       // 次の敵出現
       var kind = LevelDB.getEnemyKind(Global.level, Global.stage);
       _enemy.appear(kind);
+
+      // 開始演出
+      StartStageUI.start();
 
       // 落下開始
       Field.fall();

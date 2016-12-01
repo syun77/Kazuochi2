@@ -14,7 +14,7 @@ import jp_2dgames.game.gui.CursorUI;
 import jp_2dgames.game.gui.BgUI;
 import jp_2dgames.game.token.Block;
 import flixel.addons.transition.FlxTransitionableState;
-import jp_2dgames.game.particle.ParticleStartLevel;
+import jp_2dgames.game.particle.StartStageUI;
 import jp_2dgames.game.gui.GameUI;
 import jp_2dgames.lib.Input;
 import flash.system.System;
@@ -106,6 +106,7 @@ class PlayState extends FlxTransitionableState {
     ParticleBmpFont.createParent(this);
     ParticleChain.createInstance(this);
     ParticleCombo.createInstance(this);
+    StartStageUI.createInstance(this);
 
     // GUI生成
     CursorUI.createInstance(this);
@@ -139,6 +140,7 @@ class PlayState extends FlxTransitionableState {
     ParticleChain.destroyInstance();
     ParticleCombo.destroyInstance();
     Input.destroyVirtualPad();
+    StartStageUI.destroyInstance();
     CursorUI.destroyInstance();
     NextBlockMgr.destroyInstance();
 
@@ -181,8 +183,6 @@ class PlayState extends FlxTransitionableState {
    * 更新・初期化
    **/
   function _updateInit():Void {
-    // 開始演出
-    ParticleStartLevel.start(this);
   }
 
   /**
@@ -230,7 +230,7 @@ class PlayState extends FlxTransitionableState {
     if(FlxG.keys.justPressed.R) {
       // リスタート
       FlxG.resetState();
-//      FlxG.switchState(new PlayInitState());
+//      FlxG.switchState(StartStageUI PlayInitState());
     }
 
     if(_seq.canSaveAndLoad()) {

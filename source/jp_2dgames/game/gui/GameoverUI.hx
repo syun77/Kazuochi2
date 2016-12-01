@@ -27,8 +27,8 @@ class GameoverUI extends FlxSpriteGroup {
     /*
     if(bBtn) {
       // やり直しボタン
-      var btn = new MyButton(FlxG.width/2, FlxG.height*0.7, "Restart", function() {
-//        FlxG.switchState(new PlayInitState());
+      var btn = StartStageUI MyButton(FlxG.width/2, FlxG.height*0.7, "Restart", function() {
+//        FlxG.switchState(StartStageUI PlayInitState());
         FlxG.resetState();
       });
       btn.x -= btn.width/2;
@@ -36,7 +36,7 @@ class GameoverUI extends FlxSpriteGroup {
     }
     else {
       // やり直しテキスト
-      var txt2 = new FlxText(0, FlxG.height*0.7, FlxG.width, "X to Restart", Std.int(FONT_SIZE/2));
+      var txt2 = StartStageUI FlxText(0, FlxG.height*0.7, FlxG.width, "X to Restart", Std.int(FONT_SIZE/2));
       txt2.alignment = "center";
       this.add(txt2);
     }
