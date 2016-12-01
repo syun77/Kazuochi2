@@ -7,12 +7,11 @@ import jp_2dgames.game.dat.LevelDB;
  **/
 class Global {
 
-  public static inline var START_LEVEL:Int = 2; // 1;
   public static inline var MAX_LEVEL:Int = 4;
   public static inline var MAX_LIFE:Int = 100;
   public static inline var START_STAGE:Int = 0;
 
-  static var _level:Int = START_LEVEL; // レベル
+  static var _level:Int = 1; // レベル
   static var _stage:Int = 0; // 現在のステージ
 
   public static function initGame():Void {
