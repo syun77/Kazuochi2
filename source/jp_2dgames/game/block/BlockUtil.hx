@@ -24,8 +24,8 @@ class BlockUtil {
   public static inline var OFS_SPECIAL:Int = 10000;
 
 
-  public static function toData(number:Int, bSkull:Bool, hp:Int, bNewer:Bool):Int {
-    var skull:Int = bSkull ? OFS_SKULL : 0;
+  public static function toData(number:Int, skullLv:Int, hp:Int, bNewer:Bool):Int {
+    var skull:Int = skullLv * OFS_SKULL;
     var hpval:Int = hp * OFS_HP;
     var newer:Int = bNewer ? OFS_NEWER : 0;
     return number + skull + hpval + newer;
@@ -40,8 +40,8 @@ class BlockUtil {
     }
     return special;
   }
-  public static function toDataSkull():Int {
-    return toData(0, true, 0, false);
+  public static function toDataSkull(lv:Int):Int {
+    return toData(0, lv, 0, false);
   }
 
   public static function isNone(data:Int):Bool {
@@ -52,8 +52,12 @@ class BlockUtil {
     return data%OFS_SKULL;
   }
   public static function isSkull(data:Int):Bool {
+    var v = getSkullLv(data);
+    return v > 0;
+  }
+  public static function getSkullLv(data:Int):Int {
     var v = data%OFS_HP - getNumber(data);
-    return v == OFS_SKULL;
+    return Math.floor(v / OFS_SKULL);
   }
   public static function getHp(data:Int):Int {
     var v = data%OFS_NEWER;

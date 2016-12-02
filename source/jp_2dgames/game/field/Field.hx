@@ -87,15 +87,18 @@ class Field {
         case 11:
           // 未使用
         case 12:
-          // ドクロ
-          v = BlockUtil.toDataSkull();
+          // ドクロ Lv1
+          v = BlockUtil.toDataSkull(1);
         case 13, 14, 15, 16, 17, 18, 19, 20, 21:
           // 固いブロック
           var num = v - 12;
-          v = BlockUtil.toData(num, false, 1, false);
+          v = BlockUtil.toData(num, 0, 1, false);
+        case 24:
+          // ドクロ Lv2
+          v = BlockUtil.toDataSkull(2);
         case 25, 26, 27, 28, 29, 30, 31, 32, 33:
           var num = v - 24;
-          v = BlockUtil.toData(num, false, 2, false);
+          v = BlockUtil.toData(num, 0, 2, false);
       }
 
       _layer.set(x, y, v);
@@ -144,7 +147,7 @@ class Field {
 
       if(BlockUtil.isSkull(v)) {
         // ドクロ
-        Block.addSkull(i, j);
+        Block.addSkull(i, j, BlockUtil.getSkullLv(v));
         return;
       }
 

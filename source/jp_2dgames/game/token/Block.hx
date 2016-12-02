@@ -41,7 +41,8 @@ class Block extends Token {
 
   static inline var ANIM_HARD_OFS:Int = 10;
   static inline var ANIM_VERYHARD:String = "veryhard";
-  static inline var ANIM_SKULL:String = "skull";
+  static inline var ANIM_SKULL:String = "skull1";
+  static inline var ANIM_SKULL2:String = "skull2";
   static inline var ANIM_SPECIAL:String = "special";
 
 
@@ -63,9 +64,9 @@ class Block extends Token {
     block.init(xgrid, ygrid, BlockType.Newer(number));
     return block;
   }
-  public static function addSkull(xgrid:Int, ygrid:Int):Block {
+  public static function addSkull(xgrid:Int, ygrid:Int, lv:Int):Block {
     var block:Block = parent.recycle(Block);
-    block.init(xgrid, ygrid, BlockType.Skull);
+    block.init(xgrid, ygrid, BlockType.Skull(lv));
     return block;
   }
   public static function addSpecial(xgrid:Int, ygrid:Int, type:BlockSpecial):Block {
@@ -131,6 +132,7 @@ class Block extends Token {
   public var ygrid(get, never):Int;
   public var isNewer(get, never):Bool;
   public var isSkull(get, never):Bool;
+  public var skullLv(get, never):Int;
   public var number(get, never):Int;
 
   // ==========================================================
@@ -141,7 +143,7 @@ class Block extends Token {
   var _hp:Int;      // ブロックの堅さ
   var _state:State; // 状態
   var _bNewer:Bool; // プレイヤーが新しく配置したブロックかどうか
-  var _bSkull:Bool; // ドクロブロックかどうか
+  var _skullLv:Int; // ドクロLv
   var _special:BlockSpecial; // スペシャルブロックの種類
   var _elapsed:Float;
 
@@ -153,12 +155,20 @@ class Block extends Token {
 
     // 画像読み込み
     loadGraphic(AssetPaths.IMAGE_BLOCK, true, WIDTH, HEIGHT);
+
+    // 数字
     for(i in 0...9) {
       animation.add('${i+1}',  [i]);
+      // 固いブロック
       animation.add('${i+1+ANIM_HARD_OFS}', [12 + i]);
     }
+    // とても固いブロック
     animation.add(ANIM_VERYHARD, [10]);
+    // ドクロ
     animation.add(ANIM_SKULL, [11]);
+    // ドクロLv2
+    animation.add(ANIM_SKULL2, [23]);
+    // スペシャル
     animation.add(ANIM_SPECIAL, [9]);
   }
 
@@ -179,7 +189,7 @@ class Block extends Token {
     y = Field.toWorldY(_ygrid);
 
     _bNewer = false;
-    _bSkull = false;
+    _skullLv = 0;
     _special = BlockSpecial.None;
 
     // パラメータデフォルト値
@@ -199,9 +209,9 @@ class Block extends Token {
         number = num;
         _bNewer = true;
 
-      case BlockType.Skull:
+      case BlockType.Skull(lv):
         // ドクロブロック
-        _bSkull = true;
+        _skullLv = lv;
 
       case BlockType.Special(type):
         // スペシャルブロック
@@ -230,9 +240,9 @@ class Block extends Token {
       return;
     }
 
-    if(_bSkull) {
+    if(_skullLv > 0) {
       // ドクロブロック
-      animation.play(ANIM_SKULL);
+      animation.play('skull${_skullLv}');
       return;
     }
 
@@ -251,7 +261,7 @@ class Block extends Token {
     }
 
     if(num == 0) {
-      trace(xgrid, ygrid, _number, _bSkull, _hp);
+      trace(xgrid, ygrid, _number, _skullLv, _hp);
       throw "error";
     }
 
@@ -418,6 +428,7 @@ class Block extends Token {
   function get_xgrid()   { return _xgrid; }
   function get_ygrid()   { return _ygrid; }
   function get_isNewer() { return _bNewer; }
-  function get_isSkull() { return _bSkull; }
+  function get_isSkull() { return _skullLv > 0; }
+  function get_skullLv() { return _skullLv;}
   function get_number()  { return _number; }
 }

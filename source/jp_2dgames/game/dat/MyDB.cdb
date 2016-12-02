@@ -41,7 +41,7 @@
 					"display": null
 				},
 				{
-					"typeStr": "5:Normal,Hard,VeryHard,Skull",
+					"typeStr": "5:Normal,Hard,VeryHard,Skull,Skull2",
 					"name": "block"
 				},
 				{

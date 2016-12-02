@@ -213,7 +213,7 @@ class Enemy extends Actor  {
     req.set(
       EnemyDB.getDirection(_kind),
       EnemyDB.getBlockHp(_kind),
-      EnemyDB.isBlockSkull(_kind),
+      EnemyDB.getBlockSkull(_kind),
       EnemyDB.getBlockCount(_kind)
     );
 

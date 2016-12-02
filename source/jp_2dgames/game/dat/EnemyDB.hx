@@ -42,8 +42,11 @@ class EnemyDB {
     }
   }
 
-  public static function isBlockSkull(id:EnemiesKind):Bool {
-    return get(id).block == Enemies_block.Skull;
+  public static function getBlockSkull(id:EnemiesKind):Int {
+    if(get(id).block == Enemies_block.Skull) {
+      return 1;
+    }
+    return 0;
   }
 
   public static function getBlockHp(id:EnemiesKind):Int {
@@ -53,6 +56,7 @@ class EnemyDB {
       case Enemies_block.Hard:     BlockUtil.HP_HARD;
       case Enemies_block.VeryHard: BlockUtil.HP_VERYHARD;
       case Enemies_block.Skull:    BlockUtil.HP_NORMAL;
+      case Enemies_block.Skull2:   BlockUtil.HP_NORMAL;
     }
   }
   public static function getBlockCount(id:EnemiesKind):Int {

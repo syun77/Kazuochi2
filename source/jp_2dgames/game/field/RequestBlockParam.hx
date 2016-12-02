@@ -36,7 +36,7 @@ class RequestBlockParam {
   var _type:RequestBlock; // 種別
   var _count:Int;         // 出現数
   var _hp:Int;            // ブロックの堅さ (Block.HP_*)
-  var _bSkull:Bool;       // ドクロブロックかどうか
+  var _skullLv:Int;       // ドクロブロックLv
   var _nLine:Int;         // 上昇するライン数 (RequestBlock.Bottom のみ有効)
 
   /**
@@ -50,11 +50,11 @@ class RequestBlockParam {
    * 初期化
    **/
   public function init():Void {
-    _type   = RequestBlock.None;
-    _count  = 0;
-    _hp     = 0;
-    _bSkull = false;
-    _nLine  = 0;
+    _type    = RequestBlock.None;
+    _count   = 0;
+    _hp      = 0;
+    _skullLv = 0;
+    _nLine   = 0;
   }
 
   /**
@@ -113,20 +113,20 @@ class RequestBlockParam {
 
     for(i in 0...count) {
       var number = NextBlockMgr.put();
-      if(_bSkull) {
+      if(_skullLv > 0) {
         number = 0;
       }
       var xgrid  = arr[i];
       var ygrid  = 0;
       {
         // レイヤーに設定
-        var data = BlockUtil.toData(number, _bSkull, _hp, false);
+        var data = BlockUtil.toData(number, _skullLv, _hp, false);
         field.set(xgrid, ygrid, data);
       }
 
-      if(_bSkull) {
+      if(_skullLv > 0) {
         // ドクロブロック
-        Block.addSkull(xgrid, ygrid);
+        Block.addSkull(xgrid, ygrid, _skullLv);
       }
       else {
         Block.add(xgrid, ygrid, BlockType.Number(number, _hp));
@@ -155,7 +155,7 @@ class RequestBlockParam {
     for(i in 0...field.width) {
       var j = Field.GRID_Y_BOTTOM;
       var number = NextBlockMgr.put();
-      var data = BlockUtil.toData(number, _bSkull, _hp, false);
+      var data = BlockUtil.toData(number, _skullLv, _hp, false);
       field.set(i, j, data);
       var block = Block.add(i, j+1, BlockType.Number(number, _hp));
       block.moveSlide(i, j+1, i, j, true);
@@ -167,11 +167,11 @@ class RequestBlockParam {
   // =========================================================
   // ■各種要求
 
-  public function set(type:RequestBlock, hp:Int, bSkull:Bool, count:Int):Void {
-    _type   = type;
-    _hp     = hp;
-    _bSkull = bSkull;
-    _count  = count;
+  public function set(type:RequestBlock, hp:Int, skullLv:Int, count:Int):Void {
+    _type    = type;
+    _hp      = hp;
+    _skullLv = skullLv;
+    _count   = count;
   }
   /**
    * 上から出現
@@ -203,9 +203,9 @@ class RequestBlockParam {
    * 上から出現 (ドクロ)
    */
   public function setUpperSkull(count:Int):Void {
-    _type   = RequestBlock.Upper;
-    _count  = count;
-    _bSkull = true;
+    _type    = RequestBlock.Upper;
+    _count   = count;
+    _skullLv = 1;
   }
 
   /**
