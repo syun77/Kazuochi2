@@ -69,7 +69,7 @@ class PlayState extends FlxTransitionableState {
   override public function create():Void {
 
     // 初期化
-    Global.startLevel(2);
+    Global.startLevel(1);
 
     // 背景の生成
     _bg = new BgUI();

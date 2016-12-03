@@ -280,7 +280,7 @@ class SeqMgr {
   function _procDamageCheck():State {
 
     // ダメージブロック数を取得
-    _nDamageBlock = Field.checkEraseTop(_player);
+    _nDamageBlock = Field.checkEraseTopAndSkull(_player);
 
     if(_nDamageBlock > 0) {
       // 存在する場合はダメージ処理

@@ -378,9 +378,24 @@ class Field {
   /**
    * 最上段のブロックをチェック
    **/
-  public static function checkEraseTop(player:Player):Int {
+  public static function checkEraseTopAndSkull(player:Player):Int {
 
     var ret:Int = 0;
+
+    // 消去対象になるかどうかのチェック
+    var check = function(i:Int, j:Int, v:Int):Bool {
+      if(BlockUtil.getSkullLv(v) == 2) {
+        // ドクロLvが2なので消える
+        return true;
+      }
+      if(j <= Field.GRID_Y_TOP) {
+        // 最上段なので消える
+        return true;
+      }
+
+      // 消えない
+      return false;
+    }
 
     _layer.forEach(function(i:Int, j:Int, v:Int) {
       if(v == 0) {
@@ -388,23 +403,21 @@ class Field {
         return;
       }
 
-      var bNewer = BlockUtil.isNewer(v);
-      if(j > Field.GRID_Y_TOP) {
-        // 最上段でないのでチェック不要
-        // フラグを下げる
+      if(check(i, j, v) == false) {
+        // 消えない
+        // Newerフラグを下げる
         v = BlockUtil.offNewer(v);
         _layer.set(i, j, v);
         return;
       }
 
-      if(bNewer) {
+      if(BlockUtil.isNewer(v)) {
         // そのターンにプレイヤーが置いたブロック
         // すぐ下にあるブロックも消す
         eraseBlock(i, j+1);
       }
       else {
         // ダメージを受ける
-        v = BlockUtil.getNumber(v);
         ret++;
 
         // ダメージ演出生成
