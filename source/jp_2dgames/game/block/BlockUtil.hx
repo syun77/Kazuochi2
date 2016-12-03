@@ -59,6 +59,16 @@ class BlockUtil {
     var v = data%OFS_HP - getNumber(data);
     return Math.floor(v / OFS_SKULL);
   }
+  public static function skullCountDown(data:Int):Int {
+    if(isSkull(data) == false) {
+      return data;
+    }
+    var lv = getSkullLv(data);
+    if(lv <= 2) {
+      return data;
+    }
+    return data - 1 * OFS_SKULL;
+  }
   public static function getHp(data:Int):Int {
     var v = data%OFS_NEWER;
     return Math.floor(v/OFS_HP);

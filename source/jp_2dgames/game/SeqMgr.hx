@@ -37,6 +37,7 @@ private enum State {
   EraseCheck;        // チェック
   EraseExec;         // 実行
   // ダメージ (プレイヤーへのダメージ)
+  SkullCountDown;    // ドクロカウントダウン
   DamageCheck;       // チェック
   DamageExec;        // 実行
 
@@ -231,7 +232,11 @@ class SeqMgr {
       // 連鎖数をリセット
       result.chain = 0;
       _bKeepOnChain = false;
-      return State.DamageCheck;
+
+      // ドクロカウントダウン
+      Field.skullCountDown();
+
+      return State.SkullCountDown;
     }
   }
 
@@ -259,6 +264,17 @@ class SeqMgr {
 
     // 勝利敗北判定
     return State.WinLoseCheck;
+  }
+
+  function _procSkullCountDown():State {
+
+    if(false) {
+      // TODO: カウントダウン演出中
+      return State.None;
+    }
+
+    // ダメージチェックへ
+    return State.DamageCheck;
   }
 
   function _procDamageCheck():State {
@@ -411,6 +427,7 @@ class SeqMgr {
       State.EraseCheck        => _procEraseCheck,        // チェック
       State.EraseExec         => _procEraseExec,         // 実行
       // ダメージ
+      State.SkullCountDown    => _procSkullCountDown,    // ドクロカウントダウン
       State.DamageCheck       => _procDamageCheck,       // チェック
       State.DamageExec        => _procDamageExec,        // 実行
 

@@ -95,7 +95,7 @@ class Field {
           v = BlockUtil.toData(num, 0, 1, false);
         case 24:
           // ドクロ Lv2
-          v = BlockUtil.toDataSkull(2);
+          v = BlockUtil.toDataSkull(2 + 3);
         case 25, 26, 27, 28, 29, 30, 31, 32, 33:
           var num = v - 24;
           v = BlockUtil.toData(num, 0, 2, false);
@@ -347,6 +347,32 @@ class Field {
     });
 
     return ret;
+  }
+
+  /**
+   * ドクロをカウントダウンする
+   **/
+  public static function skullCountDown():Void {
+    _layer.forEach(function(i:Int, j:Int, v:Int) {
+      if(v == 0) {
+        // チェック不要
+        return;
+      }
+
+      var skullLv = BlockUtil.getSkullLv(v);
+      if(skullLv <= 0) {
+        // チェック不要
+        return;
+      }
+
+      v = BlockUtil.skullCountDown(v);
+      _layer.set(i, j, v);
+
+      var b = Block.search(i, j);
+      if(b != null) {
+        b.setSkullLv(BlockUtil.getSkullLv(v));
+      }
+    });
   }
 
   /**

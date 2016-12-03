@@ -1,5 +1,7 @@
 package jp_2dgames.game.token;
 
+import flixel.text.FlxText;
+import flixel.FlxSprite;
 import jp_2dgames.game.block.BlockSpecial;
 import flixel.math.FlxPoint;
 import jp_2dgames.lib.DirUtil;
@@ -48,14 +50,23 @@ class Block extends Token {
 
   public static var parent:FlxTypedGroup<Block>;
   public static function createParent(state:FlxState):Void {
-    parent = new FlxTypedGroup<Block>();
+    parent = new FlxTypedGroup<Block>(Field.GRID_X * Field.GRID_Y);
+    for(i in 0...parent.maxSize) {
+      var b = new Block();
+      b.kill();
+      parent.add(b);
+    }
     state.add(parent);
+    // テキスト登録
+    for(b in parent.members) {
+      state.add(b.txtNumber);
+    }
   }
   public static function destroyParent():Void {
     parent = null;
   }
   public static function add(xgrid:Int, ygrid:Int, type:BlockType):Block {
-    var block:Block = parent.recycle(Block);
+    var block:Block = parent.recycle();
     block.init(xgrid, ygrid, type);
     return block;
   }
@@ -134,6 +145,8 @@ class Block extends Token {
   public var isSkull(get, never):Bool;
   public var skullLv(get, never):Int;
   public var number(get, never):Int;
+  public var txtNumber(get, never):FlxText;
+  public var skullNumber(get, never):Int;
 
   // ==========================================================
   // ■フィールド
@@ -146,6 +159,8 @@ class Block extends Token {
   var _skullLv:Int; // ドクロLv
   var _special:BlockSpecial; // スペシャルブロックの種類
   var _elapsed:Float;
+  var _txtNumber:FlxText; // ドクロ用のカウントダウン数値
+  var _tAnim:Int = 0;
 
   /**
    * コンストラクタ
@@ -156,20 +171,13 @@ class Block extends Token {
     // 画像読み込み
     loadGraphic(AssetPaths.IMAGE_BLOCK, true, WIDTH, HEIGHT);
 
-    // 数字
-    for(i in 0...9) {
-      animation.add('${i+1}',  [i]);
-      // 固いブロック
-      animation.add('${i+1+ANIM_HARD_OFS}', [12 + i]);
-    }
-    // とても固いブロック
-    animation.add(ANIM_VERYHARD, [10]);
-    // ドクロ
-    animation.add(ANIM_SKULL, [11]);
-    // ドクロLv2
-    animation.add(ANIM_SKULL2, [23]);
-    // スペシャル
-    animation.add(ANIM_SPECIAL, [9]);
+    // アニメーションの登録
+    _registerAnimations();
+
+    // カウントダウン数値
+    _txtNumber = new FlxText();
+    _txtNumber.setFormat(null, 16, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    _txtNumber.kill();
   }
 
   /**
@@ -181,6 +189,7 @@ class Block extends Token {
     _state  = State.Idle;
     _hp     = BlockUtil.HP_NORMAL;
     color   = FlxColor.WHITE;
+    _tAnim  = 0;
 
     // 座標設定
     _xgrid = xgrid;
@@ -212,6 +221,10 @@ class Block extends Token {
       case BlockType.Skull(lv):
         // ドクロブロック
         _skullLv = lv;
+        if(_skullLv >= 2) {
+          _txtNumber.revive();
+          _updateTextNumber();
+        }
 
       case BlockType.Special(type):
         // スペシャルブロック
@@ -230,6 +243,17 @@ class Block extends Token {
   }
 
   /**
+   * ドクロレベルを設定する
+   **/
+  public function setSkullLv(lv:Int):Void {
+    if(isSkull == false) {
+      return;
+    }
+
+    _skullLv = lv;
+  }
+
+  /**
    * 番号を設定
    **/
   public function setNumber(Number:Int):Void {
@@ -242,7 +266,12 @@ class Block extends Token {
 
     if(_skullLv > 0) {
       // ドクロブロック
-      animation.play('skull${_skullLv}');
+      if(_skullLv == 1) {
+        animation.play('skull1');
+      }
+      else {
+        animation.play('skull2');
+      }
       return;
     }
 
@@ -298,11 +327,21 @@ class Block extends Token {
   }
 
   /**
+   * ドクロのカウントダウン番号を設定する
+   **/
+  function setSkullNumber(v:Int):Void {
+    if(_skullLv >= 2) {
+      _skullLv = v + 2;
+    }
+  }
+
+  /**
    * 更新
    **/
   override public function update(elapsed:Float):Void {
 
     color = FlxColor.WHITE;
+    _tAnim++;
 
     switch(_state) {
       case State.Idle:
@@ -315,6 +354,9 @@ class Block extends Token {
       case State.Flicker:
       case State.Slide:
     }
+
+    // テキスト更新
+    _updateTextNumber();
   }
 
   /**
@@ -412,6 +454,12 @@ class Block extends Token {
     return _state == State.Idle;
   }
 
+  override public function kill():Void {
+    super.kill();
+    // テキストも一緒に消す
+    _txtNumber.kill();
+  }
+
   /**
    * 消滅する
    **/
@@ -423,12 +471,50 @@ class Block extends Token {
     });
   }
 
+  /**
+   * ドクロカウンタの更新
+   **/
+  function _updateTextNumber():Void {
+    _txtNumber.text = '${skullNumber}';
+    _txtNumber.x = x+24;
+    _txtNumber.y = y+16;
+    _txtNumber.color = FlxColor.YELLOW;
+    if(skullNumber <= 1) {
+      _txtNumber.color = FlxColor.RED;
+    }
+    if(_tAnim%32 < 16) {
+      _txtNumber.color = FlxColor.WHITE;
+    }
+  }
+
+  /**
+   * アニメーションの登録
+   **/
+  function _registerAnimations():Void {
+    // 数字
+    for(i in 0...9) {
+      animation.add('${i+1}',  [i]);
+      // 固いブロック
+      animation.add('${i+1+ANIM_HARD_OFS}', [12 + i]);
+    }
+    // とても固いブロック
+    animation.add(ANIM_VERYHARD, [10]);
+    // ドクロ
+    animation.add(ANIM_SKULL, [11]);
+    // ドクロLv2
+    animation.add(ANIM_SKULL2, [23]);
+    // スペシャル
+    animation.add(ANIM_SPECIAL, [9]);
+  }
+
   // ======================================================================
   // ■アクセサ
-  function get_xgrid()   { return _xgrid; }
-  function get_ygrid()   { return _ygrid; }
-  function get_isNewer() { return _bNewer; }
-  function get_isSkull() { return _skullLv > 0; }
-  function get_skullLv() { return _skullLv;}
-  function get_number()  { return _number; }
+  function get_xgrid()       { return _xgrid; }
+  function get_ygrid()       { return _ygrid; }
+  function get_isNewer()     { return _bNewer; }
+  function get_isSkull()     { return _skullLv > 0; }
+  function get_skullLv()     { return _skullLv;}
+  function get_number()      { return _number; }
+  function get_txtNumber()   { return _txtNumber; }
+  function get_skullNumber() { return _skullLv - 2; }
 }

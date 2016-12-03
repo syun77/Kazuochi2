@@ -156,6 +156,10 @@ class Array2D {
     var idx:Int = toIdx(x, y);
     _pool[idx] = val;
   }
+  public function setFromIdx(idx:Int, val:Int):Void {
+    if(idx < 0 || width*height <= idx) { return; }
+    _pool[idx] = val;
+  }
   public function setFromFlxPoint(pt:FlxPoint, val:Int):Void {
     var x:Int = Std.int(pt.x);
     var y:Int = Std.int(pt.y);
