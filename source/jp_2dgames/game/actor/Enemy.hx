@@ -78,7 +78,7 @@ class Enemy extends Actor  {
 
     // 変数初期化
     _totalElapsed = 0;
-    _tStun = 0;
+    _tStun = 1; // 出現直後はAPゲージを増やさない
     _tFrame = 0;
 
     scale.set(0.5, 0.5);
@@ -235,4 +235,11 @@ class Enemy extends Actor  {
   // =================================================
   // ■アクセサ
   function get_kind() { return _kind; }
+  override function get_apratio() {
+    if(isDead()) {
+      // 死亡しているときは常に0
+      return 0.0;
+    }
+    return _ap / _apmax;
+  }
 }
