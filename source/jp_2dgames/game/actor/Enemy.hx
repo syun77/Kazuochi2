@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.field.RequestBlockParam;
 import flixel.tweens.FlxEase;
@@ -228,6 +229,7 @@ class Enemy extends Actor  {
    * APがちょうど満タンになった
    **/
   override function _cbJustApFull():Void {
+    Snd.playSe("apmax");
   }
 
   // =================================================

@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
@@ -114,6 +115,9 @@ class Actor extends Token {
   public function damage(v:Int):Void {
 
     _hp = FlxMath.maxAdd(_hp, -v, _hpmax);
+    if(isDead() == false) {
+      Snd.playSe("damage");
+    }
 
     ParticleBmpFont.startNumber(xcenter, ycenter, v, FlxColor.WHITE, Dir.Up);
     _tDamage = _getDamageTimer(v);

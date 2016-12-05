@@ -53,8 +53,16 @@
 <!--     <assets path="assets/music" unless="flash" include="*.ogg"> -->
 <!--     </assets> -->
     <!-- SE -->
-<!--     <assets path="assets/sounds" > -->
-<!--     </assets> -->
+     <assets path="assets/sounds" >
+         <sound path="apmax.wav" id="apmax" />
+         <sound path="ax.wav" id="ax" />
+         <sound path="damage.wav" id="damage" />
+         <sound path="destroy.wav" id="destroy" />
+         <sound path="erase.wav" id="erase" />
+         <sound path="fall.wav" id="fall" />
+         <sound path="pi.wav" id="pi" />
+         <sound path="push.wav" id="push" />
+     </assets>
 
     <!-- _______________________________ Libraries ______________________________ -->
 

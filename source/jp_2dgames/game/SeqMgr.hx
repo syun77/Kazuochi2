@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.particle.StartStageUI;
 import jp_2dgames.game.global.Global;
 import jp_2dgames.game.dat.LevelDB;
@@ -185,6 +186,7 @@ class SeqMgr {
       layer.set(block.xgrid, block.ygrid, data);
       // 落下開始
       Field.fall();
+      Snd.playSe("fall");
       return State.FallBlock;
     }
 
@@ -205,6 +207,7 @@ class SeqMgr {
     var result = Field.checkErase(_eraseResult, _enemy);
     if(result.erase > 0) {
       // 消去できた
+      Snd.playSe("erase");
       if(result.chain == 1) {
         // 最初の連鎖でコンボ数を増やす
         result.addCombo();
@@ -221,8 +224,8 @@ class SeqMgr {
       return State.EraseExec;
     }
     else {
-      // ダメージチェックへ
       // 連鎖終了
+      // ダメージチェックへ
       ParticleChain.end();
       if(result.chain == 0) {
         // 連鎖なしでコンボ終了
