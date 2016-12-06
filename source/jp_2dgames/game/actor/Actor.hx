@@ -250,7 +250,7 @@ class Actor extends Token {
    * APを減少させる
    **/
   public function subAp(v:Float):Void {
-    _ap = Math.max(_ap - v, _apmax);
+    _ap = Math.max(_ap - v, 0);
   }
 
   /**

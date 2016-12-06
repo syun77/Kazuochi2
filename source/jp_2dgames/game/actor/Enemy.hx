@@ -49,6 +49,9 @@ class Enemy extends Actor  {
 
     // 消しておく
     visible = false;
+
+    FlxG.watch.add(this, "_tStun");
+    FlxG.watch.add(this, "ap");
   }
 
   /**
