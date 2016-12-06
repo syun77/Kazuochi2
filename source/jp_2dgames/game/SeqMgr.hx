@@ -49,7 +49,7 @@ private enum State {
   Lose;              // 敗北演出
   GameOver;          // ゲームオーバー
 
-  StageClear;        // ステージクリア
+  LevelCompleted;    // ステージクリア
 
   End;               // おしまい
 
@@ -325,8 +325,8 @@ class SeqMgr {
       return State.None;
     }
 
-    if(false) {
-      // TODO: プレイヤー死亡
+    if(_player.isDead()) {
+      // プレイヤー死亡
       return State.Lose;
     }
     if(_enemy.isDead()) {
@@ -394,7 +394,7 @@ class SeqMgr {
     }
     else {
       // レベルクリア
-      return State.End;
+      return State.LevelCompleted;
     }
   }
 
@@ -406,7 +406,7 @@ class SeqMgr {
     return State.None;
   }
 
-  function _procStageClear():State {
+  function _procLevelCompleted():State {
     return State.None;
   }
 
@@ -441,7 +441,7 @@ class SeqMgr {
       State.Lose              => _procLose,              // 敗北演出
       State.GameOver          => _procGameOver,          // ゲームオーバー
 
-      State.StageClear        => _procStageClear,        // ステージクリア
+      State.LevelCompleted    => _procLevelCompleted,    // レベルクリア
 
       State.End               => _procEnd,               // おしまい
 
@@ -453,9 +453,14 @@ class SeqMgr {
       _change(next);
     }
 
-    if(_state == State.End) {
+    if(_state == State.LevelCompleted) {
       // ステージクリア
       return RET_LEVEL_COMPLETED;
+    }
+
+    if(_state == State.Lose) {
+      // プレイヤー死亡
+      return RET_DEAD;
     }
 
     return RET_NONE;

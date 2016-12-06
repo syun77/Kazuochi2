@@ -92,7 +92,7 @@ class Actor extends Token {
    * 消滅演出
    **/
   public function vanish():Void {
-    // サブクラスで実装する
+    kill();
   }
 
   /**

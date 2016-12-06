@@ -62,6 +62,7 @@ class PlayState extends FlxTransitionableState {
   var _seq:SeqMgr;
   var _player:Player;
   var _enemy:Enemy;
+  var _gameUI:GameUI;
 
   /**
    * 生成
@@ -110,8 +111,8 @@ class PlayState extends FlxTransitionableState {
 
     // GUI生成
     CursorUI.createInstance(this);
-    var ui = new GameUI(player, enemy);
-    this.add(ui);
+    _gameUI = new GameUI(player, enemy);
+    this.add(_gameUI);
 
     // NEXTブロック管理生成
     NextBlockMgr.createInstance();
@@ -125,7 +126,7 @@ class PlayState extends FlxTransitionableState {
 
 
     // シーケンス管理生成
-    _seq = new SeqMgr(player, enemy, ui);
+    _seq = new SeqMgr(player, enemy, _gameUI);
   }
 
   /**
@@ -195,7 +196,7 @@ class PlayState extends FlxTransitionableState {
         // ゲームオーバー
         _startGameover();
         Snd.stopMusic();
-        return;
+
       case SeqMgr.RET_LEVEL_COMPLETED:
         // レベルクリア
         _state = State.LevelCompleted;
@@ -208,7 +209,11 @@ class PlayState extends FlxTransitionableState {
    **/
   function _startGameover():Void {
     _state = State.Gameover;
-    this.add(new GameoverUI(true));
+    // メニューボタンを消す
+    _gameUI.hideMenuButton();
+    // プレイヤーを消す
+    _player.vanish();
+    this.add(new GameoverUI());
   }
 
   // -----------------------------------------------

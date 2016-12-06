@@ -1,8 +1,7 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.state.TitleState;
 import flixel.util.FlxAxes;
 import jp_2dgames.game.gui.MyButton;
-import jp_2dgames.game.state.PlayInitState;
-import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -13,9 +12,9 @@ import flixel.group.FlxSpriteGroup;
  **/
 class GameoverUI extends FlxSpriteGroup {
 
-  static inline var FONT_SIZE:Int = 16 * 1;
+  static inline var FONT_SIZE:Int = 16 * 2;
 
-  public function new(bBtn:Bool=false) {
+  public function new() {
     super();
 
     var txt = new FlxText(0, FlxG.height*0.3, FlxG.width, "GAME OVER");
@@ -24,23 +23,12 @@ class GameoverUI extends FlxSpriteGroup {
     // 中央に配置
     txt.screenCenter(FlxAxes.Y);
 
-    /*
-    if(bBtn) {
-      // やり直しボタン
-      var btn = StartStageUI MyButton(FlxG.width/2, FlxG.height*0.7, "Restart", function() {
-//        FlxG.switchState(StartStageUI PlayInitState());
-        FlxG.resetState();
-      });
-      btn.x -= btn.width/2;
-      this.add(btn);
-    }
-    else {
-      // やり直しテキスト
-      var txt2 = StartStageUI FlxText(0, FlxG.height*0.7, FlxG.width, "X to Restart", Std.int(FONT_SIZE/2));
-      txt2.alignment = "center";
-      this.add(txt2);
-    }
-    */
+    // タイトル画面にボタン
+    var btn = new MyButton(FlxG.width/2, FlxG.height*0.7, "Title", function() {
+      FlxG.switchState(new TitleState());
+    });
+    btn.x -= btn.width/2;
+    this.add(btn);
 
     scrollFactor.set();
   }

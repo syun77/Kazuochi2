@@ -9,6 +9,7 @@ private enum AnimState {
   Damage; // ダメージ
   Attack; // 攻撃
   Danger; // 危険
+  Dead;   // 死亡
 }
 
 /**
@@ -102,6 +103,8 @@ class Player extends Actor {
         if(isDanger() == false) {
           _anim = AnimState.Idle;
         }
+      case AnimState.Dead:
+        // 死亡
     }
 
     animation.play('${_anim}');
@@ -124,9 +127,16 @@ class Player extends Actor {
    **/
   override public function damage(v:Int):Void {
     super.damage(v);
-    // ダメージ演出開始
-    _anim = AnimState.Damage;
-    _tAnim = 0;
+
+    if(isDead()) {
+      // 死亡
+      _anim = AnimState.Dead;
+    }
+    else {
+      // ダメージ演出開始
+      _anim = AnimState.Damage;
+      _tAnim = 0;
+    }
   }
 
   /**
@@ -143,5 +153,6 @@ class Player extends Actor {
     animation.add('${AnimState.Damage}', [2]);
     animation.add('${AnimState.Attack}', [0]);
     animation.add('${AnimState.Danger}', [1, 2], 2);
+    animation.add('${AnimState.Dead}', [2]);
   }
 }

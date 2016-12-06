@@ -36,6 +36,7 @@ class GameUI extends FlxSpriteGroup {
   var _playerUI:StatusUI;
   var _enemyUI:StatusUI;
   var _btnSpecial:MyButton; // スペシャルボタン
+  var _btnMenu:FlxButton; // メニューボタン
   var _canPressSpecialButton:Void->Bool; // スペシャルボタンを押すことができるかどうか
 
   /**
@@ -76,10 +77,10 @@ class GameUI extends FlxSpriteGroup {
     this.add(_txtWait);
 
     // メニューボタン
-    var btnMenu = new FlxButton(FlxG.width-86, 0, "MENU", function() {
+    _btnMenu = new FlxButton(FlxG.width-86, 0, "MENU", function() {
       FlxG.state.openSubState(new SubMenuState());
     });
-    this.add(btnMenu);
+    this.add(_btnMenu);
 
     // スペシャルボタン
     _btnSpecial = new MyButton(0, FlxG.height-48, "Special", function() {
@@ -134,5 +135,12 @@ class GameUI extends FlxSpriteGroup {
    **/
   public function setCanPressSpecialFunc(func:Void->Bool):Void {
     _canPressSpecialButton = func;
+  }
+
+  /**
+   * メニューボタンを非表示にする
+   **/
+  public function hideMenuButton():Void {
+    _btnMenu.visible = false;
   }
 }
