@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.lib.MyShake;
 import jp_2dgames.game.dat.LevelDB;
 import jp_2dgames.game.particle.ParticleCombo;
 import jp_2dgames.game.particle.ParticleChain;
@@ -213,6 +214,8 @@ class PlayState extends FlxTransitionableState {
     _gameUI.hideMenuButton();
     // プレイヤーを消す
     _player.vanish();
+    // 画面を揺らす
+    MyShake.high();
     this.add(new GameoverUI());
   }
 

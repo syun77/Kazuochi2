@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxSprite;
 import jp_2dgames.game.state.TitleState;
 import flixel.util.FlxAxes;
 import jp_2dgames.game.gui.MyButton;
@@ -16,6 +17,12 @@ class GameoverUI extends FlxSpriteGroup {
 
   public function new() {
     super();
+
+    var bg = new FlxSprite();
+    bg.makeGraphic(FlxG.width, 64, FlxColor.BLACK);
+    bg.alpha = 0.7;
+    bg.screenCenter(FlxAxes.Y);
+    this.add(bg);
 
     var txt = new FlxText(0, FlxG.height*0.3, FlxG.width, "GAME OVER");
     txt.setFormat(null, FONT_SIZE, FlxColor.WHITE, "center", FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
