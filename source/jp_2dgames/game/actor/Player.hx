@@ -1,9 +1,11 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.EmotionUI;
+import flixel.FlxG;
+
 /**
  * アニメーション状態
  **/
-import flixel.FlxG;
 private enum AnimState {
   Idle;   // 待機
   Damage; // ダメージ
@@ -64,6 +66,9 @@ class Player extends Actor {
 
     // アニメーションの更新
     _updateAnimation(elapsed);
+
+    // 感情アイコンの更新
+    _updateEmotionUI();
   }
 
   /**
@@ -113,6 +118,26 @@ class Player extends Actor {
       // ダメージ中でなければふわふわ動く
       _updateFloating();
     }
+  }
+
+  /**
+   * 感情アイコンの更新
+   **/
+  function _updateEmotionUI():Void {
+    var emotion = switch(_anim) {
+      case AnimState.Idle:
+        Emotion.None;
+      case AnimState.Damage:
+        Emotion.Bad;
+      case AnimState.Attack:
+        Emotion.Groovy;
+      case AnimState.Dead:
+        Emotion.None;
+      case AnimState.Danger:
+        Emotion.Bad;
+    }
+
+    _emotionUI.change(emotion);
   }
 
   /**

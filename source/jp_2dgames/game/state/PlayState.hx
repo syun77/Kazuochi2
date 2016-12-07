@@ -103,6 +103,10 @@ class PlayState extends FlxTransitionableState {
     // ショット生成
     Shot.createParent(this);
 
+    // 感情アイコン登録
+    this.add(_player.emotionUI);
+    this.add(_enemy.emotionUI);
+
     // パーティクル生成
     Particle.createParent(this);
     ParticleBmpFont.createParent(this);

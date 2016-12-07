@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.EmotionUI;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.field.RequestBlockParam;
@@ -117,7 +118,41 @@ class Enemy extends Actor  {
 
     if(isDead() == false) {
       angle = 5 * Math.sin(_totalElapsed);
+
     }
+
+    // 感情アイコン更新
+    _updateEmotionUI();
+  }
+
+  /**
+   * 感情アイコンの更新
+   **/
+  function _updateEmotionUI():Void {
+    var func = function() {
+      if(isDead()) {
+        // 死亡
+        return Emotion.None;
+      }
+      if(_state != State.Standby) {
+        // 待機中でない
+        return Emotion.None;
+      }
+      if(_tDamage > 0) {
+        // ダメージ中
+        return Emotion.Bad;
+      }
+
+      if(calculateWaitTurnCount() == 1) {
+        // 次のターンで攻撃
+        return Emotion.Suprised;
+      }
+
+      return Emotion.None;
+    }
+    var emotion = func();
+
+    _emotionUI.change(emotion);
   }
 
   /**

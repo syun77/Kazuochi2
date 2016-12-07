@@ -13,6 +13,7 @@ class AssetPaths {
   public static inline var IMAGE_BG     = "assets/images/bg.png";
   public static inline var IMAGE_PARTICLE = "assets/images/particle.png";
   public static inline var IMAGE_TITLE  = "assets/images/title.png";
+  public static inline var IMAGE_EMOTION = "assets/images/emotion.png";
 
   // フォント
   public static inline var FONT = "assets/fonts/PixelMplus10-Regular.ttf";

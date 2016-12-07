@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.gui.EmotionUI;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.dat.EnemyDB;
 import jp_2dgames.game.particle.Particle;
@@ -22,6 +23,9 @@ class Actor extends Token {
   static inline var TIMER_DAMAGE_MIDDLE:Int = 60;
   static inline var TIMER_DAMAGE_LARGE:Int  = 90;
 
+  static inline var EMOTION_OFS_X:Int = 16;
+  static inline var EMOTION_OFS_Y:Int = -64;
+
   // ========================================
   // ■プロパティ
   public var hp(get, never):Int;
@@ -31,6 +35,7 @@ class Actor extends Token {
   public var apmax(get, never):Float;
   public var apratio(get, never):Float;
   public var canAttack(get, never):Bool;
+  public var emotionUI(get, never):EmotionUI;
 
   // ========================================
   // ■フィールド
@@ -42,6 +47,7 @@ class Actor extends Token {
   var _tFrame:Int = 0; // 経過フレーム数
   var _tween:FlxTween;
   var _bPlayer:Bool; // プレイヤーかどうか
+  var _emotionUI:EmotionUI; // 感情アイコン
 
   /**
    * コンストラクタ
@@ -50,6 +56,9 @@ class Actor extends Token {
     super(X, Y);
     setStartPosition(X, Y);
     _bPlayer = false;
+
+    _emotionUI = new EmotionUI(xcenter, ycenter);
+    _emotionUI.kill();
   }
 
   /**
@@ -184,6 +193,18 @@ class Actor extends Token {
       // APゲージ満タンアニメ
       _updateApMax();
     }
+
+    // 感情アイコン
+    if(_bPlayer) {
+      _emotionUI.x = xcenter + EMOTION_OFS_X;
+      _emotionUI.y = ycenter + EMOTION_OFS_Y;
+    }
+    else {
+      // 適用のオフセット
+      _emotionUI.x = xcenter - EMOTION_OFS_X*2.5;
+      _emotionUI.flipX = true;
+      _emotionUI.y = ycenter + EMOTION_OFS_Y*0.7+offset.y;
+    }
   }
 
   /**
@@ -278,4 +299,5 @@ class Actor extends Token {
   function get_apmax() { return _apmax; }
   function get_apratio() { return _ap / _apmax; }
   function get_canAttack() { return _ap == _apmax; }
+  function get_emotionUI() { return _emotionUI; }
 }
