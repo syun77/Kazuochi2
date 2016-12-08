@@ -287,6 +287,8 @@ class SeqMgr {
 
     if(_nDamageBlock > 0) {
       // 存在する場合はダメージ処理
+      // コンボ継続とみなす
+      _bKeepOnChain = true;
       return State.DamageExec;
     }
     else {
@@ -311,7 +313,7 @@ class SeqMgr {
       d = FlxMath.maxInt(d, 5); // 5ダメージが下限
     }
 
-    // TODO: プレイヤーにダメージを与える
+    // プレイヤーにダメージを与える
     _player.damage(v);
     _player.addAp(1);
 
