@@ -14,16 +14,18 @@ import jp_2dgames.game.dat.MyDB;
 private class _Global {
   public var level:Int; // レベル
   public var stage:Int; // 現在のステージ
+  public var score:Int; // スコア
   public function new() {
   }
   // セーブ
   public function save() {
     level = Global.level;
     stage = Global.stage;
+    score = Global.score;
   }
   // ロード
   public function load(data:Dynamic) {
-    Global.setLevel(data.level, data.stage);
+    Global.setLevel(data.level, data.stage, data.score);
   }
 }
 

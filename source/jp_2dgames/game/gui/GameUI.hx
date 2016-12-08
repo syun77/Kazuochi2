@@ -48,21 +48,22 @@ class GameUI extends FlxSpriteGroup {
     _enemy = enemy;
 
     var px:Float = 0;
-    var py:Float = 0;
+    var py:Float = 4;
+    var dy:Float = FONT_SIZE+4;
 
     // スコア
     _txtScore = new FlxText(px, py, 0, "", FONT_SIZE);
-//    this.add(_txtScore);
+    this.add(_txtScore);
+    py += dy;
 
     // レベル
-    _txtLevel = new FlxText(px, py+FONT_SIZE+4, 0, "", FONT_SIZE);
+    _txtLevel = new FlxText(px, py, 0, "", FONT_SIZE);
     this.add(_txtLevel);
-    _txtLevel.y -= FONT_SIZE-4;
+    py += dy;
 
     // ステージ
-    _txtStage = new FlxText(px, py+(FONT_SIZE+4)*2, 0, "", FONT_SIZE);
+    _txtStage = new FlxText(px, py, 0, "", FONT_SIZE);
     this.add(_txtStage);
-    _txtStage.y -= FONT_SIZE-4;
 
     // プレイヤーUI作成
     _playerUI = new StatusUI(player.left+32, player.bottom-48, player);
@@ -107,7 +108,7 @@ class GameUI extends FlxSpriteGroup {
 
     _tAnim++;
 
-//    _txtScore.text = 'SCORE: ${Global.score}';
+    _txtScore.text = 'SCORE: ${Global.score}';
     _txtLevel.text = 'LEVEL: ${Global.level}';
     _txtStage.text = 'STAGE: ${Global.stage+1}/${Global.maxStage}';
 
