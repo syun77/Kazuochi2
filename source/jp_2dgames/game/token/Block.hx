@@ -406,6 +406,17 @@ class Block extends Token {
     FlxTween.tween(this, {x:xnext, y:ynext}, speed, {ease:FlxEase.quadIn, startDelay:delay, onComplete:function(_) {
       // 移動完了
       _state = State.Idle;
+      // 着地演出
+      for(i in 0...4) {
+        var px = FlxG.random.float(left, right);
+        var angle = FlxG.random.float(-60, 60) + 90;
+        var speed = FlxG.random.float(50, 100);
+        var p = Particle.add(ParticleType.Ball, px, bottom, angle, speed);
+        p.drag.x = 50;
+        p.acceleration.y = 50;
+        var sc = 0.5;
+        p.scale.set(sc, sc);
+      }
       _bNewer = false;
     }});
   }

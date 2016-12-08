@@ -217,7 +217,7 @@ class Actor extends Token {
       return;
     }
 
-    if(_tFrame%32 == 0) {
+    if(_tFrame%48 == 0) {
       for(i in 0...2) {
         var p = Particle.add(ParticleType.Circle, xcenter, ycenter+offset.y);
         var sc = 0.2 + 0.1*i;
