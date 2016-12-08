@@ -250,6 +250,13 @@ class Block extends Token {
       return;
     }
 
+    if(lv < _skullLv) {
+      // 現在のレベルより低ければカウントダウン
+      var sc = 2;
+      _txtNumber.scale.set(sc, sc);
+      FlxTween.tween(_txtNumber.scale, {x:1, y:1}, 0.5, {ease:FlxEase.expoOut});
+    }
+
     _skullLv = lv;
   }
 
