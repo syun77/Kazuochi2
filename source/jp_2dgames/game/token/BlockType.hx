@@ -9,6 +9,6 @@ enum BlockType {
   Normal(number:Int); // 通常ブロック
   Number(number:Int, hp:Int); // 通常ブロックHP指定バージョン
   Newer(number:Int); // 新しく配置したブロック
-  Skull(lv:Int); // ドクロブロック
+  Skull(lv:Int, ext:Int); // ドクロブロック
   Special(type:BlockSpecial); // スペシャルブロック
 }

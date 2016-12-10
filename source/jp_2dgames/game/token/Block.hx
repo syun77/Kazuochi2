@@ -1,5 +1,6 @@
 package jp_2dgames.game.token;
 
+import jp_2dgames.lib.MyColor;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import jp_2dgames.game.block.BlockSpecial;
@@ -21,10 +22,11 @@ import flixel.group.FlxGroup.FlxTypedGroup;
  * 状態
  **/
 private enum State {
-  Idle;    // 待機中
-  Fall;    // 落下中
-  Flicker; // 点滅中
-  Slide;   // スライド移動中
+  Idle;      // 待機中
+  Fall;      // 落下中
+  Flicker;   // 点滅中
+  Slide;     // スライド移動中
+  CountDown; // カウントダウン中
 }
 
 /**
@@ -59,7 +61,7 @@ class Block extends Token {
     state.add(parent);
     // テキスト登録
     for(b in parent.members) {
-      state.add(b.txtNumber);
+      state.add(b.txtCountDown);
     }
   }
   public static function destroyParent():Void {
@@ -75,9 +77,9 @@ class Block extends Token {
     block.init(xgrid, ygrid, BlockType.Newer(number));
     return block;
   }
-  public static function addSkull(xgrid:Int, ygrid:Int, lv:Int):Block {
+  public static function addSkull(xgrid:Int, ygrid:Int, lv:Int, ext:Int):Block {
     var block:Block = parent.recycle(Block);
-    block.init(xgrid, ygrid, BlockType.Skull(lv));
+    block.init(xgrid, ygrid, BlockType.Skull(lv, ext));
     return block;
   }
   public static function addSpecial(xgrid:Int, ygrid:Int, type:BlockSpecial):Block {
@@ -145,8 +147,8 @@ class Block extends Token {
   public var isSkull(get, never):Bool;
   public var skullLv(get, never):Int;
   public var number(get, never):Int;
-  public var txtNumber(get, never):FlxText;
-  public var skullNumber(get, never):Int;
+  public var txtCountDown(get, never):FlxText;
+  public var countDownVal(get, never):Int;
 
   // ==========================================================
   // ■フィールド
@@ -159,7 +161,8 @@ class Block extends Token {
   var _skullLv:Int; // ドクロLv
   var _special:BlockSpecial; // スペシャルブロックの種類
   var _elapsed:Float;
-  var _txtNumber:FlxText; // ドクロ用のカウントダウン数値
+  var _txtCountDown:FlxText; // ドクロ用のカウントダウン数値
+  var _countDownVal:Int;     // カウントダウンの値
   var _tAnim:Int = 0;
 
   /**
@@ -175,9 +178,9 @@ class Block extends Token {
     _registerAnimations();
 
     // カウントダウン数値
-    _txtNumber = new FlxText();
-    _txtNumber.setFormat(null, 16, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-    _txtNumber.kill();
+    _txtCountDown = new FlxText();
+    _txtCountDown.setFormat(null, 20, MyColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    _txtCountDown.kill();
   }
 
   /**
@@ -190,6 +193,7 @@ class Block extends Token {
     _hp     = BlockUtil.HP_NORMAL;
     color   = FlxColor.WHITE;
     _tAnim  = 0;
+    _countDownVal = 0;
 
     // 座標設定
     _xgrid = xgrid;
@@ -218,11 +222,13 @@ class Block extends Token {
         number = num;
         _bNewer = true;
 
-      case BlockType.Skull(lv):
+      case BlockType.Skull(lv, ext):
         // ドクロブロック
         _skullLv = lv;
-        if(_skullLv >= 2) {
-          _txtNumber.revive();
+        if(_skullLv == BlockUtil.SKULL_LV2) {
+          // Lv2はカウントダウン
+          _countDownVal = ext;
+          _txtCountDown.revive();
           _updateTextNumber();
         }
 
@@ -245,16 +251,23 @@ class Block extends Token {
   /**
    * ドクロレベルを設定する
    **/
-  public function setSkullLv(lv:Int):Void {
+  public function setSkullLv(lv:Int, ext:Int):Void {
     if(isSkull == false) {
       return;
     }
 
-    if(lv < _skullLv) {
-      // 現在のレベルより低ければカウントダウン
-      var sc = 2;
-      _txtNumber.scale.set(sc, sc);
-      FlxTween.tween(_txtNumber.scale, {x:1, y:1}, 0.5, {ease:FlxEase.expoOut});
+    if(_skullLv == BlockUtil.SKULL_LV2) {
+      // ドクロLv2
+      if(ext < _countDownVal) {
+        // 現在のカウントダウン値より小さければ演出をする
+        var sc = 2;
+        _txtCountDown.scale.set(sc, sc);
+        _state = State.CountDown;
+        FlxTween.tween(_txtCountDown.scale, {x:1, y:1}, 0.5, {ease:FlxEase.expoOut, onComplete:function(_) {
+          _state = State.Idle;
+        }});
+        _countDownVal = ext;
+      }
     }
 
     _skullLv = lv;
@@ -337,8 +350,8 @@ class Block extends Token {
    * ドクロのカウントダウン番号を設定する
    **/
   function setSkullNumber(v:Int):Void {
-    if(_skullLv >= 2) {
-      _skullLv = v + 2;
+    if(_skullLv == BlockUtil.SKULL_LV2) {
+      _countDownVal = v;
     }
   }
 
@@ -360,6 +373,7 @@ class Block extends Token {
         _updateFall(elapsed);
       case State.Flicker:
       case State.Slide:
+      case State.CountDown:
     }
 
     // テキスト更新
@@ -475,7 +489,7 @@ class Block extends Token {
   override public function kill():Void {
     super.kill();
     // テキストも一緒に消す
-    _txtNumber.kill();
+    _txtCountDown.kill();
   }
 
   /**
@@ -493,15 +507,15 @@ class Block extends Token {
    * ドクロカウンタの更新
    **/
   function _updateTextNumber():Void {
-    _txtNumber.text = '${skullNumber}';
-    _txtNumber.x = x+24;
-    _txtNumber.y = y+16;
-    _txtNumber.color = FlxColor.YELLOW;
-    if(skullNumber <= 1) {
-      _txtNumber.color = FlxColor.RED;
+    _txtCountDown.text = '${countDownVal}';
+    _txtCountDown.x = x+20;
+    _txtCountDown.y = y+12;
+    _txtCountDown.color = FlxColor.YELLOW;
+    if(countDownVal <= 1) {
+      _txtCountDown.color = FlxColor.RED;
     }
     if(_tAnim%32 < 16) {
-      _txtNumber.color = FlxColor.WHITE;
+      _txtCountDown.color = FlxColor.WHITE;
     }
   }
 
@@ -533,6 +547,6 @@ class Block extends Token {
   function get_isSkull()     { return _skullLv > 0; }
   function get_skullLv()     { return _skullLv;}
   function get_number()      { return _number; }
-  function get_txtNumber()   { return _txtNumber; }
-  function get_skullNumber() { return _skullLv - 2; }
+  function get_txtCountDown(){ return _txtCountDown; }
+  function get_countDownVal(){ return _countDownVal; }
 }

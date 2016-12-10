@@ -253,7 +253,8 @@ class Enemy extends Actor  {
       EnemyDB.getDirection(_kind),
       EnemyDB.getBlockHp(_kind),
       EnemyDB.getBlockSkull(_kind),
-      EnemyDB.getBlockCount(_kind)
+      EnemyDB.getBlockCount(_kind),
+      EnemyDB.getExtVal(_kind)
     );
 
     resetAp();

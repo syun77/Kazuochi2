@@ -49,6 +49,10 @@
 					"name": "count"
 				},
 				{
+					"typeStr": "3",
+					"name": "extval"
+				},
+				{
 					"typeStr": "1",
 					"name": "comment",
 					"opt": true,
@@ -66,7 +70,8 @@
 					"id": "Player",
 					"count": 0,
 					"ap": 0,
-					"yoffset": 0
+					"yoffset": 0,
+					"extval": 0
 				},
 				{
 					"hp": 30,
@@ -78,7 +83,8 @@
 					"id": "Slime",
 					"count": 3,
 					"ap": 0.2,
-					"yoffset": 16
+					"yoffset": 16,
+					"extval": 0
 				},
 				{
 					"id": "SlimeRed",
@@ -90,7 +96,8 @@
 					"block": 0,
 					"count": 3,
 					"ap": 0.2,
-					"yoffset": 16
+					"yoffset": 16,
+					"extval": 0
 				},
 				{
 					"name": "コウモリ",
@@ -102,7 +109,8 @@
 					"id": "Bat",
 					"count": 3,
 					"ap": 0.3,
-					"yoffset": 0
+					"yoffset": 0,
+					"extval": 0
 				},
 				{
 					"id": "BatRed",
@@ -114,7 +122,8 @@
 					"block": 0,
 					"count": 3,
 					"ap": 0.3,
-					"yoffset": 0
+					"yoffset": 0,
+					"extval": 0
 				},
 				{
 					"id": "Snake",
@@ -123,10 +132,11 @@
 					"image": "../../../../assets/images/enemies/pipo-enemy003.png",
 					"hp": 200,
 					"direction": 0,
-					"block": 1,
+					"block": 4,
 					"count": 3,
-					"ap": 0.2,
-					"yoffset": 16
+					"ap": 1,
+					"yoffset": 16,
+					"extval": 9
 				}
 			],
 			"separators": [],
@@ -158,7 +168,7 @@
 				{
 					"enemies": [
 						{
-							"enemy": "Slime"
+							"enemy": "Snake"
 						},
 						{
 							"enemy": "Bat"

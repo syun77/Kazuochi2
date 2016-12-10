@@ -23,7 +23,7 @@ class BgUI extends FlxGroup {
   static inline var MAX_RED:Float = 0.4;
   static inline var BG_COLOR:Int = 0xFFD0D0D0;
   static inline var BG_DARK:Int = MyColor.CHARCOAL;
-  static inline var BG_RED:Int = MyColor.RED;
+  static inline var BG_RED:Int = MyColor.ASE_RED;
 
   // ==================================
   // ■フィールド

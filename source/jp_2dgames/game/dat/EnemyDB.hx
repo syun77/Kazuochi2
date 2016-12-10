@@ -43,10 +43,14 @@ class EnemyDB {
   }
 
   public static function getBlockSkull(id:EnemiesKind):Int {
-    if(get(id).block == Enemies_block.Skull) {
-      return 1;
+    switch(get(id).block) {
+      case Enemies_block.Skull:
+        return BlockUtil.SKULL_LV1;
+      case Enemies_block.Skull2:
+        return BlockUtil.SKULL_LV2;
+      default:
+        return 0;
     }
-    return 0;
   }
 
   public static function getBlockHp(id:EnemiesKind):Int {
@@ -61,5 +65,8 @@ class EnemyDB {
   }
   public static function getBlockCount(id:EnemiesKind):Int {
     return get(id).count;
+  }
+  public static function getExtVal(id:EnemiesKind):Int {
+    return get(id).extval;
   }
 }

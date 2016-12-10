@@ -95,7 +95,8 @@ class Field {
           v = BlockUtil.toData(num, 0, 1, false);
         case 24:
           // ドクロ Lv2
-          v = BlockUtil.toDataSkull(2 + 3);
+          var extval = 3;
+          v = BlockUtil.toDataSkull(2, extval);
         case 25, 26, 27, 28, 29, 30, 31, 32, 33:
           var num = v - 24;
           v = BlockUtil.toData(num, 0, 2, false);
@@ -147,7 +148,8 @@ class Field {
 
       if(BlockUtil.isSkull(v)) {
         // ドクロ
-        Block.addSkull(i, j, BlockUtil.getSkullLv(v));
+        var ext = BlockUtil.getHp(v);
+        Block.addSkull(i, j, BlockUtil.getSkullLv(v), ext);
         return;
       }
 
@@ -269,7 +271,14 @@ class Field {
         var px = xgrid + dx;
         var py = ygrid + dy;
         var val2 = _layer.get(px, py);
-        if(BlockUtil.getHp(val2) > 0) {
+        if(BlockUtil.isSkull(val2)) {
+          // ドクロブロックを消去
+          if(eraseBlock(px, py)) {
+            // 消去数をアップ
+            result.erase++;
+          }
+        }
+        else if(BlockUtil.getHp(val2) > 0) {
           // ダメージを与える
           _layer.set(px, py, BlockUtil.subHp(val2));
           var block2 = Block.search(px, py);
@@ -278,13 +287,6 @@ class Field {
           }
           else {
             trace(px, py, "none");
-          }
-        }
-        else if(BlockUtil.isSkull(val2)) {
-          // ドクロブロックを消去
-          if(eraseBlock(px, py)) {
-            // 消去数をアップ
-            result.erase++;
           }
         }
       });
@@ -370,21 +372,22 @@ class Field {
 
       var b = Block.search(i, j);
       if(b != null) {
-        b.setSkullLv(BlockUtil.getSkullLv(v));
+        var ext = BlockUtil.getHp(v);
+        b.setSkullLv(BlockUtil.getSkullLv(v), ext);
       }
     });
   }
 
   /**
-   * 最上段のブロックをチェック
+   * ダメージブロックの消去チェック
    **/
-  public static function checkEraseTopAndSkull(player:Player):Int {
+  public static function checkEraseDamageBlock(player:Player):Int {
 
     var ret:Int = 0;
 
     // 消去対象になるかどうかのチェック
     var check = function(i:Int, j:Int, v:Int):Bool {
-      if(BlockUtil.getSkullLv(v) == 2) {
+      if(BlockUtil.isEraseSkull(v)) {
         // ドクロLvが2なので消える
         return true;
       }

@@ -5,7 +5,7 @@ package jp_2dgames.game.block;
  * ■データ構造
  * 1桁目: 数値
  * 2桁目: ドクロかどうか
- * 3桁目: HP
+ * 3桁目: HP (ドクロの場合は拡張パラメータ)
  * 4桁目: プレイヤーが新しく配置したブロックかどうか
  * 5桁目: スペシャルブロックの種類
  **/
@@ -22,6 +22,9 @@ class BlockUtil {
   public static inline var OFS_HP:Int      = 100;
   public static inline var OFS_NEWER:Int   = 1000;
   public static inline var OFS_SPECIAL:Int = 10000;
+  // ドクロLv
+  public static inline var SKULL_LV1 = 1;
+  public static inline var SKULL_LV2 = 2;
 
 
   public static function toData(number:Int, skullLv:Int, hp:Int, bNewer:Bool):Int {
@@ -40,8 +43,9 @@ class BlockUtil {
     }
     return special;
   }
-  public static function toDataSkull(lv:Int):Int {
-    return toData(0, lv, 0, false);
+  public static function toDataSkull(lv:Int, ext:Int=0):Int {
+    // ドクロはHPを拡張パラメータとして利用する
+    return toData(0, lv, ext, false);
   }
 
   public static function isNone(data:Int):Bool {
@@ -59,15 +63,24 @@ class BlockUtil {
     var v = data%OFS_HP - getNumber(data);
     return Math.floor(v / OFS_SKULL);
   }
+  public static function isEraseSkull(data:Int):Bool {
+    if(getSkullLv(data) == SKULL_LV2) {
+      if(getHp(data) == 0) {
+        // ドクロLv2かつHPが0 なら消える
+        return true;
+      }
+    }
+    return false;
+  }
   public static function skullCountDown(data:Int):Int {
     if(isSkull(data) == false) {
       return data;
     }
-    var lv = getSkullLv(data);
-    if(lv <= 2) {
+    var ext = getHp(data);
+    if(ext <= 0) {
       return data;
     }
-    return data - 1 * OFS_SKULL;
+    return data - 1 * OFS_HP;
   }
   public static function getHp(data:Int):Int {
     var v = data%OFS_NEWER;

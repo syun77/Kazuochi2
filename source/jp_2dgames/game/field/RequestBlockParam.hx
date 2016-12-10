@@ -38,6 +38,7 @@ class RequestBlockParam {
   var _hp:Int;            // ブロックの堅さ (Block.HP_*)
   var _skullLv:Int;       // ドクロブロックLv
   var _nLine:Int;         // 上昇するライン数 (RequestBlock.Bottom のみ有効)
+  var _extval:Int;        // 拡張パラメータ
 
   /**
    * コンストラクタ
@@ -120,13 +121,14 @@ class RequestBlockParam {
       var ygrid  = 0;
       {
         // レイヤーに設定
-        var data = BlockUtil.toData(number, _skullLv, _hp, false);
+        var data = BlockUtil.toData(number, _skullLv, _extval, false);
         field.set(xgrid, ygrid, data);
       }
 
       if(_skullLv > 0) {
         // ドクロブロック
-        Block.addSkull(xgrid, ygrid, _skullLv);
+        trace("skull", xgrid, ygrid, _skullLv, _extval);
+        Block.addSkull(xgrid, ygrid, _skullLv, _extval);
       }
       else {
         Block.add(xgrid, ygrid, BlockType.Number(number, _hp));
@@ -167,64 +169,15 @@ class RequestBlockParam {
   // =========================================================
   // ■各種要求
 
-  public function set(type:RequestBlock, hp:Int, skullLv:Int, count:Int):Void {
+  public function set(type:RequestBlock, hp:Int, skullLv:Int, count:Int, extval:Int):Void {
     _type    = type;
     _hp      = hp;
     _skullLv = skullLv;
+    if(_skullLv > 9) {
+      _skullLv = 9;
+    }
     _count   = count;
-  }
-  /**
-   * 上から出現
-   */
-  public function setUpper(count:Int):Void {
-    _type  = RequestBlock.Upper;
-    _count = count;
-  }
-
-  /**
-   * 上から出現 (固ぷよ)
-   */
-  public function setUpperHard(count:Int):Void {
-    _type  = RequestBlock.Upper;
-    _count = count;
-    _hp    = BlockUtil.HP_HARD;
-  }
-
-  /**
-   * 上から出現 (固ぷよ)
-   */
-  public function setUpperVeryHard(count:Int):Void {
-    _type  = RequestBlock.Upper;
-    _count = count;
-    _hp    = BlockUtil.HP_VERYHARD;
-  }
-
-  /**
-   * 上から出現 (ドクロ)
-   */
-  public function setUpperSkull(count:Int):Void {
-    _type    = RequestBlock.Upper;
-    _count   = count;
-    _skullLv = 1;
-  }
-
-  /**
-   * 下から出現
-   * @param nLine 出現ライン数
-   */
-  public function setBottom(nLine:Int):Void {
-    _type  = RequestBlock.Bottom;
-    _nLine = nLine;
-    _hp    = BlockUtil.HP_NORMAL;
-  }
-
-  /**
-   * 下から出現 (固ぷよ)
-   */
-  public function setBottomHard(nLine:Int):Void {
-    _type  = RequestBlock.Bottom;
-    _nLine = nLine;
-    _hp    = BlockUtil.HP_HARD;
+    _extval  = extval;
   }
 
   // ===================================================================

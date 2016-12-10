@@ -69,6 +69,7 @@ class SeqMgr {
   var _statePrev:State;
 
   var _bKeepOnChain:Bool = false; // 連鎖が続行するかどうか
+  var _bCountDown:Bool = false;   // そのターンにカウントダウンを行ったかどうか
 
   var _eraseResult:EraseResult;        // 消去結果
   var _requestBlock:RequestBlockParam; // ブロック落下情報
@@ -136,6 +137,8 @@ class SeqMgr {
   function _beginTurn():Void {
     _player.beginTurn();
     _enemy.beginTurn();
+    // カウントダウンフラグを初期化
+    _bCountDown = false;
   }
 
   /**
@@ -225,7 +228,6 @@ class SeqMgr {
     }
     else {
       // 連鎖終了
-      // ダメージチェックへ
       ParticleChain.end();
       if(result.chain == 0) {
         // 連鎖なしでコンボ終了
@@ -236,10 +238,16 @@ class SeqMgr {
       result.chain = 0;
       _bKeepOnChain = false;
 
-      // ドクロカウントダウン
-      Field.skullCountDown();
-
-      return State.SkullCountDown;
+      if(_bCountDown == false) {
+        // ドクロカウントダウン
+        _bCountDown = true;
+        Field.skullCountDown();
+        return State.SkullCountDown;
+      }
+      else {
+        // ダメージチェックへ
+        return State.DamageCheck;
+      }
     }
   }
 
@@ -271,8 +279,8 @@ class SeqMgr {
 
   function _procSkullCountDown():State {
 
-    if(false) {
-      // TODO: カウントダウン演出中
+    if(Block.isIdleAll() == false) {
+      // カウントダウン演出中
       return State.None;
     }
 
@@ -283,7 +291,7 @@ class SeqMgr {
   function _procDamageCheck():State {
 
     // ダメージブロック数を取得
-    _nDamageBlock = Field.checkEraseTopAndSkull(_player);
+    _nDamageBlock = Field.checkEraseDamageBlock(_player);
 
     if(_nDamageBlock > 0) {
       // 存在する場合はダメージ処理
