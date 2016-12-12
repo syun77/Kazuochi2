@@ -262,11 +262,18 @@ class Block extends Token {
         // 現在のカウントダウン値より小さければ演出をする
         var sc = 2;
         _txtCountDown.scale.set(sc, sc);
+        _countDownVal = ext;
+        if(_countDownVal == 0) {
+          // 発車前演出
+          var p = Particle.add(ParticleType.CircleReverse, xcenter, ycenter);
+          var sc = 3;
+          p.scale.set(sc, sc);
+          p.color = FlxColor.RED;
+        }
         _state = State.CountDown;
         FlxTween.tween(_txtCountDown.scale, {x:1, y:1}, 0.5, {ease:FlxEase.expoOut, onComplete:function(_) {
           _state = State.Idle;
         }});
-        _countDownVal = ext;
       }
     }
 

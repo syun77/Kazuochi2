@@ -16,6 +16,7 @@ enum ParticleType {
   Blade;  // 長細い
   Rect;   // 矩形
   Circle; // 円
+  CircleReverse; // 円の逆再生
   Stone;  // ブロック破片
 }
 
@@ -121,7 +122,11 @@ class Particle extends Token {
         scale.add(sc, sc);
         alpha -= elapsed/age * 1.5;
 
-      case ParticleType.Stone:
+      case ParticleType.CircleReverse: // 円の逆再生
+        scale.scale(0.93);
+        alpha -= elapsed/age * 1.5;
+
+      case ParticleType.Stone: // 固いブロックの破片
         if(_lifespan/age > 0.7) {
           if(FlxFlicker.isFlickering(this) == false) {
             // 点滅開始
@@ -143,6 +148,7 @@ class Particle extends Token {
     animation.add('${ParticleType.Rect}' ,  [3]);
     animation.add('${ParticleType.Circle}', [4]);
     animation.add('${ParticleType.Stone}',  [5]);
+    animation.add('${ParticleType.CircleReverse}', [4]);
   }
 
   // ===========================================

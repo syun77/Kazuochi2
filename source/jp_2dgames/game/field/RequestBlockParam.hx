@@ -127,7 +127,6 @@ class RequestBlockParam {
 
       if(_skullLv > 0) {
         // ドクロブロック
-        trace("skull", xgrid, ygrid, _skullLv, _extval);
         Block.addSkull(xgrid, ygrid, _skullLv, _extval);
       }
       else {
